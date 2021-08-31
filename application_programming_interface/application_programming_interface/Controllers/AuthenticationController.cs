@@ -21,7 +21,8 @@ namespace application_programming_interface.Controllers
             //return token or throw exeption
             try
             {
-                return new JsonResult(new { });
+                throw new Exception("Test exeption");
+                //return new JsonResult(new { });
             }
             catch (Exception e)
             {
