@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using application_programming_interface.Models;
 
 namespace application_programming_interface
 {
@@ -26,6 +28,7 @@ namespace application_programming_interface
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConenction")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
