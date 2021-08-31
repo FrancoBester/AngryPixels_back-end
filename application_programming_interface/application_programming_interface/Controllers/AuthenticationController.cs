@@ -1,6 +1,6 @@
 ﻿using application_programming_interface.Atributes;
+using application_programming_interface.Interfaces;
 using application_programming_interface.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,16 +13,24 @@ namespace application_programming_interface.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
+
+        private IAuthenticationService _authentication;
+
+        public AuthenticationController(IAuthenticationService authenticationService)
+        {
+            _authentication = authenticationService;
+        }
+
+
         // GET: api/<AuthenticationController>
         [HttpPost]
-        public JsonResult LogIn([FromBody]SignInRequestDTO requestDTO)
+        public JsonResult LogIn(SignInRequestDTO requestDTO)
         {
             //generate token
             //return token or throw exeption
             try
             {
-                throw new Exception("Test exeption");
-                //return new JsonResult(new { });
+                return new JsonResult(new { Token = _authentication.SignIn(requestDTO) });
             }
             catch (Exception e)
             {

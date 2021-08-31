@@ -1,17 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using application_programming_interface.Models;
+using application_programming_interface.Interfaces;
+using application_programming_interface.Services;
 
 namespace application_programming_interface
 {
@@ -28,7 +23,16 @@ namespace application_programming_interface
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConenction")));
+
+            services.AddCors(x=>x.AddPolicy("AllowAllHeaders", builder => builder.AllowAnyOrigin()
+                                                                .AllowAnyHeader()
+                                                                .AllowAnyMethod()
+                                                                .AllowAnyOrigin()
+                                                                .WithOrigins("https://www.carnagehosting.com/",
+                                                                             "https://localhost/")
+                                                                .SetIsOriginAllowedToAllowWildcardSubdomains()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,7 +42,7 @@ namespace application_programming_interface
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseCors("AllowAllHeaders");
             app.UseHttpsRedirection();
 
             app.UseRouting();
