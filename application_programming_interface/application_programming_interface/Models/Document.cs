@@ -14,8 +14,5 @@ namespace application_programming_interface.Models
         public string Doc_type { get; set; }
 
         public string Doc_des { get; set; }
-
-
-
     }
 }
