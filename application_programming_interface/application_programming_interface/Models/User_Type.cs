@@ -15,5 +15,7 @@ namespace application_programming_interface.Models
 
         public string User_Type_des { get; set; }
 
+        // many to one - roles
+        public virtual Roles Roles { get; set; }
     }
 }

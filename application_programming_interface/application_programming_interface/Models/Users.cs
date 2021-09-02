@@ -18,5 +18,8 @@ namespace application_programming_interface.Models
         public string User_ID_Number { get; set; }
 
         public int Address_id { get; set; }
+
+        // many to one - policy
+        public virtual Policy Policy { get; set; }
     }
 }
