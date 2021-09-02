@@ -15,25 +15,32 @@ namespace application_programming_interface.Services
     {
         public string SignIn(SignInRequestDTO requestDTO)
         {
+            requestDTO.Validate();
+
             //mock authenication code
             if (requestDTO.Username == MockData.MockData.User.User_name)
             {
                 //user matches
-                return Authenticate();
+                return Authenticate(requestDTO);
             }
 
-            throw new Exception("AAAAAAAAAAAAAAAAAAAAAAAA");
+            throw new Exception("Invalid username and password combination.");
         }
 
-        private string Authenticate()
+        private string Authenticate(SignInRequestDTO requestDTO)
         {
-            var x = new List<Claim>();
-            x.Add(new Claim("Role","User"));
+            //TODO: redo this to query DB
+            var claims = new List<Claim>();
+
+            //Add user details to claims
+            claims.Add(new Claim("name", requestDTO.Username));
+
+            claims.Add(new Claim("Role", "User"));
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("852852-852852-852852-416534163"));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken("Issuer", "Audience", x, notBefore: DateTime.Now.AddDays(10),expires:DateTime.Now.AddDays(20), credentials);
+            var token = new JwtSecurityToken("Issuer", "Audience", claims, notBefore: DateTime.Now,expires:DateTime.Now.AddDays(20), credentials);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
