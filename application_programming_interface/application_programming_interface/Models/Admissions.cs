@@ -18,15 +18,8 @@ namespace application_programming_interface.Models
 
         public string Adms_type { get; set; }
 
-        [ForeignKey("Policy")]
-        public int Policy_id { get; set; }
-        public Policy Policy { get; set; }
-
         //many to one - policy
-        //public virtual int Policy_id { get; set; }
-        //public virtual Policy Policies { get; set; }
-
-        //public  int Policy_id { get; set; }
-        //public  Policy Policy { get; set; }
+        public int Policy_id { get; set; }
+        public virtual Policy Policy { get; set; }
     }
 }

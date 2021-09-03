@@ -31,8 +31,10 @@ namespace application_programming_interface.Models
 
         }
 
-        public void onModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Admissions>().HasOne(a => a.Policy).WithMany(p => p.Admissions).HasForeignKey(a =>a.Policy_id);
+            //modelBuilder.Entity<Admissions>().has
             //modelBuilder.Entity<Policy>().HasMany(p => p.Admissions).WithOne(a => a.Policy).HasForeignKey(a => a.Policy.Policy_id).IsRequired();
             //modelBuilder.Entity<Policy>().HasMany(p => p.Admissions);
             //modelBuilder.Entity<Admissions>().HasOne(a => a.Policy).WithMany(p => p.Admissions);
