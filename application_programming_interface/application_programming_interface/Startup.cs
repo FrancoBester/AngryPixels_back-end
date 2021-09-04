@@ -23,8 +23,9 @@ namespace application_programming_interface
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnections")));
+            services.AddScoped<IAddressService, AddressService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
-            services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConenction")));
 
             services.AddCors(x=>x.AddPolicy("AllowAllHeaders", builder => builder.AllowAnyOrigin()
                                                                 .AllowAnyHeader()

@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace application_programming_interface.Models
 {
     public class Mapping
     {
+        [Key]
         public int Policy_id { get; set; }
 
         public int Doc_id { get; set; }
