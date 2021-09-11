@@ -30,7 +30,8 @@ namespace application_programming_interface.Controllers
             //return token or throw exeption
             try
             {
-                return new JsonResult(new { Token = _authentication.SignIn(requestDTO) });
+                var result = _authentication.SignIn(requestDTO);
+                return new JsonResult(new { Token = result.Token, Roles = result.Roles });
             }
             catch (Exception e)
             {

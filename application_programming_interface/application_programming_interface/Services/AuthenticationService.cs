@@ -27,7 +27,7 @@ namespace application_programming_interface.Services
             return User;
         }
 
-        public string SignIn(SignInRequestDTO requestDTO)
+        public SignInResponseDTO SignIn(SignInRequestDTO requestDTO)
         {
             requestDTO.Validate();
 
@@ -41,7 +41,7 @@ namespace application_programming_interface.Services
             throw new Exception("Invalid username and password combination.");
         }
 
-        private string Authenticate(SignInRequestDTO requestDTO)
+        private SignInResponseDTO Authenticate(SignInRequestDTO requestDTO)
         {
             //TODO: redo this to query DB
             var claims = new List<Claim>();
@@ -49,7 +49,7 @@ namespace application_programming_interface.Services
             //Add user details to claims
             claims.Add(new Claim("Name", requestDTO.Username));
 
-            var roles = new List<string>() { "User" };
+            var roles = new List<string>() { "User"};
             var rolesAsString = JsonConvert.SerializeObject(roles);
 
             claims.Add(new Claim("Roles", rolesAsString));
@@ -58,7 +58,13 @@ namespace application_programming_interface.Services
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken("Issuer", "Audience", claims, notBefore: DateTime.Now,expires:DateTime.Now.AddDays(20), credentials);
-            return new JwtSecurityTokenHandler().WriteToken(token);
+
+            var objectToReturn = new SignInResponseDTO();
+            objectToReturn.Token = new JwtSecurityTokenHandler().WriteToken(token);
+            objectToReturn.Roles = roles;
+
+            return objectToReturn;
+
         }
 
     }
