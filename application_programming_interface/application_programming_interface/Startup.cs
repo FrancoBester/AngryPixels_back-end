@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using application_programming_interface.Models;
 using application_programming_interface.Interfaces;
 using application_programming_interface.Services;
+using System;
 
 namespace application_programming_interface
 {
@@ -23,6 +24,10 @@ namespace application_programming_interface
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            if (Configuration.GetConnectionString("DefaultConnections") == null)
+            {
+                throw new Exception("Please add the coonnection strings to the appsettings.json");
+            }
             services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnections")));
             services.AddScoped<IAddressService, AddressService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
