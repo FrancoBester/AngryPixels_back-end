@@ -16,5 +16,8 @@ namespace application_programming_interface.Models
         public string Addr_city { get; set; }
 
         public string Addr_code { get; set; }
+
+        //one to many - users
+        public ICollection<Users> Users { get; set; }
     }
 }

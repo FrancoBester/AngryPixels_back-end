@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using application_programming_interface.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace application_programming_interface.Controllers
 {
@@ -33,6 +34,22 @@ namespace application_programming_interface.Controllers
             catch (Exception ex)
             {
                 return new JsonResult(ex.Message);
+            }
+        }
+
+        [Route("~/{id}")]
+        [HttpPost("{id}")]
+        public JsonResult Put(int id, Users user)
+        {
+            try
+            {
+                _context.Entry(user).State = EntityState.Modified;
+                _context.SaveChanges();
+                return new JsonResult("data saved");
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ex.InnerException);
             }
         }
     }

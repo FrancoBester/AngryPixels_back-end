@@ -14,5 +14,11 @@ namespace application_programming_interface.Models
         public string Doc_type { get; set; }
 
         public string Doc_des { get; set; }
+
+        //one to many - users
+        public ICollection<Users> Users { get; set; }
+
+        //one to many - medical
+        public ICollection<Medical_Certificate> Medical_Certificates { get; set; }
     }
 }

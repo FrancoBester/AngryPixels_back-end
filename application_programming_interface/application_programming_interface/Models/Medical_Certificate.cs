@@ -14,5 +14,12 @@ namespace application_programming_interface.Models
         public string Med_Cet_Date { get; set; }
 
         public string Med_Cet_llink { get; set; }
+
+        //one to many - users
+        public ICollection<Users> Users { get; set; }
+
+        //many to one - document
+        public int Doc_id { get; set; }
+        public virtual Document Document { get; set; }
     }
 }

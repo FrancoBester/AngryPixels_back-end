@@ -33,16 +33,16 @@ namespace application_programming_interface.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Admissions>().HasOne(a => a.Policy).WithMany(p => p.Admissions).HasForeignKey(a =>a.Policy_id);
-            //modelBuilder.Entity<Admissions>().has
-            //modelBuilder.Entity<Policy>().HasMany(p => p.Admissions).WithOne(a => a.Policy).HasForeignKey(a => a.Policy.Policy_id).IsRequired();
-            //modelBuilder.Entity<Policy>().HasMany(p => p.Admissions);
-            //modelBuilder.Entity<Admissions>().HasOne(a => a.Policy).WithMany(p => p.Admissions);
-            //modelBuilder.Entity<Admissions>().HasOne(a => a.Policy).WithMany(p => p.Admissions).HasForeignKey(a => a.Policy.Policy_id);
-            //modelBuilder.Entity<Policy>().HasMany(c => c.Admissions).WithOne(x => x.Policy).HasForeignKey(x => x.Policy_id);
-            //modelBuilder.Entity<Policy>().HasMany(c => c.Admissions).WithOne(x => x.Policy).HasPrincipalKey(x => x.Policy_id);
-            modelBuilder.Entity<Roles>().HasMany(c => c.User_Types).WithOne(x => x.Roles).HasPrincipalKey(x => x.Role_id);
-            modelBuilder.Entity<Policy>().HasMany(c => c.Users).WithOne(x => x.Policy).HasForeignKey(c => c.User_id);
+            modelBuilder.Entity<Admissions>().HasOne(a => a.Policy).WithMany(p => p.Admissions).HasForeignKey(a => a.Policy_id); //tested policy/admission
+            modelBuilder.Entity<User_Type>().HasOne(u => u.Roles).WithMany(r => r.User_Types).HasForeignKey(u => u.Role_id); //tested user_type/roles
+            modelBuilder.Entity<Medical_Certificate>().HasOne(m => m.Document).WithMany(d => d.Medical_Certificates).HasForeignKey(m => m.Med_Cet_id);//not test medical/document
+            modelBuilder.Entity<Users>().HasOne(u => u.Query).WithMany(q => q.Users).HasForeignKey(u => u.Query_id); // not test user/queries
+            modelBuilder.Entity<Users>().HasOne(u => u.Address).WithMany(a => a.Users).HasForeignKey(u => u.Address_id);// not test user/address
+            modelBuilder.Entity<Users>().HasOne(u => u.User_Type).WithMany(t => t.Users).HasForeignKey(u => u.User_type_id);// not test user/user_type
+            modelBuilder.Entity<Users>().HasOne(u => u.Medical_Certificate).WithMany(m => m.Users).HasForeignKey(u => u.Medical_Certificate);// not test user/medical
+            modelBuilder.Entity<Users>().HasOne(u => u.Policy).WithMany(p => p.Users).HasForeignKey(u => u.User_id);//not tested user/policy
+            modelBuilder.Entity<Users>().HasOne(u => u.Document).WithMany(d => d.Users).HasForeignKey(u => u.Doc_id);//not tested user/document
+
 
         }
 

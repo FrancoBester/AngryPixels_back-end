@@ -17,5 +17,8 @@ namespace application_programming_interface.Models
 
         public string Query_level { get; set; }
 
+        //one to many - users
+        public ICollection<Users> Users { get; set; }
+
     }
 }

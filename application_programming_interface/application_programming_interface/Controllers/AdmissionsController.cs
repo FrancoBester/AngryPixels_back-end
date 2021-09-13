@@ -27,16 +27,12 @@ namespace application_programming_interface.Controllers
             return _context.Admissions.ToList();
         }
 
-        //[Route("~/{id}")]
-        //[HttpPost("{id}")]
         [HttpPost]
         public JsonResult Post([FromBody] Admissions admissions)
         {
-            //var new_ad = new Admissions { Adms_id = admissions.Adms_id, Adms_type = admissions.Adms_type, Adms_Hospital = admissions.Adms_Hospital, Adms_Doctor = admissions.Adms_Doctor, Policy_id = admissions.Policy_id };
             try
             {
                 _context.Set<Admissions>().Add(admissions);
-                //_context.Admissions.Add(admissions);
                 _context.SaveChanges();
                 return new JsonResult("data saved");
             }

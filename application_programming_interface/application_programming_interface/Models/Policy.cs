@@ -20,13 +20,10 @@ namespace application_programming_interface.Models
         public string Policy_date { get; set; }
 
         //one to many - admissions
-        //public virtual List<Admissions> Admissions { get; set; }
-        //public IEnumerable<Admissions> Admissions { get; set; }
-
         public ICollection<Admissions> Admissions { get; set; }
 
         //one to many - users
-        public virtual List<Users> Users { get; set; }
+        public ICollection<Users> Users { get; set; }
 
     }
 }

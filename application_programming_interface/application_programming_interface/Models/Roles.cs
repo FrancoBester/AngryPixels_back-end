@@ -18,7 +18,7 @@ namespace application_programming_interface.Models
         public string Role_code { get; set; }
 
         //one to many - user_type
-        public virtual List<User_Type> User_Types { get; set; }
+        public ICollection<User_Type> User_Types { get; set; }
 
     }
 }
