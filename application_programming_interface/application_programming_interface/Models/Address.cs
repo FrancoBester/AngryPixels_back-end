@@ -9,13 +9,13 @@ namespace application_programming_interface.Models
     public class Address
     {
         [Key]
-        public int Addr_id { get; set; }
+        public int Address_id { get; set; }
 
-        public string Addr_street { get; set; }
+        public string Street { get; set; }
 
-        public string Addr_city { get; set; }
+        public string City { get; set; }
 
-        public string Addr_code { get; set; }
+        public string Postal_Code { get; set; }
 
         //one to many - users
         public ICollection<Users> Users { get; set; }

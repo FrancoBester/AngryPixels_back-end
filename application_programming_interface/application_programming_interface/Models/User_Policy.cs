@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace application_programming_interface.Models
 {
-    public class Document 
+    public class User_Policy
     {
         [Key]
-        public int Doc_Id { get; set; }
+
+        public int User_Policy_Id { get; set; }
 
         //many to one - users
         public int User_Id { get; set; }
@@ -18,8 +19,5 @@ namespace application_programming_interface.Models
         //many to one - policy
         public int Policy_Id { get; set; }
         public virtual Policy Policy { get; set; }
-
-        //one to many 
-        public ICollection<Document_Type> Document_Types { get; set; }
     }
 }

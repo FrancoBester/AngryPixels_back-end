@@ -11,14 +11,14 @@ namespace application_programming_interface.Models
         [Key]
         public int Role_id { get; set;}
 
-        public string Role_name { get; set; }
+        public string Role_Name { get; set; }
 
-        public string Role_des { get; set; }
+        public string Role_Des { get; set; }
 
-        public string Role_code { get; set; }
+        public string Role_Code { get; set; }
 
-        //one to many - user_type
-        public ICollection<User_Type> User_Types { get; set; }
+        //one to many - user_roles
+        public ICollection<User_Roles> User_Roles { get; set; }
 
     }
 }

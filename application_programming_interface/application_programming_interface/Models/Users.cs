@@ -17,28 +17,26 @@ namespace application_programming_interface.Models
 
         public string User_ID_Number { get; set; }
 
-        // many to one - policy
-        public int Policy_id { get; set; }
-        public virtual Policy Policy { get; set; }
-
-        // many to one - queries
-        public int Query_id { get; set; }
-        public virtual Queries Query { get; set; }
 
         //many to one - address
-        public int Address_id { get; set; }
+        public int Address_Id { get; set; }
         public virtual Address Address { get; set; }
 
-        //many to one - user_type
-        public int User_type_id { get; set; }
-        public virtual User_Type User_Type { get; set; }
+        //many to one - query
+        public int Query_Id { get; set; }
+        public virtual Queries Query { get; set; }
 
-        //may to one - medical
-        public int Med_Cet_id { get; set; }
-        public virtual Medical_Certificate Medical_Certificate { get; set; }
+        //one to many - user_roles
+        public ICollection<User_Roles> User_Roles { get; set; }
 
-        //many to one - documents
-        public int Doc_id { get; set; }
-        public virtual Document Document { get; set; }
+        //one to many - schema_requests
+        public ICollection<Schema_Requests> Schema_Requests { get; set; }
+
+        //one to many - user_policy
+        public ICollection<User_Policy> User_Policies { get; set; }
+
+        //one to many - Document
+        public ICollection<Document> Documents { get; set; }
+        
     }
 }

@@ -15,7 +15,7 @@ namespace application_programming_interface.Models
         DbSet<Policy> Policy { get; set; }
         DbSet<Queries> Queries { get; set; }
         DbSet<Roles> Roles { get; set; }
-        DbSet<User_Type> User_Type { get; set; }
+        DbSet<User_Roles> User_Type { get; set; }
         DbSet<Users> Users { get; set; }
     }
 
@@ -33,27 +33,31 @@ namespace application_programming_interface.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Admissions>().HasOne(a => a.Policy).WithMany(p => p.Admissions).HasForeignKey(a => a.Policy_id); //tested policy/admission
-            modelBuilder.Entity<User_Type>().HasOne(u => u.Roles).WithMany(r => r.User_Types).HasForeignKey(u => u.Role_id); //tested user_type/roles
-            modelBuilder.Entity<Medical_Certificate>().HasOne(m => m.Document).WithMany(d => d.Medical_Certificates).HasForeignKey(m => m.Med_Cet_id);//not test medical/document
-            modelBuilder.Entity<Users>().HasOne(u => u.Query).WithMany(q => q.Users).HasForeignKey(u => u.Query_id); // not test user/queries
-            modelBuilder.Entity<Users>().HasOne(u => u.Address).WithMany(a => a.Users).HasForeignKey(u => u.Address_id);// not test user/address
-            modelBuilder.Entity<Users>().HasOne(u => u.User_Type).WithMany(t => t.Users).HasForeignKey(u => u.User_type_id);// not test user/user_type
-            modelBuilder.Entity<Users>().HasOne(u => u.Medical_Certificate).WithMany(m => m.Users).HasForeignKey(u => u.Medical_Certificate);// not test user/medical
-            modelBuilder.Entity<Users>().HasOne(u => u.Policy).WithMany(p => p.Users).HasForeignKey(u => u.User_id);//not tested user/policy
-            modelBuilder.Entity<Users>().HasOne(u => u.Document).WithMany(d => d.Users).HasForeignKey(u => u.Doc_id);//not tested user/document
-
-
+            //not tested
+            modelBuilder.Entity<Users>().HasOne(u => u.Address).WithMany(a => a.Users).HasForeignKey(u => u.Address_Id);// user/address
+            modelBuilder.Entity<Users>().HasOne(u => u.Query).WithMany(q => q.Users).HasForeignKey(u => u.Query_Id);// user/querry
+            modelBuilder.Entity<User_Roles>().HasOne(ur => ur.Role).WithMany(r => r.User_Roles).HasForeignKey(ur => ur.Role_Id); // user_roles/roles
+            modelBuilder.Entity<User_Roles>().HasOne(ur => ur.User).WithMany(u => u.User_Roles).HasForeignKey(ur => ur.User_Id);// user_roles/user
+            modelBuilder.Entity<Schema_Requests>().HasOne(sr => sr.User).WithMany(u => u.Schema_Requests).HasForeignKey(sr => sr.User_Id);// schema_roles/user
+            modelBuilder.Entity<User_Policy>().HasOne(up => up.User).WithMany(u => u.User_Policies).HasForeignKey(up => up.User_Policy_Id);// user_policy/user
+            modelBuilder.Entity<Document>().HasOne(d => d.User).WithMany(u => u.Documents).HasForeignKey(d => d.User_Id);// document/user
+            modelBuilder.Entity<Schema_Requests>().HasOne(sr => sr.Policy).WithMany(p => p.Schema_Requests).HasForeignKey(sr => sr.Policy_Id);// schema_request/policy
+            modelBuilder.Entity<User_Policy>().HasOne(up => up.Policy).WithMany(p => p.User_Policies).HasForeignKey(up => up.Policy_Id);// user_policy/policy
+            modelBuilder.Entity<Document>().HasOne(d => d.Policy).WithMany(p => p.Documents).HasForeignKey(d => d.Policy_Id);// document/policy
+            modelBuilder.Entity<Admissions>().HasOne(a => a.Policy).WithMany(p => p.Admissions).HasForeignKey(a => a.Policy_Id);// admissions/policy
+            modelBuilder.Entity<Document_Type>().HasOne(dt => dt.Document).WithMany(d => d.Document_Types).HasForeignKey(dt => dt.Doc_Id);// document_type/document
         }
 
         public DbSet<Address> Address { get; set; }
         public DbSet<Admissions> Admissions { get; set; }
         public DbSet<Document> Document { get; set; }
-        public DbSet<Medical_Certificate> Medical_Certificates { get; set; }
+        public DbSet<Document_Type> Document_Type { get; set; }
         public DbSet<Policy> Policy { get; set; }
         public DbSet<Queries> Queries { get; set; }
         public DbSet<Roles> Roles { get; set; }
-        public DbSet<User_Type> User_Type { get; set; }
+        public DbSet<Schema_Requests> Schema_Requests { get; set; }
+        public DbSet<User_Policy> User_Policies { get; set; }
+        public DbSet<User_Roles> User_Roles { get; set; }
         public DbSet<Users> Users { get; set; }
     }
 }

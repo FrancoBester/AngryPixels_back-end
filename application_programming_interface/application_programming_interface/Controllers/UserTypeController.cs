@@ -20,17 +20,17 @@ namespace application_programming_interface.Controllers
         }
         
         [HttpGet]
-        public IEnumerable<User_Type> Get()
+        public IEnumerable<User_Roles> Get()
         {
             return _context.User_Type.ToList();
         }
 
         [HttpPost]
-        public JsonResult Post(User_Type user_type)
+        public JsonResult Post(User_Roles user_type)
         {
             try
             {
-                _context.Set<User_Type>().Add(user_type);
+                _context.Set<User_Roles>().Add(user_type);
                 _context.SaveChanges();
                 return new JsonResult("data saved");
             }
@@ -42,7 +42,7 @@ namespace application_programming_interface.Controllers
 
         [Route("~/{id}")]
         [HttpPost("{id}")]
-        public JsonResult Put(int id, User_Type user_Type) 
+        public JsonResult Put(int id, User_Roles user_Type) 
         {
             try 
             {

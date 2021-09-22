@@ -9,21 +9,29 @@ namespace application_programming_interface.Models
     public class Policy
     {
         [Key]
-        public int Policy_id { get; set; }
+        public int Policy_Id { get; set; }
 
-        public string Policy_holder {get;set;}
+        public string Policy_Holder {get;set;}
 
-        public string Policy_type { get; set; }
+        public string Policy_Type { get; set; }
 
-        public string Policy_des { get; set; }
+        public string Policy_Des { get; set; }
 
-        public string Policy_date { get; set; }
+        public string Policy_Date { get; set; }
+
+        public string Policy_Benefits { get; set; }
+
+        //one to many - schema_requests
+        public ICollection<Schema_Requests> Schema_Requests { get; set; }
+
+        //one to many - user_policy
+        public ICollection<User_Policy> User_Policies { get; set; }
+
+        //one to many - Document
+        public ICollection<Document> Documents { get; set; }
 
         //one to many - admissions
         public ICollection<Admissions> Admissions { get; set; }
-
-        //one to many - users
-        public ICollection<Users> Users { get; set; }
 
     }
 }

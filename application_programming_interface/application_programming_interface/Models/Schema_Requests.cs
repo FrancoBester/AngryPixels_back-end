@@ -6,20 +6,17 @@ using System.Threading.Tasks;
 
 namespace application_programming_interface.Models
 {
-    public class Document 
+    public class Schema_Requests
     {
         [Key]
-        public int Doc_Id { get; set; }
+        public int Request_Id { get; set; }
 
-        //many to one - users
+        // many to one - users
         public int User_Id { get; set; }
         public virtual Users User { get; set; }
 
         //many to one - policy
         public int Policy_Id { get; set; }
         public virtual Policy Policy { get; set; }
-
-        //one to many 
-        public ICollection<Document_Type> Document_Types { get; set; }
     }
 }

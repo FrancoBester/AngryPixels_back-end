@@ -10,16 +10,16 @@ namespace application_programming_interface.Models
     public class Admissions
     {
         [Key]
-        public int Adms_id { get; set; }
+        public int Adms_Id { get; set; }
 
-        public string Adms_Doctor { get; set; }
+        public string Adms_Doctors { get; set; }
 
-        public string Adms_Hospital { get; set; }
+        public string Adms_Hospitals { get; set; }
 
-        public string Adms_type { get; set; }
-
+        public string Adms_Type { get; set; }
+        
         //many to one - policy
-        public int Policy_id { get; set; }
+        public int Policy_Id { get; set; }
         public virtual Policy Policy { get; set; }
     }
 }

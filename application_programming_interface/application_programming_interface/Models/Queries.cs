@@ -11,11 +11,13 @@ namespace application_programming_interface.Models
         [Key]
         public int Query_id { get; set; }
 
-        public string Query_des { get; set; }
+        public string Query_Title { get; set; }
 
-        public string Query_code { get; set; }
+        public string Query_Detail { get; set; }
 
-        public string Query_level { get; set; }
+        public string Query_Code { get; set; }
+
+        public string Query_Level { get; set; }
 
         //one to many - users
         public ICollection<Users> Users { get; set; }
