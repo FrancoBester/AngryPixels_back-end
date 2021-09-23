@@ -19,6 +19,7 @@ namespace application_programming_interface.Controllers
             _context = context;
         }
 
+
         [HttpGet]
         public IEnumerable<User_Roles> Get()
         {
@@ -63,7 +64,7 @@ namespace application_programming_interface.Controllers
         {
             try
             {
-                _context.Remove(_context.Admissions.Single(a => a.Adms_Id == id));
+                _context.Remove(_context.User_Roles.Single(ur => ur.User_Roles_Id == id));
                 _context.SaveChanges();
                 return new JsonResult("Record removed");
             }
