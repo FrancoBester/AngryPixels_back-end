@@ -23,15 +23,17 @@ namespace application_programming_interface.Controllers
             _context = context;
         }
 
+        [Route("~/Address/GetAll")]
         [HttpGet]
-        public IEnumerable<Address> Get()
+        public IEnumerable<Address> GetAll()
         {
             _serve.WriteMsg("Hello");
             return _context.Address.ToList();
         }
 
+        [Route("~/Address/Create")]
         [HttpPost]
-        public JsonResult Post([FromBody] Address address)
+        public JsonResult Create([FromBody] Address address)
         {
             try
             {
@@ -45,10 +47,9 @@ namespace application_programming_interface.Controllers
             }
         }
 
-
-        [Route("~/{id}")]
+        [Route("~/Address/Update/{id}")]
         [HttpPut("{id}")]
-        public JsonResult Put(Address address)
+        public JsonResult Update(Address address)
         {
             try
             {
@@ -63,7 +64,7 @@ namespace application_programming_interface.Controllers
         }
 
 
-        [Route("~/{id}")]
+        [Route("~/Address/Delete/{id}")]
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {

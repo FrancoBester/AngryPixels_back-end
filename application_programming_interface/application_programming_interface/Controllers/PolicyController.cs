@@ -20,14 +20,16 @@ namespace application_programming_interface.Controllers
             _context = context;
         }
 
+        [Route("~/Policy/GetAll")]
         [HttpGet]
-        public IEnumerable<Policy> Get()
+        public IEnumerable<Policy> GetAll()
         {
             return _context.Policy.ToList();
         }
 
+        [Route("~/Policy/Create")]
         [HttpPost]
-        public JsonResult Post(Policy policy)
+        public JsonResult Create(Policy policy)
         {
             try
             {
@@ -41,9 +43,9 @@ namespace application_programming_interface.Controllers
             }
         }
 
-        [Route("~/{id}")]
+        [Route("~/Policy/Update/{id}")]
         [HttpPut("{id}")]
-        public JsonResult Put(Policy policy)
+        public JsonResult Update(Policy policy)
         {
             try
             {
@@ -58,7 +60,7 @@ namespace application_programming_interface.Controllers
         }
 
 
-        [Route("~/{id}")]
+        [Route("~/Policy/Delete/{id}")]
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {

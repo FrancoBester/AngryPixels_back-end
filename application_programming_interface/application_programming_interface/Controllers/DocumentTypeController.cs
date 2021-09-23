@@ -19,14 +19,16 @@ namespace application_programming_interface.Controllers
             _context = context;
         }
 
+        [Route("~/Document_Type/GetAll")]
         [HttpGet]
-        public IEnumerable<Document_Type> Get()
+        public IEnumerable<Document_Type> GetAll()
         {
             return _context.Document_Type.ToList();
         }
 
+        [Route("~/Document_Type/Create")]
         [HttpPost]
-        public JsonResult Post([FromBody] Document_Type document_Type)
+        public JsonResult Create([FromBody] Document_Type document_Type)
         {
             try
             {
@@ -40,9 +42,9 @@ namespace application_programming_interface.Controllers
             }
         }
 
-        [Route("~/{id}")]
+        [Route("~/Document_Type/Update/{id}")]
         [HttpPut("{id}")]
-        public JsonResult Put(Document_Type document_Type)
+        public JsonResult Update(Document_Type document_Type)
         {
             try
             {
@@ -56,7 +58,7 @@ namespace application_programming_interface.Controllers
             }
         }
 
-        [Route("~/{id}")]
+        [Route("~/Document_Type/Delete/{id}")]
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {

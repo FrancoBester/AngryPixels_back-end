@@ -21,8 +21,9 @@ namespace application_programming_interface.Controllers
             _context = context;
         }
 
+        [Route("~/Document/GetAll")]
         [HttpGet]
-        public  IEnumerable<Document> Get()
+        public  IEnumerable<Document> GetAll()
         {
             //var teset = _context.Document.FromSqlRaw("GetAllDocument").ToList(); //method to use stored procedures in api
 
@@ -32,8 +33,9 @@ namespace application_programming_interface.Controllers
             return _context.Document.ToList();
         }
 
+        [Route("~/Document/Create")]
         [HttpPost]
-        public JsonResult Post(Document doc)
+        public JsonResult Create(Document doc)
         {
             try
             {
@@ -49,9 +51,9 @@ namespace application_programming_interface.Controllers
             
         }
 
-        [Route("~/{id}")]
+        [Route("~/Document/Update/{id}")]
         [HttpPut("{id}")]
-        public JsonResult Put(Document document)
+        public JsonResult Update(Document document)
         {
             try
             {
@@ -66,7 +68,7 @@ namespace application_programming_interface.Controllers
         }
 
 
-        [Route("~/{id}")]
+        [Route("~/Document/Delete/{id}")]
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {

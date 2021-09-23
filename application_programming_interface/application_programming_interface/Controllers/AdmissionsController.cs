@@ -19,15 +19,17 @@ namespace application_programming_interface.Controllers
             _context = context;
         }
 
+        [Route("~/Admissions/GetAll")]
         [HttpGet]
-        public IEnumerable<Admissions> Get()
+        public IEnumerable<Admissions> GetAll()
         {
             //var test = _context.Admissions.Select(x => x.Policy.Policy_id).FirstOrDefault();// example for getting forgein key data
             return _context.Admissions.ToList();
         }
 
+        [Route("~/Admissions/Create")]
         [HttpPost]
-        public JsonResult Post([FromBody] Admissions admissions)
+        public JsonResult Create([FromBody] Admissions admissions)
         {
             try
             {
@@ -41,9 +43,9 @@ namespace application_programming_interface.Controllers
             }
         }
 
-        [Route("~/{id}")]
+        [Route("~/Admissions/Update/{id}")]
         [HttpPut("{id}")]
-        public JsonResult Put(int id, Admissions admissions)
+        public JsonResult Update(int id, Admissions admissions)
         {
             try
             {
@@ -57,7 +59,7 @@ namespace application_programming_interface.Controllers
             }
         }
 
-        [Route("~/{id}")]
+        [Route("~/Admissions/Delete/{id}")]
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {
