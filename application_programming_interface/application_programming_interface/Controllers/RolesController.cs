@@ -64,7 +64,7 @@ namespace application_programming_interface.Controllers
         {
             try
             {
-                _context.Remove(_context.Roles.Single(r => r.Role_id == id));
+                _context.Remove(_context.Roles.Single(r => r.Role_Id == id));
                 _context.SaveChanges();
                 return new JsonResult("Record removed");
             }

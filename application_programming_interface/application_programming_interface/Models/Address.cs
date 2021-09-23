@@ -9,7 +9,7 @@ namespace application_programming_interface.Models
     public class Address
     {
         [Key]
-        public int Address_id { get; set; }
+        public int Address_Id { get; set; }
 
         public string Street { get; set; }
 

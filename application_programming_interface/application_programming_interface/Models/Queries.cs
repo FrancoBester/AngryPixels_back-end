@@ -9,7 +9,7 @@ namespace application_programming_interface.Models
     public class Queries
     {
         [Key]
-        public int Query_id { get; set; }
+        public int Query_Id { get; set; }
 
         public string Query_Title { get; set; }
 

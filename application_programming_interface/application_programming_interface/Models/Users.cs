@@ -9,14 +9,23 @@ namespace application_programming_interface.Models
     public class Users
     {
         [Key]
-        public int User_id { get; set; }
+        public int User_Id { get; set; }
 
-        public string User_name { get; set; }
+        public string User_Name { get; set; }
 
-        public string User_surname { get; set; }
+        public string User_Surname { get; set; }
 
         public string User_ID_Number { get; set; }
 
+        public string User_Email { get; set; }
+
+        public string User_Cell { get; set; }
+
+        public string User_Dob { get; set; }
+
+        public string User_Gender { get; set; }
+
+        public string User_Age { get; set; }
 
         //many to one - address
         public int Address_Id { get; set; }

@@ -59,7 +59,7 @@ namespace application_programming_interface.Controllers
         {
             try
             {
-                _context.Remove(_context.Users.Single(u => u.User_id == id));
+                _context.Remove(_context.Users.Single(u => u.User_Id == id));
                 _context.SaveChanges();
                 return new JsonResult("Record removed");
             }
