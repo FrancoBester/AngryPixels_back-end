@@ -19,13 +19,14 @@ namespace application_programming_interface.Controllers
             _context = context;
         }
 
-
+        [Route("~/UserRoles/GetAll")]
         [HttpGet]
         public IEnumerable<User_Roles> Get()
         {
             return _context.User_Roles.ToList();
         }
 
+        [Route("~/UserRoles/Create")]
         [HttpPost]
         public JsonResult Post([FromBody] User_Roles user_Roles)
         {
@@ -42,7 +43,7 @@ namespace application_programming_interface.Controllers
         }
 
 
-        [Route("~/{id}")]
+        [Route("~/UserRoles/Edit/{id}")]
         [HttpPut("{id}")]
         public JsonResult Put(User_Roles user_Roles)
         {
@@ -58,7 +59,7 @@ namespace application_programming_interface.Controllers
             }
         }
 
-        [Route("~/{id}")]
+        [Route("~/UserRoles/Delete/{id}")]
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {
@@ -73,6 +74,16 @@ namespace application_programming_interface.Controllers
                 return new JsonResult(ex.InnerException);
             }
         }
+
+        //Get user name, surname, type and policy type
+
+        //Get all info from user model, policy, role, documents
+
+        //Admin gets all crud
+
+        //user CRUd func
+        //  Edit
+        //      info Name,Surname, Email, Cell, Gender, address, documents
 
     }
 }

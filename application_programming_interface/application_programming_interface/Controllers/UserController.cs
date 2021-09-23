@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace application_programming_interface.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class UserController : Controller
     {
         private readonly DataContext _context;
@@ -16,12 +18,14 @@ namespace application_programming_interface.Controllers
             _context = context;
         }
 
+        [Route("~/Users/GetAll")]
         [HttpGet]
         public IEnumerable<Users> Get()
         {
             return _context.Users.ToList();
         }
 
+        [Route("~/Users/Create")]
         [HttpPost]
         public JsonResult Post(Users user)
         {
@@ -37,7 +41,7 @@ namespace application_programming_interface.Controllers
             }
         }
 
-        [Route("~/{id}")]
+        [Route("~/Users/Edit/{id}")]
         [HttpPost("{id}")]
         public JsonResult Put(int id, Users user)
         {
@@ -53,7 +57,7 @@ namespace application_programming_interface.Controllers
             }
         }
 
-        [Route("~/{id}")]
+        [Route("~/Users/Delete/{id}")]
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {
@@ -68,5 +72,32 @@ namespace application_programming_interface.Controllers
                 return new JsonResult(ex.InnerException);
             }
         }
+
+
+
+        //user CRUD func - profile page
+        //  Select - load page
+        //      all user queries(queire detail, title)
+        //  
+        //  Edit - click pfp image button
+        //      info Name,Surname, Email, Cell, Gender, address, documents
+        //  Insert into schema request table - change/update policy
+        //  
+        //  Delete - delete entire profile
+        //  
+
+
+        //Admin gets all CRUD
+
+        //Admin CRUD func
+        //  Select - load page
+        //      Get user name, surname, type and policy type
+        //  Select - expand click
+        //      Get all info from user model, policy, role, 
+        //  Edit
+        //      info  policies, 
+        // Search
+        //      name,surname, policy type, user type, 
+
     }
 }

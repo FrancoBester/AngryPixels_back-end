@@ -21,12 +21,14 @@ namespace application_programming_interface.Controllers
             _context = context;
         }
 
+        [Route("~/UserPolicy/GetAll")]
         [HttpGet]
         public IEnumerable<User_Policy> Get()
         {
             return _context.User_Policies.ToList();
         }
 
+        [Route("~/UserPolicy/Create")]
         [HttpPost]
         public JsonResult Post([FromBody] User_Policy user_Policy)
         {
@@ -43,7 +45,7 @@ namespace application_programming_interface.Controllers
         }
 
 
-        [Route("~/{id}")]
+        [Route("~/UserPolicy/Edit/{id}")]
         [HttpPut("{id}")]
         public JsonResult Put(User_Policy user_Policy)
         {
@@ -60,7 +62,7 @@ namespace application_programming_interface.Controllers
         }
 
 
-        [Route("~/{id}")]
+        [Route("~/UserPolicy/Delete/{id}")]
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {

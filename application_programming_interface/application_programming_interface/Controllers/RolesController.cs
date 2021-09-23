@@ -19,12 +19,14 @@ namespace application_programming_interface.Controllers
             _context = context;
         }
 
+        [Route("~/Roles/GetAll")]
         [HttpGet]
         public IEnumerable<Document_Type> Get()
         {
             return _context.Document_Type.ToList();
         }
 
+        [Route("~/Roles/Create")]
         [HttpPost]
         public JsonResult Post([FromBody] Roles roles)
         {
@@ -41,7 +43,7 @@ namespace application_programming_interface.Controllers
         }
 
 
-        [Route("~/{id}")]
+        [Route("~/Roles/Edit/{id}")]
         [HttpPut("{id}")]
         public JsonResult Put(Roles roles)
         {
@@ -58,7 +60,7 @@ namespace application_programming_interface.Controllers
         }
 
 
-        [Route("~/{id}")]
+        [Route("~/Roles/Delete/{id}")]
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {

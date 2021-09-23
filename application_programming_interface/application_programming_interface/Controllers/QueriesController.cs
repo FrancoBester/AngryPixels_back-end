@@ -19,12 +19,14 @@ namespace application_programming_interface.Controllers
             _context = context;
         }
 
+        [Route("~/Queries/GetAll")]
         [HttpGet]
         public IEnumerable<Queries> Get()
         {
             return _context.Queries.ToList();
         }
 
+        [Route("~/Queries/Create")]
         [HttpPost]
         public JsonResult Post([FromBody] Queries queries)
         {
@@ -41,7 +43,7 @@ namespace application_programming_interface.Controllers
         }
 
 
-        [Route("~/{id}")]
+        [Route("~/Queries/Edit/{id}")]
         [HttpPut("{id}")]
         public JsonResult Put(Queries queries)
         {
@@ -57,7 +59,7 @@ namespace application_programming_interface.Controllers
             }
         }
 
-        [Route("~/{id}")]
+        [Route("~/Queries/Delete/{id}")]
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {
@@ -72,5 +74,13 @@ namespace application_programming_interface.Controllers
                 return new JsonResult(ex.InnerException);
             }
         }
+
+        //Admin
+        //  select
+        //      level,code,title,user id/name
+        //  Select - user click
+        //      all user info
+        //  select - tilte click
+        //      all querie table
     }
 }

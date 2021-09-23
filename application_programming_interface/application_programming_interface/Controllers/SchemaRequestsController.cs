@@ -20,12 +20,14 @@ namespace application_programming_interface.Controllers
             _context = context;
         }
 
+        [Route("~/SchemaRequests/GetAll")]
         [HttpGet]
         public IEnumerable<Schema_Requests> Get()
         {
             return _context.Schema_Requests.ToList();
         }
 
+        [Route("~/SchemaRequests/Create")]
         [HttpPost]
         public JsonResult Post([FromBody] Schema_Requests schema_Requests)
         {
@@ -42,7 +44,7 @@ namespace application_programming_interface.Controllers
         }
 
 
-        [Route("~/{id}")]
+        [Route("~/SchemaRequests/Edit/{id}")]
         [HttpPut("{id}")]
         public JsonResult Put(Schema_Requests schema_Requests)
         {
@@ -59,7 +61,7 @@ namespace application_programming_interface.Controllers
         }
 
 
-        [Route("~/{id}")]
+        [Route("~/SchemaRequests/Delete/{id}")]
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
         {
@@ -74,5 +76,16 @@ namespace application_programming_interface.Controllers
                 return new JsonResult(ex.InnerException);
             }
         }
+
+        //Admin - medcial scheme request review page
+        //  Select
+        //      user name, surname, request id, policy type
+        //  Select - expand click
+        //      all user info, policy request info 
+        //  Update - accept
+        //      user details update with policy  
+        //  Delete - reject - email alternatives
+        //      schema_request, 
+        //
     }
 }
