@@ -1,41 +1,40 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using application_programming_interface.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace application_programming_interface.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AdmissionsController : ControllerBase
+    public class DocumentTypeController : ControllerBase
     {
         private readonly DataContext _context;
 
-        public AdmissionsController(DataContext context)
+        public DocumentTypeController(DataContext context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public IEnumerable<Admissions> Get()
+        public IEnumerable<Document_Type> Get()
         {
-            //var test = _context.Admissions.Select(x => x.Policy.Policy_id).FirstOrDefault();// example for getting forgein key data
-            return _context.Admissions.ToList();
+            return _context.Document_Type.ToList();
         }
 
         [HttpPost]
-        public JsonResult Post([FromBody] Admissions admissions)
+        public JsonResult Post([FromBody] Document_Type document_Type)
         {
             try
             {
-                _context.Set<Admissions>().Add(admissions);
+                _context.Set<Document_Type>().Add(document_Type);
                 _context.SaveChanges();
-                return new JsonResult("data saved");
+                return new JsonResult("Data saved");
             }
-            catch (Exception ex)
+            catch( Exception ex)
             {
                 return new JsonResult(ex.InnerException);
             }
@@ -43,15 +42,15 @@ namespace application_programming_interface.Controllers
 
         [Route("~/{id}")]
         [HttpPut("{id}")]
-        public JsonResult Put(int id, Admissions admissions)
+        public JsonResult Put(Document_Type document_Type)
         {
             try
             {
-                _context.Entry(admissions).State = EntityState.Modified;
+                _context.Entry(document_Type).State = EntityState.Modified;
                 _context.SaveChanges();
-                return new JsonResult("data saved");
+                return new JsonResult("Data saved");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new JsonResult(ex.InnerException);
             }
@@ -63,12 +62,11 @@ namespace application_programming_interface.Controllers
         {
             try
             {
-                var test = id;
-                _context.Remove(_context.Admissions.Single(a => a.Adms_Id == id));
+                _context.Remove(_context.Document_Type.Single(dt => dt.DocType_Id == id));
                 _context.SaveChanges();
                 return new JsonResult("Record removed");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new JsonResult(ex.InnerException);
             }

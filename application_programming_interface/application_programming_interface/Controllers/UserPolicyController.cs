@@ -1,39 +1,40 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using application_programming_interface.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace application_programming_interface.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AdmissionsController : ControllerBase
+
+    public class UserPolicyController : ControllerBase
     {
         private readonly DataContext _context;
 
-        public AdmissionsController(DataContext context)
+        public UserPolicyController(DataContext context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public IEnumerable<Admissions> Get()
+        public IEnumerable<User_Policy> Get()
         {
-            //var test = _context.Admissions.Select(x => x.Policy.Policy_id).FirstOrDefault();// example for getting forgein key data
-            return _context.Admissions.ToList();
+            return _context.User_Policies.ToList();
         }
 
         [HttpPost]
-        public JsonResult Post([FromBody] Admissions admissions)
+        public JsonResult Post([FromBody] User_Policy user_Policy)
         {
             try
             {
-                _context.Set<Admissions>().Add(admissions);
+                _context.Set<User_Policy>().Add(user_Policy);
                 _context.SaveChanges();
-                return new JsonResult("data saved");
+                return new JsonResult("Data saved");
             }
             catch (Exception ex)
             {
@@ -41,21 +42,23 @@ namespace application_programming_interface.Controllers
             }
         }
 
+
         [Route("~/{id}")]
         [HttpPut("{id}")]
-        public JsonResult Put(int id, Admissions admissions)
+        public JsonResult Put(User_Policy user_Policy)
         {
             try
             {
-                _context.Entry(admissions).State = EntityState.Modified;
+                _context.Entry(user_Policy).State = EntityState.Modified;
                 _context.SaveChanges();
-                return new JsonResult("data saved");
+                return new JsonResult("Data saved");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new JsonResult(ex.InnerException);
             }
         }
+
 
         [Route("~/{id}")]
         [HttpDelete("{id}")]
@@ -63,12 +66,11 @@ namespace application_programming_interface.Controllers
         {
             try
             {
-                var test = id;
-                _context.Remove(_context.Admissions.Single(a => a.Adms_Id == id));
+                _context.Remove(_context.User_Policies.Single(up => up.User_Policy_Id == id));
                 _context.SaveChanges();
                 return new JsonResult("Record removed");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new JsonResult(ex.InnerException);
             }

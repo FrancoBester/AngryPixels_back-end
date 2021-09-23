@@ -11,11 +11,13 @@ namespace application_programming_interface.Models
         DbSet<Address> Address { get; set; }
         DbSet<Admissions> Admissions { get; set; }
         DbSet<Document> Document { get; set; }
-        DbSet<Medical_Certificate> Medical_Certificates { get; set; }
+        DbSet<Document_Type> Document_Type { get; set; }
         DbSet<Policy> Policy { get; set; }
         DbSet<Queries> Queries { get; set; }
         DbSet<Roles> Roles { get; set; }
-        DbSet<User_Roles> User_Type { get; set; }
+        DbSet<Schema_Requests> Schema_Requests { get; set; }
+        DbSet<User_Policy> User_Policies { get; set; }
+        DbSet<User_Roles> User_Roles { get; set; }
         DbSet<Users> Users { get; set; }
     }
 

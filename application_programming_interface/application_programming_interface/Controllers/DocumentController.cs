@@ -48,6 +48,39 @@ namespace application_programming_interface.Controllers
             }
             
         }
+
+        [Route("~/{id}")]
+        [HttpPut("{id}")]
+        public JsonResult Put(Document document)
+        {
+            try
+            {
+                _context.Entry(document).State = EntityState.Modified;
+                _context.SaveChanges();
+                return new JsonResult("Data saved");
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ex.InnerException);
+            }
+        }
+
+
+        [Route("~/{id}")]
+        [HttpDelete("{id}")]
+        public JsonResult Delete(int id)
+        {
+            try
+            {
+                _context.Remove(_context.Document.Single(d => d.Doc_Id == id));
+                _context.SaveChanges();
+                return new JsonResult("Record removed");
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ex.InnerException);
+            }
+        }
     }
     
 }
