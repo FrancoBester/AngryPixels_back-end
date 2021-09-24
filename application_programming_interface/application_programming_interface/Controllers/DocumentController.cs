@@ -6,6 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using application_programming_interface.Models;
 using Microsoft.EntityFrameworkCore;
+using application_programming_interface.Interfaces;
+using Microsoft.AspNetCore.Http;
+using application_programming_interface.DTOs;
 
 namespace application_programming_interface.Controllers
 {
@@ -15,22 +18,35 @@ namespace application_programming_interface.Controllers
     public class DocumentController : ControllerBase
     {
         private readonly DataContext _context;
+        private readonly IBlobStorageService _blobStorage;
 
-        public DocumentController(DataContext context)
+        public DocumentController(DataContext context, IBlobStorageService blobStorage)
         {
             _context = context;
+            _blobStorage = blobStorage;
         }
 
         [Route("~/Document/GetAll")]
         [HttpGet]
-        public  IEnumerable<Document> GetAll()
+        public BinaryData GetAll()
         {
+            #region
             //var teset = _context.Document.FromSqlRaw("GetAllDocument").ToList(); //method to use stored procedures in api
 
             //int id_test = 1;
             //var test = _context.Document.Where(e => e.Doc_id == id_test).Select(e => e).SingleOrDefault(); //example of link and lambda statments in api
 
-            return _context.Document.ToList();
+            //return _context.Document.ToList();
+            #endregion
+            var doc = _blobStorage.GetDocument();
+            return doc;
+        }
+
+        [Route("~/Document/UploadDoc")]
+        [HttpPost]
+        public void OnPostUpload([FromForm]FileDTO file)
+        {
+            _blobStorage.UploadDocument(file);
         }
 
         [Route("~/Document/Create")]
@@ -83,6 +99,8 @@ namespace application_programming_interface.Controllers
                 return new JsonResult(ex.InnerException);
             }
         }
+
+
     }
     
 }

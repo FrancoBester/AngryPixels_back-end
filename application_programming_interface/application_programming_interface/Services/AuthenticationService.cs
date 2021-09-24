@@ -32,7 +32,7 @@ namespace application_programming_interface.Services
             requestDTO.Validate();
 
             //mock authenication code
-            if (requestDTO.Username == MockData.MockData.User.User_name)
+            if (requestDTO.Username == MockData.MockData.User.User_Name)
             {
                 //user matches
                 return Authenticate(requestDTO);

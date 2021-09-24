@@ -8,6 +8,7 @@ using application_programming_interface.Models;
 using application_programming_interface.Interfaces;
 using application_programming_interface.Services;
 using System;
+using Azure.Storage.Blobs;
 
 namespace application_programming_interface
 {
@@ -31,13 +32,13 @@ namespace application_programming_interface
             services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnections")));
             services.AddScoped<IAddressService, AddressService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
-
+            services.AddSingleton(x => new BlobServiceClient(Configuration.GetConnectionString("StorageAccount")));
+            services.AddScoped<IBlobStorageService, BlobStorageService>();
             services.AddCors(x=>x.AddPolicy("AllowAllHeaders", builder => builder.AllowAnyOrigin()
                                                                 .AllowAnyHeader()
                                                                 .AllowAnyMethod()
                                                                 .AllowAnyOrigin()
-                                                                .WithOrigins("https://www.carnagehosting.com/",
-                                                                             "https://localhost/")
+                                                                .WithOrigins("https://localhost/")
                                                                 .SetIsOriginAllowedToAllowWildcardSubdomains()));
         }
 
