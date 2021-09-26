@@ -99,5 +99,26 @@ namespace application_programming_interface.Controllers
         // Search
         //      name,surname, policy type, user type, 
 
+        [Route("~/Users/Test")]
+        [HttpGet]
+        public IEnumerable<dynamic> Test()
+        {
+
+            //var a = (from user in _context.Users
+            //select  user.User_Name );
+
+            //var e = _context.Users.Include("User_Roles.Role").Select(x => new { x.User_Name, x.User_Surname }).ToList();
+
+
+            var test = (from user in _context.Users
+                        join uRoles in _context.User_Roles on user.User_Id equals uRoles.User_Id
+                        join aRoles in _context.Roles on uRoles.Role_Id equals aRoles.Role_Id
+                        join uPolicy in _context.User_Policy on user.User_Id equals uPolicy.User_Id
+                        join aPolicy in _context.Policy on uPolicy.Policy_Id equals aPolicy.Policy_Id
+                        select new { user.User_Name, user.User_Surname, aRoles.Role_Name, aPolicy.Policy_Type }).AsEnumerable().Cast<dynamic>().ToList<dynamic>();
+
+            return test;
+        }
+
     }
 }

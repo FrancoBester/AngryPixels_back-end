@@ -25,7 +25,7 @@ namespace application_programming_interface.Controllers
         [HttpGet]
         public IEnumerable<User_Policy> Get()
         {
-            return _context.User_Policies.ToList();
+            return _context.User_Policy.ToList();
         }
 
         [Route("~/UserPolicy/Create")]
@@ -68,7 +68,7 @@ namespace application_programming_interface.Controllers
         {
             try
             {
-                _context.Remove(_context.User_Policies.Single(up => up.User_Policy_Id == id));
+                _context.Remove(_context.User_Policy.Single(up => up.User_Policy_Id == id));
                 _context.SaveChanges();
                 return new JsonResult("Record removed");
             }

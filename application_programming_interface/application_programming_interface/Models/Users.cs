@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using application_programming_interface.DTOs;
 
 namespace application_programming_interface.Models
 {
@@ -42,10 +43,18 @@ namespace application_programming_interface.Models
         public ICollection<Schema_Requests> Schema_Requests { get; set; }
 
         //one to many - user_policy
-        public ICollection<User_Policy> User_Policies { get; set; }
+        public ICollection<User_Policy> User_Policy { get; set; }
 
         //one to many - Document
         public ICollection<Document> Documents { get; set; }
+
+        //DTO code
+
+        //public AdminLoadPageDTO adminLoadPageDTO => new AdminLoadPageDTO
+        //{
+        //    User_Name = this.User_Name,
+        //    User_Surname = this.User_Surname
+        //};
         
     }
 }

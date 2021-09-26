@@ -26,21 +26,21 @@ namespace application_programming_interface.Controllers
             _blobStorage = blobStorage;
         }
 
-        [Route("~/Document/GetAll")]
-        [HttpGet]
-        public BinaryData GetAll()
-        {
-            #region
-            //var teset = _context.Document.FromSqlRaw("GetAllDocument").ToList(); //method to use stored procedures in api
+        //[Route("~/Document/GetAll")]
+        //[HttpGet]
+        //public BinaryData GetAll()
+        //{
+        //    #region
+        //    //var teset = _context.Document.FromSqlRaw("GetAllDocument").ToList(); //method to use stored procedures in api
 
-            //int id_test = 1;
-            //var test = _context.Document.Where(e => e.Doc_id == id_test).Select(e => e).SingleOrDefault(); //example of link and lambda statments in api
+        //    //int id_test = 1;
+        //    //var test = _context.Document.Where(e => e.Doc_id == id_test).Select(e => e).SingleOrDefault(); //example of link and lambda statments in api
 
-            //return _context.Document.ToList();
-            #endregion
-            var doc = _blobStorage.GetDocument();
-            return doc;
-        }
+        //    //return _context.Document.ToList();
+        //    #endregion
+        //    var doc = _blobStorage.GetDocument();
+        //    return doc;
+        //}
 
         [Route("~/Document/UploadDoc")]
         [HttpPost]
