@@ -47,14 +47,6 @@ namespace application_programming_interface.Models
 
         //one to many - Document
         public ICollection<Document> Documents { get; set; }
-
-        //DTO code
-
-        //public AdminLoadPageDTO adminLoadPageDTO => new AdminLoadPageDTO
-        //{
-        //    User_Name = this.User_Name,
-        //    User_Surname = this.User_Surname
-        //};
         
     }
 }

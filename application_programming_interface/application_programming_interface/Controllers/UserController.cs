@@ -92,42 +92,54 @@ namespace application_programming_interface.Controllers
 
         //Admin CRUD func
         //  Select - load page
-        //      Get user name, surname, type and policy type
+        //      Get user name, surname, type and policy type ------- (DONE)
         //  Select - expand click
         //      Get all info from user model, policy, role, 
         //  Edit
         //      info  policies, 
         // Search
-        //      name,surname, policy type, user type, 
+        //      name,surname, policy type, user type, -------- (DONE)
 
-        [Route("~/Users/Test")]
+        [Route("~/Users/GetAdminLoadPageData")]
         [HttpGet]
-        public IEnumerable<dynamic> Test()
+        public IEnumerable<AdminLoadPageDTO> GetAdminLoadPageData(int? pageNumber)
         {
+            //--------------------------------
+            //VIR EXAMPLE MOENI DELETE NIE
+            //--------------------------------
+            //var test2 = (from user in _context.Users
+            //             select new UserDTO
+            //             {
+            //                 FirstName = user.User_Name,
+            //                 LastName = user.User_Surname,
+            //                 Roles = (from ur in _context.User_Roles
+            //                          join r in _context.Roles
+            //                             on ur.Role_Id equals r.Role_Id
+            //                          where ur.User_Id == user.User_Id
+            //                          select r.Role_Name).ToList(),
+            //                 Policies = (from up in _context.User_Policy
+            //                             join p in _context.Policy
+            //                                on up.Policy_Id equals p.Policy_Id
+            //                             where up.User_Id == user.User_Id
+            //                             select p).ToList()
+            //             }).ToList();
 
-            //var a = (from user in _context.Users
-            //select  user.User_Name );
+            //Pagination
+            int curPage = pageNumber ?? 1;
+            int curPageSize = 20;
 
-            //var e = _context.Users.Include("User_Roles.Role").Select(x => new { x.User_Name, x.User_Surname }).ToList();
-
-
-            var test = (from user in _context.Users
-                        join uRoles in _context.User_Roles on user.User_Id equals uRoles.User_Id
-                        join aRoles in _context.Roles on uRoles.Role_Id equals aRoles.Role_Id
-                        join uPolicy in _context.User_Policy on user.User_Id equals uPolicy.User_Id
-                        join aPolicy in _context.Policy on uPolicy.Policy_Id equals aPolicy.Policy_Id
-                        select new { user.User_Name, user.User_Surname, aRoles.Role_Name, aPolicy.Policy_Type }).AsEnumerable().Cast<dynamic>().ToList<dynamic>();
-
-            var test2 = (from user in _context.Users
-                         select new UserDTO
+            //Query for needed info
+            var userData = (from user in _context.Users
+                         select new AdminLoadPageDTO
                          {
+                             UserId = user.User_Id,
                              FirstName = user.User_Name,
                              LastName = user.User_Surname,
                              Roles = (from ur in _context.User_Roles
                                       join r in _context.Roles
                                          on ur.Role_Id equals r.Role_Id
                                       where ur.User_Id == user.User_Id
-                                      select r.Role_Name).ToList(),
+                                      select r).ToList(),
                              Policies = (from up in _context.User_Policy
                                          join p in _context.Policy
                                             on up.Policy_Id equals p.Policy_Id
@@ -135,7 +147,45 @@ namespace application_programming_interface.Controllers
                                          select p).ToList()
                          }).ToList();
 
-            return test;
+            return userData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
+        }
+
+        [Route("~/Users/SearchLoadPageData")]
+        [HttpGet]
+        public IEnumerable<AdminLoadPageDTO> SearchLoadPageData(int? pageNumber, string search)
+        {
+            
+            //Pagination
+            int curPage = pageNumber ?? 1;
+            int curPageSize = 20;
+
+            //Query for needed info
+            var userData = (from user in _context.Users
+                            select new AdminLoadPageDTO
+                            {
+                                UserId = user.User_Id,
+                                FirstName = user.User_Name,
+                                LastName = user.User_Surname,
+                                Roles = (from ur in _context.User_Roles
+                                         join r in _context.Roles
+                                            on ur.Role_Id equals r.Role_Id
+                                         where ur.User_Id == user.User_Id
+                                         select r.Role_Name).ToList(),
+                                Policies = (from up in _context.User_Policy
+                                            join p in _context.Policy
+                                               on up.Policy_Id equals p.Policy_Id
+                                            where up.User_Id == user.User_Id
+                                            select p.Policy_Type).ToList()
+                            }).ToList();
+
+            //Search results
+            var searchResults = userData.Where(s => s.FirstName.Contains(search)
+                                || s.LastName.Contains(search)
+                                || s.Roles.Contains(search)
+                                || s.Policies.Contains(search)).ToList();
+
+
+            return searchResults.Skip((curPage - 1) * curPageSize).Take(curPageSize);
         }
 
     }
