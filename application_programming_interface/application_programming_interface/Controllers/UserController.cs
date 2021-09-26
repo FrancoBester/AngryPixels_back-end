@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using application_programming_interface.Models;
 using Microsoft.EntityFrameworkCore;
+using application_programming_interface.DTOs;
 
 namespace application_programming_interface.Controllers
 {
@@ -116,6 +117,23 @@ namespace application_programming_interface.Controllers
                         join uPolicy in _context.User_Policy on user.User_Id equals uPolicy.User_Id
                         join aPolicy in _context.Policy on uPolicy.Policy_Id equals aPolicy.Policy_Id
                         select new { user.User_Name, user.User_Surname, aRoles.Role_Name, aPolicy.Policy_Type }).AsEnumerable().Cast<dynamic>().ToList<dynamic>();
+
+            var test2 = (from user in _context.Users
+                         select new UserDTO
+                         {
+                             FirstName = user.User_Name,
+                             LastName = user.User_Surname,
+                             Roles = (from ur in _context.User_Roles
+                                      join r in _context.Roles
+                                         on ur.Role_Id equals r.Role_Id
+                                      where ur.User_Id == user.User_Id
+                                      select r.Role_Name).ToList(),
+                             Policies = (from up in _context.User_Policy
+                                         join p in _context.Policy
+                                            on up.Policy_Id equals p.Policy_Id
+                                         where up.User_Id == user.User_Id
+                                         select p).ToList()
+                         }).ToList();
 
             return test;
         }
