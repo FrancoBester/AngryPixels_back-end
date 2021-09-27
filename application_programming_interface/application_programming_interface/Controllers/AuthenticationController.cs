@@ -38,5 +38,13 @@ namespace application_programming_interface.Controllers
                 throw new Exception(e.Message);
             }
         }
+        //CAAAAAAAAAAAAARRRRRRRRRRRRRRRMMMMMMMMMMMMMMMMMMMEEEEEEEEEEEEEEEEEEEEENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNnNnNnNnNnnNnN
+        [HttpGet]
+        [Route("~/TEST")]
+        [Authentication("admin")]
+        public JsonResult Test()
+        {
+            return new JsonResult(new { Token = "Fuck you"});
+        }
     }
 }
