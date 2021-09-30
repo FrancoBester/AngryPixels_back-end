@@ -19,8 +19,9 @@ namespace application_programming_interface.Models
 
         public string Query_Level { get; set; }
 
-        //one to many - users
-        public ICollection<Users> Users { get; set; }
+        //many to one - address
+        public int User_Id { get; set; }
+        public virtual Users Users { get; set; }
 
     }
 }

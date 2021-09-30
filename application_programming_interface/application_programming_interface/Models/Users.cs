@@ -30,9 +30,8 @@ namespace application_programming_interface.Models
         public int Address_Id { get; set; }
         public virtual Address Address { get; set; }
 
-        //many to one - query
-        public int Query_Id { get; set; }
-        public virtual Queries Query { get; set; }
+        // one to many - query
+        public ICollection<Queries> Queries { get; set; }
 
         //one to many - user_roles
         public ICollection<User_Roles> User_Roles { get; set; }
