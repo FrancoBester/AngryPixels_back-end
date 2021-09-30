@@ -124,28 +124,43 @@ namespace application_programming_interface.Controllers
             //                             select p).ToList()
             //             }).ToList();
 
+            //Query for needed info
+            //var userData = (from user in _context.Users
+            //             select new AdminLoadPageDTO
+            //             {
+            //                 UserId = user.User_Id,
+            //                 FirstName = user.User_Name,
+            //                 LastName = user.User_Surname,
+            //                 Roles = (from ur in _context.User_Roles
+            //                          join r in _context.Roles
+            //                             on ur.Role_Id equals r.Role_Id
+            //                          where ur.User_Id == user.User_Id
+            //                          select r.Role_Name).ToList(),
+            //                 Policies = (from up in _context.User_Policy
+            //                             join p in _context.Policy
+            //                                on up.Policy_Id equals p.Policy_Id
+            //                             where up.User_Id == user.User_Id
+            //                             select p.Policy_Type).ToList()
+            //             }).ToList();
+
+
             //Pagination
             int curPage = pageNumber ?? 1;
             int curPageSize = 20;
 
-            //Query for needed info
-            var userData = (from user in _context.Users
-                         select new AdminLoadPageDTO
-                         {
-                             UserId = user.User_Id,
-                             FirstName = user.User_Name,
-                             LastName = user.User_Surname,
-                             Roles = (from ur in _context.User_Roles
-                                      join r in _context.Roles
-                                         on ur.Role_Id equals r.Role_Id
-                                      where ur.User_Id == user.User_Id
-                                      select r.Role_Name).ToList(),
-                             Policies = (from up in _context.User_Policy
-                                         join p in _context.Policy
-                                            on up.Policy_Id equals p.Policy_Id
-                                         where up.User_Id == user.User_Id
-                                         select p.Policy_Type).ToList()
-                         }).ToList();
+            var userData = (from u in _context.Users
+                            join ur in _context.User_Roles on u.User_Id equals ur.User_Id
+                            join r in _context.Roles on ur.Role_Id equals r.Role_Id
+                            join up in _context.User_Policy on u.User_Id equals up.User_Id
+                            join p in _context.Policy on up.Policy_Id equals p.Policy_Id
+                            select new AdminLoadPageDTO
+                            {
+                                UserId = u.User_Id,
+                                FirstName = u.User_Name,
+                                LastName = u.User_Surname,
+                                Roles = r.Role_Name,
+                                Policies = p.Policy_Type
+                            }).ToList();
 
             return userData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
         }
@@ -154,32 +169,29 @@ namespace application_programming_interface.Controllers
         [HttpGet]
         public IEnumerable<AdminLoadPageDTO> SearchLoadPageData(int? pageNumber, string search)
         {
-            
+
             //Pagination
             int curPage = pageNumber ?? 1;
             int curPageSize = 20;
 
             //Query for needed info
-            var userData = (from user in _context.Users
+            var userData = (from u in _context.Users
+                            join ur in _context.User_Roles on u.User_Id equals ur.User_Id
+                            join r in _context.Roles on ur.Role_Id equals r.Role_Id
+                            join up in _context.User_Policy on u.User_Id equals up.User_Id
+                            join p in _context.Policy on up.Policy_Id equals p.Policy_Id
+                            where u.User_Name.ToUpper().Contains(search.ToUpper()) ||
+                                  u.User_Surname.ToUpper().Contains(search.ToUpper()) ||
+                                  r.Role_Name.ToUpper().Contains(search.ToUpper()) ||
+                                  p.Policy_Type.ToUpper().Contains(search.ToUpper())
                             select new AdminLoadPageDTO
                             {
-                                UserId = user.User_Id,
-                                FirstName = user.User_Name,
-                                LastName = user.User_Surname,
-                                Roles = (from ur in _context.User_Roles
-                                         join r in _context.Roles
-                                            on ur.Role_Id equals r.Role_Id
-                                         where ur.User_Id == user.User_Id
-                                         select r.Role_Name).ToList(),
-                                Policies = (from up in _context.User_Policy
-                                            join p in _context.Policy
-                                               on up.Policy_Id equals p.Policy_Id
-                                            where up.User_Id == user.User_Id
-                                            select p.Policy_Type).ToList()
-                            }).Where(s => s.FirstName.ToUpper().Contains(search.ToUpper())
-                                       || s.LastName.ToUpper().Contains(search.ToUpper())
-                                       || s.Roles.Contains(search)
-                                       || s.Policies.Contains(search)).ToList();
+                                UserId = u.User_Id,
+                                FirstName = u.User_Name,
+                                LastName = u.User_Surname,
+                                Roles = r.Role_Name,
+                                Policies = p.Policy_Type
+                            }).ToList();
 
 
             return userData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
