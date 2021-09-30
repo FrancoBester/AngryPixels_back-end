@@ -154,6 +154,22 @@ namespace application_programming_interface.Controllers
             int curPageSize = 20;
 
             //Query for needed info
+            var userData = (from user in _context.Users
+                            select new AdminLoadPageDTO
+                            {
+                                UserId = user.User_Id,
+                                FirstName = user.User_Name,
+                                LastName = user.User_Surname,
+                                Roles = (from ur in _context.User_Roles
+                                         join r in _context.Roles
+                                            on ur.Role_Id equals r.Role_Id
+                                         where ur.User_Id == user.User_Id
+                                         select r.Role_Name).ToList(),
+                                Policies = (from up in _context.User_Policy
+                                            join p in _context.Policy
+                                               on up.Policy_Id equals p.Policy_Id
+                                            where up.User_Id == user.User_Id
+                                            select p.Policy_Type).ToList()
             var userData = (from u in _context.Users
                             join ur in _context.User_Roles on u.User_Id equals ur.User_Id
                             join r in _context.Roles on ur.Role_Id equals r.Role_Id
@@ -206,6 +222,28 @@ namespace application_programming_interface.Controllers
             return userData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
         }
 
+        [Route("~/Users/GetUserLoadPageData")]
+        [HttpGet]
+        public IEnumerable<UserQueryDTO> GetUserLoadPageData(int? pageNumber, int id)
+        {
+            int curPage = pageNumber ?? 1;
+            int curPageSize = 20;
+
+            var userQeury = (from user in _context.Users
+                             select new UserQueryDTO
+                             {
+                                 FirstName = user.User_Name,
+                                 LastName = user.User_Surname,
+                                 Query_Detail = (from q in _context.Queries
+                                                 where q.Query_Id == id
+                                                 select q.Query_Detail).ToList(),
+                                 Query_Title = (from q in _context.Queries
+                                                where q.Query_Id == id
+                                                select q.Query_Title).ToList()
+                             }).ToList();
+
+            return userQeury.Skip((curPage - 1) * curPageSize).Take(curPageSize);
+        }
         //Retreives a specific Client Users information 
             //Use when admin clicks on User_Name or User_Surname in GetAdminLoadPageData(User Controller) <<<AND>>> GetAllUserQueries(Queries Controller)
                 // Policy_Id ==> Allow Admins to click on Policy_Type to view specific policy info
