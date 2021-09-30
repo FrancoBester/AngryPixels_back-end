@@ -9,6 +9,7 @@ namespace application_programming_interface.DTOs
     public class AdminLoadPageDTO
     {
         public int UserId{ get; set; }
+        public int PolicyId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Roles { get; set; }

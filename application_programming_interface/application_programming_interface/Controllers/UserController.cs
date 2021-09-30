@@ -74,7 +74,8 @@ namespace application_programming_interface.Controllers
             }
         }
 
-
+        #region Client User Functionalities 
+        #endregion
 
         //user CRUD func - profile page
         //  Select - load page
@@ -100,6 +101,8 @@ namespace application_programming_interface.Controllers
         // Search
         //      name,surname, policy type, user type, -------- (DONE)
 
+
+        #region Admin Functionalities
         [Route("~/Users/GetAdminLoadPageData")]
         [HttpGet]
         public IEnumerable<AdminLoadPageDTO> GetAdminLoadPageData(int? pageNumber)
@@ -148,6 +151,7 @@ namespace application_programming_interface.Controllers
             int curPage = pageNumber ?? 1;
             int curPageSize = 20;
 
+            //Query for needed info
             var userData = (from u in _context.Users
                             join ur in _context.User_Roles on u.User_Id equals ur.User_Id
                             join r in _context.Roles on ur.Role_Id equals r.Role_Id
@@ -159,6 +163,7 @@ namespace application_programming_interface.Controllers
                                 FirstName = u.User_Name,
                                 LastName = u.User_Surname,
                                 Roles = r.Role_Name,
+                                PolicyId = p.Policy_Id,
                                 Policies = p.Policy_Type
                             }).ToList();
 
@@ -190,12 +195,15 @@ namespace application_programming_interface.Controllers
                                 FirstName = u.User_Name,
                                 LastName = u.User_Surname,
                                 Roles = r.Role_Name,
+                                PolicyId = p.Policy_Id,
                                 Policies = p.Policy_Type
                             }).ToList();
 
 
             return userData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
         }
+        #endregion
+
 
     }
 }
