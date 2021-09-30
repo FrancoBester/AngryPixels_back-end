@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using application_programming_interface.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using application_programming_interface.DTOs;
 
 namespace application_programming_interface.Controllers
 {
@@ -75,6 +76,36 @@ namespace application_programming_interface.Controllers
             }
         }
 
+        [Route("~/Queries/GetAdminLoadPage")]
+        [HttpGet]
+        public IEnumerable<QueriesDTO> GetAdminLoadPageData(int? pageNumber)
+        {
+            int curPage = pageNumber ?? 1;
+            int curPageSize = 10;
+
+
+            var queryData = (from query in _context.Queries
+                             select new QueriesDTO
+                             {
+                                 Query_Title = query.Query_Title,
+                                 Query_Code = query.Query_Code,
+                                 Query_Level = query.Query_Level,
+                                 User_Id = (from u in _context.Users
+                                            where u.Query_Id == query.Query_Id
+                                            select u.User_Id
+                                                ).ToList(),
+                                 User_Name = (from u in _context.Users
+                                              where u.Query_Id == query.Query_Id
+                                              select u.User_Name
+                                                ).ToList(),
+                                 User_Surname = (from u in _context.Users
+                                                 where u.Query_Id == query.Query_Id
+                                                 select u.User_Surname
+                                                ).ToList(),
+                             }).ToList();
+
+            return queryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
+        }
         //Admin
         //  select
         //      level,code,title,user id/name
