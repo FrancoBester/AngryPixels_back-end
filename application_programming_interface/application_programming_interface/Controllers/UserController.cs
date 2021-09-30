@@ -139,12 +139,12 @@ namespace application_programming_interface.Controllers
                                       join r in _context.Roles
                                          on ur.Role_Id equals r.Role_Id
                                       where ur.User_Id == user.User_Id
-                                      select r).ToList(),
+                                      select r.Role_Name).ToList(),
                              Policies = (from up in _context.User_Policy
                                          join p in _context.Policy
                                             on up.Policy_Id equals p.Policy_Id
                                          where up.User_Id == user.User_Id
-                                         select p).ToList()
+                                         select p.Policy_Type).ToList()
                          }).ToList();
 
             return userData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
@@ -170,20 +170,19 @@ namespace application_programming_interface.Controllers
                                          join r in _context.Roles
                                             on ur.Role_Id equals r.Role_Id
                                          where ur.User_Id == user.User_Id
-                                         select r).ToList(),
+                                         select r.Role_Name).ToList(),
                                 Policies = (from up in _context.User_Policy
                                             join p in _context.Policy
                                                on up.Policy_Id equals p.Policy_Id
                                             where up.User_Id == user.User_Id
-                                            select p).ToList()
-                            }).ToList();
+                                            select p.Policy_Type).ToList()
+                            }).Where(s => s.FirstName.ToUpper().Contains(search.ToUpper())
+                                       || s.LastName.ToUpper().Contains(search.ToUpper())
+                                       || s.Roles.Contains(search)
+                                       || s.Policies.Contains(search)).ToList();
 
-            //Search results
-            var searchResults = userData.Where(s => s.FirstName.Contains(search)
-                                || s.LastName.Contains(search)).ToList();
 
-
-            return searchResults.Skip((curPage - 1) * curPageSize).Take(curPageSize);
+            return userData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
         }
 
     }
