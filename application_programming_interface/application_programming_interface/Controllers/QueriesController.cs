@@ -84,7 +84,7 @@ namespace application_programming_interface.Controllers
         //  select - tilte click
         //      all querie table
 
-        #region Admin Query Functionalities
+        #region Admin Dashboard Query Functionalities
 
         //Allow admins to view queries posted by all the users with pagination
         [Route("~/Queries/GetAllUserQueries")]
@@ -97,7 +97,7 @@ namespace application_programming_interface.Controllers
             int curPageSize = 20;
 
             //Query for needed info
-            var userData = (from u in _context.Users
+            var qeuryData = (from u in _context.Users
                             join uq in _context.Queries on u.Query_Id equals uq.Query_Id
                             select new AllUserQueriesDTO
                             {
@@ -109,7 +109,7 @@ namespace application_programming_interface.Controllers
                                 User_Name = u.User_Name
                             }).ToList();
 
-            return userData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
+            return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
         }
 
         //Allow admins to search for any of the fields in the Queries Table
@@ -123,7 +123,7 @@ namespace application_programming_interface.Controllers
             int curPageSize = 20;
 
             //Query for needed info
-            var userData = (from u in _context.Users
+            var qeuryData = (from u in _context.Users
                             join uq in _context.Queries on u.Query_Id equals uq.Query_Id
                             where uq.Query_Level.ToUpper().Contains(search.ToUpper()) ||
                                   uq.Query_Code.ToUpper().Contains(search.ToUpper()) ||
@@ -140,7 +140,7 @@ namespace application_programming_interface.Controllers
                             }).ToList();
 
 
-            return userData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
+            return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
         }
 
         //Allow admins to view the details of the chosen query
@@ -149,7 +149,7 @@ namespace application_programming_interface.Controllers
         public IEnumerable<QueryDetailsDTO> GetQueryDetails(int queryId)
         {
             //Query for needed info
-            var userData = (from uq in _context.Queries
+            var qeuryData = (from uq in _context.Queries
                             where uq.Query_Id == queryId
                             select new QueryDetailsDTO
                             {
@@ -161,7 +161,7 @@ namespace application_programming_interface.Controllers
                             }).ToList();
 
 
-            return userData;
+            return qeuryData;
         }
 
         #endregion

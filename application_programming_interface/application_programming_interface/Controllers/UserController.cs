@@ -102,7 +102,7 @@ namespace application_programming_interface.Controllers
         //      name,surname, policy type, user type, -------- (DONE)
 
 
-        #region Admin Functionalities
+        #region Admin Dashboard User Functionalities
 
         //Retreives user information data are displayed on the admin loading page regaring all users with their policies and roles.
         [Route("~/Users/GetAdminLoadPageData")]
@@ -207,7 +207,7 @@ namespace application_programming_interface.Controllers
         }
 
         //Retreives a specific Client Users information 
-            //Use when admin clicks on User_Name in GetAdminLoadPageData(User Controller) and GetAllUserQueries(Queries Controller)
+            //Use when admin clicks on User_Name or User_Surname in GetAdminLoadPageData(User Controller) <<<AND>>> GetAllUserQueries(Queries Controller)
                 // Policy_Id ==> Allow Admins to click on Policy_Type to view specific policy info
                 // DocType_Id ==> Allow admins to click on Med_Cet, Passport_Doc, Birth_Certificate to download/view it
         [Route("~/Users/GetUserDetails/{userId}")]
@@ -247,6 +247,50 @@ namespace application_programming_interface.Controllers
 
 
             return userData;
+        }
+
+        //Retreives a specific Policy's information with the Admissions Type
+            //Use when admin clicks on Policy_Type in GetAdminLoadPageData (User Controller)
+                //Adms_Id ==> Allow Admin to click on Adms_Type to view specific Admission type info
+        [Route("~/Users/GetPolicyDetails/{policyId}")]
+        [HttpGet("{policyId}")]
+        public IEnumerable<PolicyInfoDTO> GetPolicyDetails(int policyId)
+        {
+            //Query for needed info
+            var policyData = (from p in _context.Policy
+                            join a in _context.Admissions on p.Policy_Id equals a.Policy_Id
+                            where p.Policy_Id == policyId
+                            select new PolicyInfoDTO
+                            {
+                                Policy_Type = p.Policy_Type,
+                                Policy_Holder = p.Policy_Holder,
+                                Policy_Date = p.Policy_Date,
+                                Policy_Des = p.Policy_Des,
+                                Policy_Benefits = p.Policy_Benefits,
+                                Adms_Id = a.Adms_Id,
+                                Adms_Type = a.Adms_Type
+                            }).ToList();
+
+            return policyData;
+        }
+
+        //Retreives a specific AddimionType's information
+            //Use when admin clicks on Adms_Type in GetPolicyDetails (User Controller)
+        [Route("~/Users/GetAdmsTypeDetails/{admsId}")]
+        [HttpGet("{admsId}")]
+        public IEnumerable<AdmsInfoDTO> GetAdmsTypeDetails(int admsId)
+        {
+            //Query for needed info
+            var policyData = (from a in _context.Admissions
+                              where a.Adms_Id == admsId
+                              select new AdmsInfoDTO
+                              {
+                                  Adms_Type = a.Adms_Type,
+                                  Adms_Hospitals = a.Adms_Hospitals,
+                                  Adms_Doctors = a.Adms_Doctors
+                              }).ToList();
+
+            return policyData;
         }
 
         #endregion
