@@ -6,7 +6,6 @@ using application_programming_interface.DTOs;
 using application_programming_interface.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using application_programming_interface.DTOs;
 
 namespace application_programming_interface.Controllers
 {
@@ -77,7 +76,7 @@ namespace application_programming_interface.Controllers
             }
         }
 
-        [Route("~/Queries/GetAdminLoadPage")]
+        [Route("~/Queries/GetAdminLoadPageData")]
         [HttpGet]
         public IEnumerable<QueriesDTO> GetAdminLoadPageData(int? pageNumber)
         {
