@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using application_programming_interface.DTOs;
 using application_programming_interface.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -82,5 +83,87 @@ namespace application_programming_interface.Controllers
         //      all user info
         //  select - tilte click
         //      all querie table
+
+        #region Admin Query Functionalities
+
+        //Allow admins to view queries posted by all the users with pagination
+        [Route("~/Queries/GetAllUserQueries")]
+        [HttpGet]
+        public IEnumerable<AllUserQueriesDTO> GetAllUserQueries(int? pageNumber)
+        {
+
+            //Pagination
+            int curPage = pageNumber ?? 1;
+            int curPageSize = 20;
+
+            //Query for needed info
+            var userData = (from u in _context.Users
+                            join uq in _context.Queries on u.Query_Id equals uq.Query_Id
+                            select new AllUserQueriesDTO
+                            {
+                                Query_Id = uq.Query_Id,
+                                Query_Level = uq.Query_Level,
+                                Query_Code = uq.Query_Code,
+                                Query_Title = uq.Query_Title,
+                                User_Id = u.User_Id,
+                                User_Name = u.User_Name
+                            }).ToList();
+
+            return userData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
+        }
+
+        //Allow admins to search for any of the fields in the Queries Table
+        [Route("~/Queries/SearchAllUserQueries")]
+        [HttpGet]
+        public IEnumerable<AllUserQueriesDTO> SearchAllUserQueries(int? pageNumber, string search)
+        {
+
+            //Pagination
+            int curPage = pageNumber ?? 1;
+            int curPageSize = 20;
+
+            //Query for needed info
+            var userData = (from u in _context.Users
+                            join uq in _context.Queries on u.Query_Id equals uq.Query_Id
+                            where uq.Query_Level.ToUpper().Contains(search.ToUpper()) ||
+                                  uq.Query_Code.ToUpper().Contains(search.ToUpper()) ||
+                                  uq.Query_Title.ToUpper().Contains(search.ToUpper()) ||
+                                  u.User_Name.ToUpper().Contains(search.ToUpper())
+                            select new AllUserQueriesDTO
+                            {
+                                Query_Id = uq.Query_Id,
+                                Query_Level = uq.Query_Level,
+                                Query_Code = uq.Query_Code,
+                                Query_Title = uq.Query_Title,
+                                User_Id = u.User_Id,
+                                User_Name = u.User_Name
+                            }).ToList();
+
+
+            return userData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
+        }
+
+        //Allow admins to view the details of the chosen query
+        [Route("~/Queries/GetQueryDetails/{queryId}")]
+        [HttpGet("{queryId}")]
+        public IEnumerable<QueryDetailsDTO> GetQueryDetails(int queryId)
+        {
+            //Query for needed info
+            var userData = (from uq in _context.Queries
+                            where uq.Query_Id == queryId
+                            select new QueryDetailsDTO
+                            {
+                                Query_Id = uq.Query_Id,
+                                Query_Title = uq.Query_Title,
+                                Query_Level = uq.Query_Level,
+                                Query_Code = uq.Query_Code,
+                                Query_Detail = uq.Query_Detail
+                            }).ToList();
+
+
+            return userData;
+        }
+
+        #endregion
     }
 }

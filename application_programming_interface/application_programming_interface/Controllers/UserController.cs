@@ -103,6 +103,8 @@ namespace application_programming_interface.Controllers
 
 
         #region Admin Functionalities
+
+        //Retreives user information data are displayed on the admin loading page regaring all users with their policies and roles.
         [Route("~/Users/GetAdminLoadPageData")]
         [HttpGet]
         public IEnumerable<AdminLoadPageDTO> GetAdminLoadPageData(int? pageNumber)
@@ -170,6 +172,7 @@ namespace application_programming_interface.Controllers
             return userData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
         }
 
+        //Allows Admin users to search for any field values on the admin loading page table
         [Route("~/Users/SearchLoadPageData")]
         [HttpGet]
         public IEnumerable<AdminLoadPageDTO> SearchLoadPageData(int? pageNumber, string search)
@@ -202,6 +205,50 @@ namespace application_programming_interface.Controllers
 
             return userData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
         }
+
+        //Retreives a specific Client Users information 
+            //Use when admin clicks on User_Name in GetAdminLoadPageData(User Controller) and GetAllUserQueries(Queries Controller)
+                // Policy_Id ==> Allow Admins to click on Policy_Type to view specific policy info
+                // DocType_Id ==> Allow admins to click on Med_Cet, Passport_Doc, Birth_Certificate to download/view it
+        [Route("~/Users/GetUserDetails/{userId}")]
+        [HttpGet("{userId}")]
+        public IEnumerable<UserInfoDTO> GetUserDetails(int userId)
+        {
+            //Query for needed info
+            var userData = (from u in _context.Users
+                            join a in _context.Address on u.Address_Id equals a.Address_Id
+                            join ur in _context.User_Roles on u.User_Id equals ur.User_Id
+                            join r in _context.Roles on ur.Role_Id equals r.Role_Id
+                            join up in _context.User_Policy on u.User_Id equals up.User_Id
+                            join p in _context.Policy on up.Policy_Id equals p.Policy_Id
+                            join d in _context.Document on u.User_Id equals d.User_Id
+                            join dt in _context.Document_Type on d.Doc_Id equals dt.Doc_Id
+                            where u.User_Id == userId
+                            select new UserInfoDTO
+                            {
+                                Role_Name = r.Role_Name,
+                                User_Name = u.User_Name,
+                                User_Surname = u.User_Surname,
+                                User_ID_Number = u.User_ID_Number,
+                                User_Email = u.User_Email,
+                                User_Cell = u.User_Cell,
+                                User_Dob = u.User_Dob,
+                                User_Gender = u.User_Gender,
+                                Street = a.Street,
+                                City = a.City,
+                                Postal_Code = a.Postal_Code,
+                                Policy_Type = p.Policy_Type,
+                                Med_Cet = dt.Med_Cet,
+                                Passport_Doc = dt.Passport_Doc,
+                                Birth_Certificate = dt.Birth_Certificate,
+                                Policy_Id = p.Policy_Id,
+                                DocType_Id = dt.DocType_Id
+                            }).ToList();
+
+
+            return userData;
+        }
+
         #endregion
 
 
