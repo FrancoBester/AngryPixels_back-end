@@ -26,8 +26,6 @@ namespace application_programming_interface.Models
 
         public string User_Gender { get; set; }
 
-        public string User_Age { get; set; }
-
         //many to one - address
         public int Address_Id { get; set; }
         public virtual Address Address { get; set; }
