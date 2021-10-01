@@ -76,36 +76,7 @@ namespace application_programming_interface.Controllers
             }
         }
 
-        [Route("~/Queries/GetAdminLoadPageData")]
-        [HttpGet]
-        public IEnumerable<QueriesDTO> GetAdminLoadPageData(int? pageNumber)
-        {
-            int curPage = pageNumber ?? 1;
-            int curPageSize = 10;
-
-
-            var queryData = (from query in _context.Queries
-                             select new QueriesDTO
-                             {
-                                 Query_Title = query.Query_Title,
-                                 Query_Code = query.Query_Code,
-                                 Query_Level = query.Query_Level,
-                                 User_Id = (from u in _context.Users
-                                            where u.Query_Id == query.Query_Id
-                                            select u.User_Id
-                                                ).ToList(),
-                                 User_Name = (from u in _context.Users
-                                              where u.Query_Id == query.Query_Id
-                                              select u.User_Name
-                                                ).ToList(),
-                                 User_Surname = (from u in _context.Users
-                                                 where u.Query_Id == query.Query_Id
-                                                 select u.User_Surname
-                                                ).ToList(),
-                             }).ToList();
-
-            return queryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
-        }
+       
         //Admin
         //  select
         //      level,code,title,user id/name
@@ -128,16 +99,16 @@ namespace application_programming_interface.Controllers
 
             //Query for needed info
             var qeuryData = (from u in _context.Users
-                            join uq in _context.Queries on u.Query_Id equals uq.Query_Id
-                            select new AllUserQueriesDTO
-                            {
-                                Query_Id = uq.Query_Id,
-                                Query_Level = uq.Query_Level,
-                                Query_Code = uq.Query_Code,
-                                Query_Title = uq.Query_Title,
-                                User_Id = u.User_Id,
-                                User_Name = u.User_Name
-                            }).ToList();
+                             join uq in _context.Queries on u.User_Id equals uq.User_Id
+                             select new AllUserQueriesDTO
+                             {
+                                 Query_Id = uq.Query_Id,
+                                 Query_Level = uq.Query_Level,
+                                 Query_Code = uq.Query_Code,
+                                 Query_Title = uq.Query_Title,
+                                 User_Id = u.User_Id,
+                                 User_Name = u.User_Name
+                             }).ToList();
 
             return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
         }
@@ -154,20 +125,20 @@ namespace application_programming_interface.Controllers
 
             //Query for needed info
             var qeuryData = (from u in _context.Users
-                            join uq in _context.Queries on u.Query_Id equals uq.Query_Id
-                            where uq.Query_Level.ToUpper().Contains(search.ToUpper()) ||
-                                  uq.Query_Code.ToUpper().Contains(search.ToUpper()) ||
-                                  uq.Query_Title.ToUpper().Contains(search.ToUpper()) ||
-                                  u.User_Name.ToUpper().Contains(search.ToUpper())
-                            select new AllUserQueriesDTO
-                            {
-                                Query_Id = uq.Query_Id,
-                                Query_Level = uq.Query_Level,
-                                Query_Code = uq.Query_Code,
-                                Query_Title = uq.Query_Title,
-                                User_Id = u.User_Id,
-                                User_Name = u.User_Name
-                            }).ToList();
+                             join uq in _context.Queries on u.User_Id equals uq.User_Id
+                             where uq.Query_Level.ToUpper().Contains(search.ToUpper()) ||
+                                   uq.Query_Code.ToUpper().Contains(search.ToUpper()) ||
+                                   uq.Query_Title.ToUpper().Contains(search.ToUpper()) ||
+                                   u.User_Name.ToUpper().Contains(search.ToUpper())
+                             select new AllUserQueriesDTO
+                             {
+                                 Query_Id = uq.Query_Id,
+                                 Query_Level = uq.Query_Level,
+                                 Query_Code = uq.Query_Code,
+                                 Query_Title = uq.Query_Title,
+                                 User_Id = u.User_Id,
+                                 User_Name = u.User_Name
+                             }).ToList();
 
 
             return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
