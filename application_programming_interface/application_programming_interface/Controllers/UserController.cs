@@ -42,6 +42,21 @@ namespace application_programming_interface.Controllers
             }
         }
 
+        [Route("~/api/Users/Register")]
+        [HttpPost]
+        public JsonResult RegisterUser(UserRegisterDTO user)
+        {
+            try
+            {
+                //Add julle code hier om n user te add
+                return new JsonResult("data saved");
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ex.Message);
+            }
+        }
+
         [Route("~/Users/Edit/{id}")]
         [HttpPost("{id}")]
         public JsonResult Put(int id, Users user)
