@@ -22,7 +22,7 @@ namespace application_programming_interface.Models
 
         public string User_Cell { get; set; }
 
-        public string User_Dob { get; set; }
+        public DateTime User_Dob { get; set; }
 
         public string User_Gender { get; set; }
 

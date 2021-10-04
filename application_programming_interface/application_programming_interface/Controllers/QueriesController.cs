@@ -76,7 +76,7 @@ namespace application_programming_interface.Controllers
             }
         }
 
-       
+
         //Admin
         //  select
         //      level,code,title,user id/name
@@ -84,6 +84,42 @@ namespace application_programming_interface.Controllers
         //      all user info
         //  select - tilte click
         //      all querie table
+
+
+        #region User Dashboard Query Functionalities
+
+        //Allow users to view all of their own queries
+        //QueryId --> When clicked user can view that queries details
+        [Route("~/Queries/GetSpecificUserQueries/{userId}")]
+        [HttpGet("{userId}")]
+        public IEnumerable<SpecificUserQueriesDTO> GetSpecificUserQueries(int? pageNumber, int userId)
+        {
+
+            //Pagination
+            int curPage = pageNumber ?? 1;
+            int curPageSize = 20;
+
+            //Query for needed info
+            var qeuryData = (from u in _context.Users
+                             join uq in _context.Queries on u.User_Id equals uq.User_Id
+                             where u.User_Id == userId
+                             select new SpecificUserQueriesDTO
+                             {
+                                 Query_Id = uq.Query_Id,
+                                 Query_Title = uq.Query_Title,
+                                 Query_Level = uq.Query_Level
+                             }).ToList();
+
+            return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
+        }
+
+        //TODO:
+            //Allow user to post query
+            //Allow user to remove query
+
+
+        #endregion
+
 
         #region Admin Dashboard Query Functionalities
 
@@ -145,6 +181,7 @@ namespace application_programming_interface.Controllers
         }
 
         //Allow admins to view the details of the chosen query
+        //Allows users to view the details of their own query
         [Route("~/Queries/GetQueryDetails/{queryId}")]
         [HttpGet("{queryId}")]
         public IEnumerable<QueryDetailsDTO> GetQueryDetails(int queryId)
@@ -164,6 +201,12 @@ namespace application_programming_interface.Controllers
 
             return qeuryData;
         }
+
+        //TODO: (Need DB changes gotta check which ones)
+            //Medical Scheme Request Review Page
+                //-->Retreive all schema requests (Name, Surname, RequestID, PolicyType)
+                //-->Allow admin to accept schema request
+                //-->Allow admin to reject schema request with alternatives
 
         #endregion
     }

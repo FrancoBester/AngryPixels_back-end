@@ -19,36 +19,34 @@ namespace application_programming_interface.Controllers
             _context = context;
         }
 
-        [Route("~/Users/GetAll")]
-        [HttpGet]
-        public IEnumerable<Users> Get()
-        {
-            return _context.Users.ToList();
-        }
+        //DATABASE CHANGES NEEDED
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //Change --> DOB type to DateTime in DB
+        //ADD --> Query Status && AssistantName to Query Table
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        [Route("~/Users/Create")]
-        [HttpPost]
-        public JsonResult Post(Users user)
-        {
-            try
-            {
-                _context.Add<Users>(user);
-                _context.SaveChanges();
-                return new JsonResult("data saved");
-            }
-            catch (Exception ex)
-            {
-                return new JsonResult(ex.Message);
-            }
-        }
-
-        [Route("~/api/Users/Register")]
+        [Route("~/api/Users/RegisterUser")]
         [HttpPost]
         public JsonResult RegisterUser(UserRegisterDTO user)
         {
             try
             {
                 //Add julle code hier om n user te add
+                //(CAREL -->>)(NIE SEKER hoe om address stuff te add en hoe om die password hash te add nie)
+                var userToAdd = new Users
+                {
+                    User_Name = user.FirstName,
+                    User_Surname = user.LastName,
+                    User_Dob = user.DateOfBirth,
+                    User_Cell = user.CellPhoneNumber,
+                    User_Email = user.Email,
+                    User_Gender = user.Gender,
+                    User_ID_Number = user.IDnumber
+                };
+
+                _context.Users.Add(userToAdd);
+                _context.SaveChanges();
+
                 return new JsonResult("data saved");
             }
             catch (Exception ex)
@@ -57,14 +55,60 @@ namespace application_programming_interface.Controllers
             }
         }
 
-        [Route("~/Users/Edit/{id}")]
-        [HttpPost("{id}")]
-        public JsonResult Put(int id, Users user)
+
+        #region Client User Functionalities 
+
+        [Route("~/Users/GetUserLoadPageData")]
+        [HttpGet]
+        public IEnumerable<UserQueryDTO> GetUserLoadPageData(int? pageNumber, int id)
+        {
+            int curPage = pageNumber ?? 1;
+            int curPageSize = 20;
+
+            var userQeury = (from user in _context.Users
+                             select new UserQueryDTO
+                             {
+                                 FirstName = user.User_Name,
+                                 LastName = user.User_Surname,
+                                 Query_Detail = (from q in _context.Queries
+                                                 where q.Query_Id == id
+                                                 select q.Query_Detail).ToList(),
+                                 Query_Title = (from q in _context.Queries
+                                                where q.Query_Id == id
+                                                select q.Query_Title).ToList()
+                             }).ToList();
+
+            return userQeury.Skip((curPage - 1) * curPageSize).Take(curPageSize);
+        }
+
+        //Allow specific user to update their own information (includes Users and Address)
+        [Route("~/Users/UpdateUserInformation/{userId}")]
+        [HttpPut("{userId}")]
+        public JsonResult UpdateUserInformation(Users user, int userId)
         {
             try
             {
-                _context.Entry(user).State = EntityState.Modified;
-                _context.SaveChanges();
+                var updateUserObj = _context.Users.Where(x => x.User_Id == userId).SingleOrDefault();
+                var updateAdressObj = _context.Address.Where(x => x.Address_Id == updateUserObj.Address_Id).SingleOrDefault();
+
+                if (updateUserObj != null)
+                {
+                    updateUserObj.User_Name = user.User_Name;
+                    updateUserObj.User_Surname = user.User_Surname;
+                    updateUserObj.User_Email = user.User_Email;
+                    updateUserObj.User_Cell = user.User_Cell;
+                    updateUserObj.User_Gender = user.User_Gender;
+                    updateUserObj.User_Dob = user.User_Dob;
+                    updateUserObj.User_ID_Number = user.User_ID_Number;
+
+                    updateAdressObj.City = user.Address.City;
+                    updateAdressObj.Street = user.Address.Street;
+                    updateAdressObj.Postal_Code = user.Address.Postal_Code;
+
+                    _context.Users.Update(updateUserObj);
+                    _context.SaveChanges();
+                }
+
                 return new JsonResult("data saved");
             }
             catch (Exception ex)
@@ -73,14 +117,25 @@ namespace application_programming_interface.Controllers
             }
         }
 
-        [Route("~/Users/Delete/{id}")]
-        [HttpDelete("{id}")]
-        public JsonResult Delete(int id)
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //NEEDS TO BE TESTED STILL
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //Allow specific user to remove own account
+        //Allow admin to also remove user account
+        [Route("~/Users/RemoveUserAccount/{userId}")]
+        [HttpDelete("{userId}")]
+        public JsonResult RemoveUserAccount(int userId) 
         {
             try
             {
-                _context.Remove(_context.Users.Single(u => u.User_Id == id));
-                _context.SaveChanges();
+                var delObj = _context.Users.Where(x => x.User_Id == userId).SingleOrDefault();
+
+                if (delObj != null)
+                {
+                    _context.Users.Remove(delObj);
+                    _context.SaveChanges();
+                }
+
                 return new JsonResult("Record removed");
             }
             catch (Exception ex)
@@ -89,37 +144,26 @@ namespace application_programming_interface.Controllers
             }
         }
 
-        #region Client User Functionalities 
+        //TODO:
+            //Allow to manage policy info/type
+
+
         #endregion
 
         //user CRUD func - profile page
-        //  Select - load page
-        //      all user queries(queire detail, title)
-        //  
-        //  Edit - click pfp image button
-        //      info Name,Surname, Email, Cell, Gender, address, documents
         //  Insert into schema request table - change/update policy
-        //  
-        //  Delete - delete entire profile
-        //  
 
 
         //Admin gets all CRUD
-
         //Admin CRUD func
-        //  Select - load page
-        //      Get user name, surname, type and policy type ------- (DONE)
-        //  Select - expand click
-        //      Get all info from user model, policy, role, 
         //  Edit
         //      info  policies, 
-        // Search
-        //      name,surname, policy type, user type, -------- (DONE)
-
 
         #region Admin Dashboard User Functionalities
 
         //Retreives user information data are displayed on the admin loading page regaring all users with their policies and roles.
+        //FirstName/LastName --> When admin clicks it, they can view specific user info.
+        //PolicyType --> When admin clicks it, they can view specific policy info.
         [Route("~/Users/GetAdminLoadPageData")]
         [HttpGet]
         public IEnumerable<AdminLoadPageDTO> GetAdminLoadPageData(int? pageNumber)
@@ -143,26 +187,6 @@ namespace application_programming_interface.Controllers
             //                             where up.User_Id == user.User_Id
             //                             select p).ToList()
             //             }).ToList();
-
-            //Query for needed info
-            //var userData = (from user in _context.Users
-            //             select new AdminLoadPageDTO
-            //             {
-            //                 UserId = user.User_Id,
-            //                 FirstName = user.User_Name,
-            //                 LastName = user.User_Surname,
-            //                 Roles = (from ur in _context.User_Roles
-            //                          join r in _context.Roles
-            //                             on ur.Role_Id equals r.Role_Id
-            //                          where ur.User_Id == user.User_Id
-            //                          select r.Role_Name).ToList(),
-            //                 Policies = (from up in _context.User_Policy
-            //                             join p in _context.Policy
-            //                                on up.Policy_Id equals p.Policy_Id
-            //                             where up.User_Id == user.User_Id
-            //                             select p.Policy_Type).ToList()
-            //             }).ToList();
-
 
             //Pagination
             int curPage = pageNumber ?? 1;
@@ -219,29 +243,6 @@ namespace application_programming_interface.Controllers
 
 
             return userData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
-        }
-
-        [Route("~/Users/GetUserLoadPageData")]
-        [HttpGet]
-        public IEnumerable<UserQueryDTO> GetUserLoadPageData(int? pageNumber, int id)
-        {
-            int curPage = pageNumber ?? 1;
-            int curPageSize = 20;
-
-            var userQeury = (from user in _context.Users
-                             select new UserQueryDTO
-                             {
-                                 FirstName = user.User_Name,
-                                 LastName = user.User_Surname,
-                                 Query_Detail = (from q in _context.Queries
-                                                 where q.Query_Id == id
-                                                 select q.Query_Detail).ToList(),
-                                 Query_Title = (from q in _context.Queries
-                                                where q.Query_Id == id
-                                                select q.Query_Title).ToList()
-                             }).ToList();
-
-            return userQeury.Skip((curPage - 1) * curPageSize).Take(curPageSize);
         }
 
         //Retreives a specific Client Users information 
