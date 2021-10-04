@@ -42,7 +42,7 @@ namespace application_programming_interface.Controllers
         //    return doc;
         //}
 
-        [Route("~/Document/UploadDoc")]
+        [Route("~/api/Document/UploadDoc")]
         [HttpPost]
         public void OnPostUpload([FromForm]FileDTO file)
         {

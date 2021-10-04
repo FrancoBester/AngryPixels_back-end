@@ -25,7 +25,7 @@ namespace application_programming_interface.Controllers
         //ADD --> Query Status && AssistantName to Query Table
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        [Route("~/api/Users/RegisterUser")]
+        [Route("~/api/Users/Register")]
         [HttpPost]
         public JsonResult RegisterUser(UserRegisterDTO user)
         {
@@ -271,7 +271,7 @@ namespace application_programming_interface.Controllers
                                 User_ID_Number = u.User_ID_Number,
                                 User_Email = u.User_Email,
                                 User_Cell = u.User_Cell,
-                                User_Dob = u.User_Dob,
+                                User_Dob = "CHANNNNNNNNGGGGGGGGGGEEEEEEEEEEEETTTTTTHHHHHHHHHHIIIIIIIIIIIISSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS",
                                 User_Gender = u.User_Gender,
                                 Street = a.Street,
                                 City = a.City,
