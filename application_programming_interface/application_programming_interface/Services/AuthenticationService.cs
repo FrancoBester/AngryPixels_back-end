@@ -10,17 +10,20 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace application_programming_interface.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-
-        public AuthenticationService()
+        private readonly DataContext _context;
+        public UserDescriptorDTO User { get; set; }
+        public AuthenticationService(DataContext context)
         {
             User = new UserDescriptorDTO();
+            _context = context;
         }
-        public UserDescriptorDTO User { get; set; }
+        
 
         public UserDescriptorDTO GetUser()
         {
@@ -31,12 +34,22 @@ namespace application_programming_interface.Services
         {
             requestDTO.Validate();
 
-            //mock authenication code
-            if (requestDTO.Username == MockData.MockData.User.User_Name)
+            //Check if user exists and if password matches
+            var user = (from u in _context.Users
+                        where u.User_Email == requestDTO.Email
+                        select u
+                       ).FirstOrDefault();
+
+            if (user == null)
             {
-                //user matches
-                return Authenticate(requestDTO);
+                throw new ValidationException("User Email Not Found");
             }
+
+            ///WHERE IS PASSWORD IN DB??????
+            ///WE SAVE PASSWORD AS MD5 HASH IN DB
+            ///var hash = GenerateHash(requestDTO.Password)
+
+            return Authenticate(requestDTO);
 
             throw new Exception("Invalid username and password combination.");
         }
@@ -47,7 +60,7 @@ namespace application_programming_interface.Services
             var claims = new List<Claim>();
 
             //Add user details to claims
-            claims.Add(new Claim("Name", requestDTO.Username));
+            claims.Add(new Claim("email", requestDTO.Email));
 
             var roles = new List<string>() { "User"};
             var rolesAsString = JsonConvert.SerializeObject(roles);
@@ -67,5 +80,21 @@ namespace application_programming_interface.Services
 
         }
 
+        private string GenerateHash(string value)
+        {
+            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
+            {
+                byte[] inputBytes = Encoding.ASCII.GetBytes(value);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    sb.Append(hashBytes[i].ToString("X2"));
+                }
+                return sb.ToString();
+            }
+
+        }
     }
 }
