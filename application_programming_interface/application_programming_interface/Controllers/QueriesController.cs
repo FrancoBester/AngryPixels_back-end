@@ -63,20 +63,52 @@ namespace application_programming_interface.Controllers
             return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
         }
 
+        //Allow users to create queries (Needs to be tested)
+        [Route("~/Queries/GetSpecificUserQueries/{userId}")]
+        [HttpPost("{userId}")]
+        public JsonResult CreateQuery(int userId, Queries newQuery)
+        {
+            try
+            {
+                var queryToAdd = new Queries
+                {
+                    User_Id = userId,
+                    Status_Id = 1,
+                    Assistant_Name = "None",
+                    Query_Title = newQuery.Query_Title,
+                    Query_Level = newQuery.Query_Level,
+                    Query_Detail = newQuery.Query_Detail,
+                    Query_Code = "QC4" //need to add method to generate one 
+                };
+
+                _context.Queries.Add(queryToAdd);
+                _context.SaveChanges();
+
+                return new JsonResult("Query added");
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ex.Message);
+            }
+            
+        }
+
+
         //TODO:
-            //Allow user to post query
-            //Allow user to remove query
+        //Allow user to post query
+        //Allow user to remove query
 
 
         #endregion
 
 
+
         #region Admin Dashboard Query Functionalities
 
-        //Allow admins to view queries posted by all the users with pagination
-        [Route("~/Queries/GetAllUserQueries")]
+        //Retreives all Queries
+        [Route("~/Queries/GetAllQueries")]
         [HttpGet]
-        public IEnumerable<AllUserQueriesDTO> GetAllUserQueries(int? pageNumber)
+        public IEnumerable<AllUserQueriesDTO> GetAllQueries(int? pageNumber)
         {
 
             //Pagination
@@ -130,6 +162,36 @@ namespace application_programming_interface.Controllers
             return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
         }
 
+        //Retreives Queries by ID
+        // 1 --> Gets all Unresolved Queries
+        // 2 --> Gets all Active Queries
+        // 3 --> Gets all Resolved Queries
+        [Route("~/Queries/GetQueriesByStatus")]
+        [HttpGet]
+        public IEnumerable<AllUserQueriesDTO> GetQueriesByStatus(int? pageNumber, int statusId)
+        {
+
+            //Pagination
+            int curPage = pageNumber ?? 1;
+            int curPageSize = 20;
+
+            //Query for needed info
+            var qeuryData = (from u in _context.Users
+                             join uq in _context.Queries on u.User_Id equals uq.User_Id
+                             where uq.Status_Id == statusId
+                             select new AllUserQueriesDTO
+                             {
+                                 Query_Id = uq.Query_Id,
+                                 Query_Level = uq.Query_Level,
+                                 Query_Code = uq.Query_Code,
+                                 Query_Title = uq.Query_Title,
+                                 User_Id = u.User_Id,
+                                 User_Name = u.User_Name
+                             }).ToList();
+
+            return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
+        }
+
         //Allow admins to view the details of the chosen query
         //Allows users to view the details of their own query
         [Route("~/Queries/GetQueryDetails/{queryId}")]
@@ -155,10 +217,94 @@ namespace application_programming_interface.Controllers
         }
 
         //TODO: (Need DB changes gotta check which ones)
-            //Medical Scheme Request Review Page
-                //-->Retreive all schema requests (Name, Surname, RequestID, PolicyType)
-                //-->Allow admin to accept schema request
-                //-->Allow admin to reject schema request with alternatives
+        //Medical Scheme Request Review Page
+        //-->Retreive all schema requests (Name, Surname, RequestID, PolicyType)
+        //-->Allow admin to accept schema request
+        //-->Allow admin to reject schema request with alternatives
+
+        #endregion
+
+        #region Maybe
+        //Retreives all Resolved Queries (DONT HAVE TO WORRY ABOUT IT ANYMORE)
+        [Route("~/Queries/GetResolvedQueries")]
+        [HttpGet]
+        public IEnumerable<AllUserQueriesDTO> GetResolvedQueries(int? pageNumber)
+        {
+
+            //Pagination
+            int curPage = pageNumber ?? 1;
+            int curPageSize = 20;
+
+            //Query for needed info
+            var qeuryData = (from u in _context.Users
+                             join uq in _context.Queries on u.User_Id equals uq.User_Id
+                             where uq.Status_Id == 3
+                             select new AllUserQueriesDTO
+                             {
+                                 Query_Id = uq.Query_Id,
+                                 Query_Level = uq.Query_Level,
+                                 Query_Code = uq.Query_Code,
+                                 Query_Title = uq.Query_Title,
+                                 User_Id = u.User_Id,
+                                 User_Name = u.User_Name
+                             }).ToList();
+
+            return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
+        }
+
+        //Retreives all Unresolved Queries (NEEDS TO HAVE AN EMPLOYEE ASSIGNED STILL)
+        [Route("~/Queries/GetUnresolvedQueries")]
+        [HttpGet]
+        public IEnumerable<AllUserQueriesDTO> GetUnresolvedQueries(int? pageNumber)
+        {
+
+            //Pagination
+            int curPage = pageNumber ?? 1;
+            int curPageSize = 20;
+
+            //Query for needed info
+            var qeuryData = (from u in _context.Users
+                             join uq in _context.Queries on u.User_Id equals uq.User_Id
+                             where uq.Status_Id == 1
+                             select new AllUserQueriesDTO
+                             {
+                                 Query_Id = uq.Query_Id,
+                                 Query_Level = uq.Query_Level,
+                                 Query_Code = uq.Query_Code,
+                                 Query_Title = uq.Query_Title,
+                                 User_Id = u.User_Id,
+                                 User_Name = u.User_Name
+                             }).ToList();
+
+            return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
+        }
+
+        //Retreives all Active Queries (CURRENTLY BEING ADDRESSED BY EMPLOYEE)
+        [Route("~/Queries/GetActiveQueries")]
+        [HttpGet]
+        public IEnumerable<AllUserQueriesDTO> GetActiveQueries(int? pageNumber)
+        {
+
+            //Pagination
+            int curPage = pageNumber ?? 1;
+            int curPageSize = 20;
+
+            //Query for needed info
+            var qeuryData = (from u in _context.Users
+                             join uq in _context.Queries on u.User_Id equals uq.User_Id
+                             where uq.Status_Id == 2
+                             select new AllUserQueriesDTO
+                             {
+                                 Query_Id = uq.Query_Id,
+                                 Query_Level = uq.Query_Level,
+                                 Query_Code = uq.Query_Code,
+                                 Query_Title = uq.Query_Title,
+                                 User_Id = u.User_Id,
+                                 User_Name = u.User_Name
+                             }).ToList();
+
+            return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
+        }
 
         #endregion
     }

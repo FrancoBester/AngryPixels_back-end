@@ -261,7 +261,7 @@ namespace application_programming_interface.Controllers
                             join up in _context.User_Policy on u.User_Id equals up.User_Id
                             join p in _context.Policy on up.Policy_Id equals p.Policy_Id
                             join d in _context.Document on u.User_Id equals d.User_Id
-                            join dt in _context.Document_Type on d.Doc_Id equals dt.Doc_Id
+                            join dt in _context.Document_Type on d.Doc_Id equals dt.DocType_Id
                             where u.User_Id == userId
                             select new UserInfoDTO
                             {
@@ -277,9 +277,6 @@ namespace application_programming_interface.Controllers
                                 City = a.City,
                                 Postal_Code = a.Postal_Code,
                                 Policy_Type = p.Policy_Type,
-                                Med_Cet = dt.Med_Cet,
-                                Passport_Doc = dt.Passport_Doc,
-                                Birth_Certificate = dt.Birth_Certificate,
                                 Policy_Id = p.Policy_Id,
                                 DocType_Id = dt.DocType_Id
                             }).ToList();
