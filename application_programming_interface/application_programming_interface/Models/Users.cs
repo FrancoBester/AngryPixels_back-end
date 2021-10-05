@@ -11,23 +11,18 @@ namespace application_programming_interface.Models
     {
         [Key]
         public int User_Id { get; set; }
-
         public string User_Name { get; set; }
-
         public string User_Surname { get; set; }
-
         public string User_ID_Number { get; set; }
-
         public string User_Email { get; set; }
-
         public string User_Cell { get; set; }
-
         public DateTime User_Dob { get; set; }
-
         public string User_Gender { get; set; }
+        public string Password_Hash { get; set; }
+        public int Address_Id { get; set; }
+
 
         //many to one - address
-        public int Address_Id { get; set; }
         public virtual Address Address { get; set; }
 
         // one to many - query

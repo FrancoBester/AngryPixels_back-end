@@ -47,7 +47,7 @@ namespace application_programming_interface.Models
             modelBuilder.Entity<User_Policy>().HasOne(up => up.Policy).WithMany(p => p.User_Policies).HasForeignKey(up => up.Policy_Id);// user_policy/policy
             modelBuilder.Entity<Document>().HasOne(d => d.Policy).WithMany(p => p.Documents).HasForeignKey(d => d.Policy_Id);// document/policy
             modelBuilder.Entity<Admissions>().HasOne(a => a.Policy).WithMany(p => p.Admissions).HasForeignKey(a => a.Policy_Id);// admissions/policy
-            modelBuilder.Entity<Document_Type>().HasOne(dt => dt.Document).WithMany(d => d.Document_Types).HasForeignKey(dt => dt.Doc_Id);// document_type/document
+            modelBuilder.Entity<Document_Type>().HasOne(dt => dt.Document).WithMany(d => d.Document_Types).HasForeignKey(dt => dt.DocType_Id);// document_type/document
         }
 
         public DbSet<Address> Address { get; set; }

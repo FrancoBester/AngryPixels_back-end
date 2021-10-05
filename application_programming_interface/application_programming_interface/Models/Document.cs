@@ -10,13 +10,15 @@ namespace application_programming_interface.Models
     {
         [Key]
         public int Doc_Id { get; set; }
+        public int User_Id { get; set; }
+        public int Policy_Id { get; set; }
+        public int Doc_Type_Id { get; set; }
+
 
         //many to one - users
-        public int User_Id { get; set; }
         public virtual Users User { get; set; }
 
         //many to one - policy
-        public int Policy_Id { get; set; }
         public virtual Policy Policy { get; set; }
 
         //one to many 

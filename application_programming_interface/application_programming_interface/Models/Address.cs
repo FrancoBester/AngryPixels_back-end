@@ -10,12 +10,10 @@ namespace application_programming_interface.Models
     {
         [Key]
         public int Address_Id { get; set; }
-
         public string Street { get; set; }
-
         public string City { get; set; }
-
         public string Postal_Code { get; set; }
+
 
         //one to many - users
         public ICollection<Users> Users { get; set; }

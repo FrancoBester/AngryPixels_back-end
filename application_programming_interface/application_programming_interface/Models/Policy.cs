@@ -10,16 +10,12 @@ namespace application_programming_interface.Models
     {
         [Key]
         public int Policy_Id { get; set; }
-
         public string Policy_Holder {get;set;}
-
         public string Policy_Type { get; set; }
-
         public string Policy_Des { get; set; }
-
         public string Policy_Date { get; set; }
-
         public string Policy_Benefits { get; set; }
+
 
         //one to many - schema_requests
         public ICollection<Schema_Requests> Schema_Requests { get; set; }

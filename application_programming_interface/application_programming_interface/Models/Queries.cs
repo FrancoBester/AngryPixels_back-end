@@ -10,17 +10,16 @@ namespace application_programming_interface.Models
     {
         [Key]
         public int Query_Id { get; set; }
-
         public string Query_Title { get; set; }
-
         public string Query_Detail { get; set; }
-
         public string Query_Code { get; set; }
-
         public string Query_Level { get; set; }
+        public int User_Id { get; set; }
+        public string Assistant_Name { get; set; }
+        public int Status_Id { get; set; } //1,2,3 (Use enums)
+
 
         //many to one - address
-        public int User_Id { get; set; }
         public virtual Users Users { get; set; }
 
     }
