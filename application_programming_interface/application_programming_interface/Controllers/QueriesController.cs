@@ -20,63 +20,6 @@ namespace application_programming_interface.Controllers
             _context = context;
         }
 
-        [Route("~/Queries/GetAll")]
-        [HttpGet]
-        public IEnumerable<Queries> Get()
-        {
-            return _context.Queries.ToList();
-        }
-
-        [Route("~/Queries/Create")]
-        [HttpPost]
-        public JsonResult Post([FromBody] Queries queries)
-        {
-            try
-            {
-                _context.Set<Queries>().Add(queries);
-                _context.SaveChanges();
-                return new JsonResult("Data saved");
-            }
-            catch (Exception ex)
-            {
-                return new JsonResult(ex.InnerException);
-            }
-        }
-
-
-        [Route("~/Queries/Edit/{id}")]
-        [HttpPut("{id}")]
-        public JsonResult Put(Queries queries)
-        {
-            try
-            {
-                _context.Entry(queries).State = EntityState.Modified;
-                _context.SaveChanges();
-                return new JsonResult("Data saved");
-            }
-            catch (Exception ex)
-            {
-                return new JsonResult(ex.InnerException);
-            }
-        }
-
-        [Route("~/Queries/Delete/{id}")]
-        [HttpDelete("{id}")]
-        public JsonResult Delete(int id)
-        {
-            try
-            {
-                _context.Remove(_context.Queries.Single(q => q.Query_Id == id));
-                _context.SaveChanges();
-                return new JsonResult("Record removed");
-            }
-            catch (Exception ex)
-            {
-                return new JsonResult(ex.InnerException);
-            }
-        }
-
-
         //Admin
         //  select
         //      level,code,title,user id/name
@@ -85,6 +28,12 @@ namespace application_programming_interface.Controllers
         //  select - tilte click
         //      all querie table
 
+        enum QueryStatuses
+        {
+            Unresolved = 1,
+            Active = 2,
+            Resolved = 3
+        }
 
         #region User Dashboard Query Functionalities
 
@@ -107,7 +56,8 @@ namespace application_programming_interface.Controllers
                              {
                                  Query_Id = uq.Query_Id,
                                  Query_Title = uq.Query_Title,
-                                 Query_Level = uq.Query_Level
+                                 Query_Status = ((QueryStatuses)uq.Status_Id).ToString(),
+                                 Assistant_Name = uq.Assistant_Name
                              }).ToList();
 
             return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
@@ -195,7 +145,9 @@ namespace application_programming_interface.Controllers
                                 Query_Title = uq.Query_Title,
                                 Query_Level = uq.Query_Level,
                                 Query_Code = uq.Query_Code,
-                                Query_Detail = uq.Query_Detail
+                                Query_Detail = uq.Query_Detail,
+                                Query_Status = ((QueryStatuses)uq.Status_Id).ToString(),
+                                Assistant_Name = uq.Assistant_Name
                             }).ToList();
 
 

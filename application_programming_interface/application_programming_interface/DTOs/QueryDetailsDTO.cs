@@ -12,5 +12,8 @@ namespace application_programming_interface.DTOs
         public string Query_Detail { get; set; }
         public string Query_Code { get; set; }
         public string Query_Level { get; set; }
+        public string Query_Status { get; set; }
+        public string Assistant_Name { get; set; }
+
     }
 }
