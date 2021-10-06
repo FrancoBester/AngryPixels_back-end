@@ -50,8 +50,9 @@ namespace application_programming_interface.Atributes
             //TODO: get roles and stuff from db and dubble chekc information
             var authService = (AuthenticationService)context.HttpContext.RequestServices.GetService(typeof(IAuthenticationService));
             var claim = claims.Claims.ToList();
-            var name = claim.Where(x => x.Type.Equals("Name", System.StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value;
+            var name = claim.Where(x => x.Type.Equals("Email", System.StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value;
             var roles = claim.Where(x => x.Type.Equals("Roles", System.StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value;
+            var id = claim.Where(x => x.Type.Equals("ID", System.StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value;
 
             if (!string.IsNullOrEmpty(_role))
             {

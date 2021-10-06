@@ -49,18 +49,19 @@ namespace application_programming_interface.Services
             ///WE SAVE PASSWORD AS MD5 HASH IN DB
             ///var hash = GenerateHash(requestDTO.Password)
 
-            return Authenticate(requestDTO);
+            return Authenticate(requestDTO,user.User_Id);
 
             throw new Exception("Invalid username and password combination.");
         }
 
-        private SignInResponseDTO Authenticate(SignInRequestDTO requestDTO)
+        private SignInResponseDTO Authenticate(SignInRequestDTO requestDTO,int id)
         {
             //TODO: redo this to query DB
             var claims = new List<Claim>();
 
             //Add user details to claims
-            claims.Add(new Claim("email", requestDTO.Email));
+            claims.Add(new Claim("Email", requestDTO.Email));
+            claims.Add(new Claim("ID", id.ToString()));
 
             var roles = new List<string>() { "User"};
             var rolesAsString = JsonConvert.SerializeObject(roles);
