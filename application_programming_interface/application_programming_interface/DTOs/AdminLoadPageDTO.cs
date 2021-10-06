@@ -12,8 +12,8 @@ namespace application_programming_interface.DTOs
         public int PolicyId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Roles { get; set; }
-        public string Policies { get; set; }
+        public string RoleName { get; set; }
+        public string PolicyName { get; set; }
         //public List<string> Roles { get; set; }
         //public List<string> Policies { get; set; }
     }
