@@ -36,7 +36,7 @@ namespace application_programming_interface.Services
         }
 
         #region Client User Functionalities 
-        public IEnumerable<UserQueryDTO> GetUserLoadPageData(int? pageNumber, int id)
+        public IEnumerable<UserQueryDTO> GetUserLoadPageData(int? pageNumber, int userId)
         {
             int curPage = pageNumber ?? 1;
             int curPageSize = 20;
@@ -47,10 +47,10 @@ namespace application_programming_interface.Services
                                  FirstName = user.User_Name,
                                  LastName = user.User_Surname,
                                  Query_Detail = (from q in _context.Queries
-                                                 where q.Query_Id == id
+                                                 where q.Query_Id == userId
                                                  select q.Query_Detail).ToList(),
                                  Query_Title = (from q in _context.Queries
-                                                where q.Query_Id == id
+                                                where q.Query_Id == userId
                                                 select q.Query_Title).ToList()
                              }).ToList();
 
@@ -83,11 +83,10 @@ namespace application_programming_interface.Services
         }
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //NEEDS TO BE TESTED STILL
+        //FK CONSTRAINT ERROR
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //Allow specific user to remove own account
         //Allow admin to also remove user account
-
         public void RemoveUserAccount(int userId)
         {
                 var delObj = _context.Users.Where(x => x.User_Id == userId).SingleOrDefault();
@@ -121,26 +120,6 @@ namespace application_programming_interface.Services
         //PolicyType --> When admin clicks it, they can view specific policy info.
         public IEnumerable<AdminLoadPageDTO> GetAdminLoadPageData(int? pageNumber)
         {
-            //--------------------------------
-            //VIR EXAMPLE MOENI DELETE NIE
-            //--------------------------------
-            //var test2 = (from user in _context.Users
-            //             select new UserDTO
-            //             {
-            //                 FirstName = user.User_Name,
-            //                 LastName = user.User_Surname,
-            //                 Roles = (from ur in _context.User_Roles
-            //                          join r in _context.Roles
-            //                             on ur.Role_Id equals r.Role_Id
-            //                          where ur.User_Id == user.User_Id
-            //                          select r.Role_Name).ToList(),
-            //                 Policies = (from up in _context.User_Policy
-            //                             join p in _context.Policy
-            //                                on up.Policy_Id equals p.Policy_Id
-            //                             where up.User_Id == user.User_Id
-            //                             select p).ToList()
-            //             }).ToList();
-
             //Pagination
             int curPage = pageNumber ?? 1;
             int curPageSize = 20;
@@ -149,16 +128,22 @@ namespace application_programming_interface.Services
             var userData = (from u in _context.Users
                             join ur in _context.User_Roles on u.User_Id equals ur.User_Id
                             join r in _context.Roles on ur.Role_Id equals r.Role_Id
-                            join up in _context.User_Policy on u.User_Id equals up.User_Id
-                            join p in _context.Policy on up.Policy_Id equals p.Policy_Id
                             select new AdminLoadPageDTO
                             {
                                 UserId = u.User_Id,
                                 FirstName = u.User_Name,
                                 LastName = u.User_Surname,
-                                Roles = r.Role_Name,
-                                PolicyId = p.Policy_Id,
-                                Policies = p.Policy_Type
+                                RoleName = r.Role_Name,
+                                PolicyId = (from up in _context.User_Policy
+                                            join p in _context.Policy
+                                            on up.Policy_Id equals p.Policy_Id
+                                            where up.User_Id == u.User_Id
+                                            select p.Policy_Id).FirstOrDefault(),
+                                PolicyName = (from up in _context.User_Policy
+                                            join p in _context.Policy
+                                            on up.Policy_Id equals p.Policy_Id
+                                            where up.User_Id == u.User_Id
+                                            select p.Policy_Type).FirstOrDefault()
                             }).ToList();
 
             return userData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
@@ -176,21 +161,26 @@ namespace application_programming_interface.Services
             var userData = (from u in _context.Users
                             join ur in _context.User_Roles on u.User_Id equals ur.User_Id
                             join r in _context.Roles on ur.Role_Id equals r.Role_Id
-                            join up in _context.User_Policy on u.User_Id equals up.User_Id
-                            join p in _context.Policy on up.Policy_Id equals p.Policy_Id
-                            where u.User_Name.ToUpper().Contains(search.ToUpper()) ||
-                                  u.User_Surname.ToUpper().Contains(search.ToUpper()) ||
-                                  r.Role_Name.ToUpper().Contains(search.ToUpper()) ||
-                                  p.Policy_Type.ToUpper().Contains(search.ToUpper())
                             select new AdminLoadPageDTO
                             {
                                 UserId = u.User_Id,
                                 FirstName = u.User_Name,
                                 LastName = u.User_Surname,
-                                Roles = r.Role_Name,
-                                PolicyId = p.Policy_Id,
-                                Policies = p.Policy_Type
-                            }).ToList();
+                                RoleName = r.Role_Name,
+                                PolicyId = (from up in _context.User_Policy
+                                            join p in _context.Policy
+                                            on up.Policy_Id equals p.Policy_Id
+                                            where up.User_Id == u.User_Id
+                                            select p.Policy_Id).FirstOrDefault(),
+                                PolicyName = (from up in _context.User_Policy
+                                            join p in _context.Policy
+                                            on up.Policy_Id equals p.Policy_Id
+                                            where up.User_Id == u.User_Id
+                                            select p.Policy_Type).FirstOrDefault()
+                            }).Where( x => x.FirstName.ToUpper().Contains(search.ToUpper()) ||
+                                      x.LastName.ToUpper().Contains(search.ToUpper()) ||
+                                      x.RoleName.ToUpper().Contains(search.ToUpper()) ||
+                                      x.PolicyName.ToUpper().Contains(search.ToUpper())).ToList();
 
 
             return userData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
@@ -202,34 +192,35 @@ namespace application_programming_interface.Services
         // DocType_Id ==> Allow admins to click on Med_Cet, Passport_Doc, Birth_Certificate to download/view it
         public IEnumerable<UserInfoDTO> GetUserDetails(int userId)
         {
-            //Query for needed info
             var userData = (from u in _context.Users
-                            join a in _context.Address on u.Address_Id equals a.Address_Id
-                            join ur in _context.User_Roles on u.User_Id equals ur.User_Id
-                            join r in _context.Roles on ur.Role_Id equals r.Role_Id
-                            join up in _context.User_Policy on u.User_Id equals up.User_Id
-                            join p in _context.Policy on up.Policy_Id equals p.Policy_Id
-                            join d in _context.Document on u.User_Id equals d.User_Id
-                            join dt in _context.Document_Type on d.Doc_Id equals dt.DocType_Id
-                            where u.User_Id == userId
-                            select new UserInfoDTO
-                            {
-                                Role_Name = r.Role_Name,
-                                User_Name = u.User_Name,
-                                User_Surname = u.User_Surname,
-                                User_ID_Number = u.User_ID_Number,
-                                User_Email = u.User_Email,
-                                User_Cell = u.User_Cell,
-                                User_Dob = "CHANNNNNNNNGGGGGGGGGGEEEEEEEEEEEETTTTTTHHHHHHHHHHIIIIIIIIIIIISSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS",
-                                User_Gender = u.User_Gender,
-                                Street = a.Street,
-                                City = a.City,
-                                Postal_Code = a.Postal_Code,
-                                Policy_Type = p.Policy_Type,
-                                Policy_Id = p.Policy_Id,
-                                DocType_Id = dt.DocType_Id
-                            }).ToList();
-
+                         join a in _context.Address on u.Address_Id equals a.Address_Id
+                         join ur in _context.User_Roles on u.User_Id equals ur.User_Id
+                         join r in _context.Roles on ur.Role_Id equals r.Role_Id
+                         where u.User_Id == userId
+                         select new UserInfoDTO
+                         {
+                             User_Name = u.User_Name,
+                             User_Surname = u.User_Surname,
+                             User_ID_Number = u.User_ID_Number,
+                             User_Email = u.User_Email,
+                             User_Cell = u.User_Cell,
+                             User_Dob = u.User_Dob,
+                             User_Gender = u.User_Gender,
+                             Street = a.Street,
+                             City = a.City,
+                             Postal_Code = a.Postal_Code,
+                             Role_Name = r.Role_Name,
+                             Policy_Type = (from up in _context.User_Policy
+                                            join p in _context.Policy
+                                            on up.Policy_Id equals p.Policy_Id
+                                            where up.User_Id == userId
+                                            select p.Policy_Type).FirstOrDefault(),
+                             Policy_Id = (from up in _context.User_Policy
+                                          join p in _context.Policy
+                                          on up.Policy_Id equals p.Policy_Id
+                                          where up.User_Id == userId
+                                          select p.Policy_Id).FirstOrDefault()
+                         }).ToList();
 
             return userData;
         }
