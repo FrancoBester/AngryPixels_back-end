@@ -46,7 +46,7 @@ namespace application_programming_interface.Controllers
 
         #region Client User Functionalities 
 
-        [Route("~/Users/GetUserLoadPageData")]
+        [Route("~/api/Users/GetUserLoadPageData")]
         [HttpGet]
         public IEnumerable<UserQueryDTO> GetUserLoadPageData(int? pageNumber, int userId)
         {
@@ -54,7 +54,7 @@ namespace application_programming_interface.Controllers
         }
 
         //Allow specific user to update their own information (includes Users and Address)
-        [Route("~/Users/UpdateUserInformation/{userId}")]
+        [Route("~/api/Users/UpdateUserInformation/{userId}")]
         [HttpPut("{userId}")]
         public JsonResult UpdateUserInformation(Users user, int userId)
         {
@@ -75,7 +75,7 @@ namespace application_programming_interface.Controllers
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //Allow specific user to remove own account
         //Allow admin to also remove user account
-        [Route("~/Users/RemoveUserAccount/{userId}")]
+        [Route("~/api/Users/RemoveUserAccount/{userId}")]
         [HttpDelete("{userId}")]
         public JsonResult RemoveUserAccount(int userId) 
         {
@@ -89,6 +89,12 @@ namespace application_programming_interface.Controllers
             {
                 return new JsonResult(ex.InnerException);
             }
+        }
+
+        [Route("~/api/Users/GetProfileInformation/{userId}")]
+        public JsonResult GetProfiledata(int id)
+        {
+            return new JsonResult("Quack");
         }
 
         //TODO:
