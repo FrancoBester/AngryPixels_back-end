@@ -31,8 +31,6 @@ namespace application_programming_interface.Controllers
         {
             try
             {
-                //Add julle code hier om n user te add
-                //(CAREL -->>)(NIE SEKER hoe om address stuff te add en hoe om die password hash te add nie)
                 _userService.RegisterUser(user);
 
                 return new JsonResult("data saved");

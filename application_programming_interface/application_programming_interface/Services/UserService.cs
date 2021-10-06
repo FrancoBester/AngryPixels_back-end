@@ -19,7 +19,6 @@ namespace application_programming_interface.Services
         public void RegisterUser(UserRegisterDTO user)
         {
             //Add julle code hier om n user te add
-            //(CAREL -->>)(NIE SEKER hoe om address stuff te add en hoe om die password hash te add nie)
             var userToAdd = new Users
             {
                 User_Name = user.FirstName,
@@ -28,7 +27,10 @@ namespace application_programming_interface.Services
                 User_Cell = user.CellPhoneNumber,
                 User_Email = user.Email,
                 User_Gender = user.Gender,
-                User_ID_Number = user.IDnumber
+                User_ID_Number = user.IDnumber,
+                Password_Hash = user.Password
+
+                //CCAAAAARRREEEELLLL How you do this ? xD --> Address ??
             };
 
             _context.Users.Add(userToAdd);
