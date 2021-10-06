@@ -8,6 +8,8 @@ namespace application_programming_interface.DTOs
     public class SignInResponseDTO
     {
         public string Token;
+        public int Id;
+        public string Email;
         public List<string> Roles;
     }
 }

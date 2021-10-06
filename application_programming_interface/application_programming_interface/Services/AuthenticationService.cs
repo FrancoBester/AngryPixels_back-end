@@ -76,6 +76,8 @@ namespace application_programming_interface.Services
             var objectToReturn = new SignInResponseDTO();
             objectToReturn.Token = new JwtSecurityTokenHandler().WriteToken(token);
             objectToReturn.Roles = roles;
+            objectToReturn.Id = id;
+            objectToReturn.Email = requestDTO.Email;
 
             return objectToReturn;
 
