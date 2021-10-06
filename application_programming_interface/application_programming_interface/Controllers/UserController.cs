@@ -92,9 +92,9 @@ namespace application_programming_interface.Controllers
         }
 
         [Route("~/api/Users/GetProfileInformation/{userId}")]
-        public JsonResult GetProfiledata(int id)
+        public JsonResult GetProfiledata(int userId)
         {
-            return new JsonResult("Quack");
+            return new JsonResult(_userService.GetProfileInformation(userId));
         }
 
         //TODO:
@@ -129,7 +129,7 @@ namespace application_programming_interface.Controllers
                 // DocType_Id ==> Allow admins to click on Med_Cet, Passport_Doc, Birth_Certificate to download/view it
         [Route("~/Users/GetUserDetails/{userId}")]
         [HttpGet("{userId}")]
-        public IEnumerable<UserInfoDTO> GetUserDetails(int userId)
+        public UserInfoDTO GetUserDetails(int userId)
         {
             return _userService.GetUserDetails(userId);
         }
