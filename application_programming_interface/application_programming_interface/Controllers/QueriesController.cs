@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using application_programming_interface.DTOs;
+using application_programming_interface.Interfaces;
 using application_programming_interface.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,27 +14,13 @@ namespace application_programming_interface.Controllers
     [Route("[controller]")]
     public class QueriesController : ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly IQueriesService _queriesService;
 
-        public QueriesController(DataContext context)
+        public QueriesController(IQueriesService queriesService)
         {
-            _context = context;
+            _queriesService = queriesService;
         }
 
-        //Admin
-        //  select
-        //      level,code,title,user id/name
-        //  Select - user click
-        //      all user info
-        //  select - tilte click
-        //      all querie table
-
-        enum QueryStatuses
-        {
-            Unresolved = 1,
-            Active = 2,
-            Resolved = 3
-        }
 
         #region User Dashboard Query Functionalities
 
@@ -44,45 +31,17 @@ namespace application_programming_interface.Controllers
         public IEnumerable<SpecificUserQueriesDTO> GetSpecificUserQueries(int? pageNumber, int userId)
         {
 
-            //Pagination
-            int curPage = pageNumber ?? 1;
-            int curPageSize = 20;
-
-            //Query for needed info
-            var qeuryData = (from u in _context.Users
-                             join uq in _context.Queries on u.User_Id equals uq.User_Id
-                             where u.User_Id == userId
-                             select new SpecificUserQueriesDTO
-                             {
-                                 Query_Id = uq.Query_Id,
-                                 Query_Title = uq.Query_Title,
-                                 Query_Status = ((QueryStatuses)uq.Status_Id).ToString(),
-                                 Assistant_Name = uq.Assistant_Name
-                             }).ToList();
-
-            return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
+            return _queriesService.GetSpecificUserQueries(pageNumber, userId);
         }
 
         //Allow users to create queries (Needs to be tested)
-        [Route("~/Queries/GetSpecificUserQueries/{userId}")]
+        [Route("~/Queries/CreateQuery/{userId}")]
         [HttpPost("{userId}")]
         public JsonResult CreateQuery(int userId, Queries newQuery)
         {
             try
             {
-                var queryToAdd = new Queries
-                {
-                    User_Id = userId,
-                    Status_Id = 1,
-                    Assistant_Name = "None",
-                    Query_Title = newQuery.Query_Title,
-                    Query_Level = newQuery.Query_Level,
-                    Query_Detail = newQuery.Query_Detail,
-                    Query_Code = "QC4" //need to add method to generate one 
-                };
-
-                _context.Queries.Add(queryToAdd);
-                _context.SaveChanges();
+                _queriesService.CreateQuery(userId, newQuery);
 
                 return new JsonResult("Query added");
             }
@@ -93,15 +52,7 @@ namespace application_programming_interface.Controllers
             
         }
 
-
-        //TODO:
-        //Allow user to post query
-        //Allow user to remove query
-
-
         #endregion
-
-
 
         #region Admin Dashboard Query Functionalities
 
@@ -110,25 +61,7 @@ namespace application_programming_interface.Controllers
         [HttpGet]
         public IEnumerable<AllUserQueriesDTO> GetAllQueries(int? pageNumber)
         {
-
-            //Pagination
-            int curPage = pageNumber ?? 1;
-            int curPageSize = 20;
-
-            //Query for needed info
-            var qeuryData = (from u in _context.Users
-                             join uq in _context.Queries on u.User_Id equals uq.User_Id
-                             select new AllUserQueriesDTO
-                             {
-                                 Query_Id = uq.Query_Id,
-                                 Query_Level = uq.Query_Level,
-                                 Query_Code = uq.Query_Code,
-                                 Query_Title = uq.Query_Title,
-                                 User_Id = u.User_Id,
-                                 User_Name = u.User_Name
-                             }).ToList();
-
-            return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
+            return _queriesService.GetAllQueries(pageNumber);
         }
 
         //Allow admins to search for any of the fields in the Queries Table
@@ -136,30 +69,7 @@ namespace application_programming_interface.Controllers
         [HttpGet]
         public IEnumerable<AllUserQueriesDTO> SearchAllUserQueries(int? pageNumber, string search)
         {
-
-            //Pagination
-            int curPage = pageNumber ?? 1;
-            int curPageSize = 20;
-
-            //Query for needed info
-            var qeuryData = (from u in _context.Users
-                             join uq in _context.Queries on u.User_Id equals uq.User_Id
-                             where uq.Query_Level.ToUpper().Contains(search.ToUpper()) ||
-                                   uq.Query_Code.ToUpper().Contains(search.ToUpper()) ||
-                                   uq.Query_Title.ToUpper().Contains(search.ToUpper()) ||
-                                   u.User_Name.ToUpper().Contains(search.ToUpper())
-                             select new AllUserQueriesDTO
-                             {
-                                 Query_Id = uq.Query_Id,
-                                 Query_Level = uq.Query_Level,
-                                 Query_Code = uq.Query_Code,
-                                 Query_Title = uq.Query_Title,
-                                 User_Id = u.User_Id,
-                                 User_Name = u.User_Name
-                             }).ToList();
-
-
-            return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
+            return _queriesService.SearchAllUserQueries(pageNumber, search);
         }
 
         //Retreives Queries by ID
@@ -170,26 +80,7 @@ namespace application_programming_interface.Controllers
         [HttpGet]
         public IEnumerable<AllUserQueriesDTO> GetQueriesByStatus(int? pageNumber, int statusId)
         {
-
-            //Pagination
-            int curPage = pageNumber ?? 1;
-            int curPageSize = 20;
-
-            //Query for needed info
-            var qeuryData = (from u in _context.Users
-                             join uq in _context.Queries on u.User_Id equals uq.User_Id
-                             where uq.Status_Id == statusId
-                             select new AllUserQueriesDTO
-                             {
-                                 Query_Id = uq.Query_Id,
-                                 Query_Level = uq.Query_Level,
-                                 Query_Code = uq.Query_Code,
-                                 Query_Title = uq.Query_Title,
-                                 User_Id = u.User_Id,
-                                 User_Name = u.User_Name
-                             }).ToList();
-
-            return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
+            return _queriesService.GetQueriesByStatus(pageNumber, statusId);
         }
 
         //Allow admins to view the details of the chosen query
@@ -198,22 +89,7 @@ namespace application_programming_interface.Controllers
         [HttpGet("{queryId}")]
         public IEnumerable<QueryDetailsDTO> GetQueryDetails(int queryId)
         {
-            //Query for needed info
-            var qeuryData = (from uq in _context.Queries
-                            where uq.Query_Id == queryId
-                            select new QueryDetailsDTO
-                            {
-                                Query_Id = uq.Query_Id,
-                                Query_Title = uq.Query_Title,
-                                Query_Level = uq.Query_Level,
-                                Query_Code = uq.Query_Code,
-                                Query_Detail = uq.Query_Detail,
-                                Query_Status = ((QueryStatuses)uq.Status_Id).ToString(),
-                                Assistant_Name = uq.Assistant_Name
-                            }).ToList();
-
-
-            return qeuryData;
+            return _queriesService.GetQueryDetails(queryId);
         }
 
         //TODO: (Need DB changes gotta check which ones)
@@ -225,86 +101,29 @@ namespace application_programming_interface.Controllers
         #endregion
 
         #region Maybe
-        //Retreives all Resolved Queries (DONT HAVE TO WORRY ABOUT IT ANYMORE)
-        [Route("~/Queries/GetResolvedQueries")]
-        [HttpGet]
-        public IEnumerable<AllUserQueriesDTO> GetResolvedQueries(int? pageNumber)
-        {
+        ////Retreives all Resolved Queries (DONT HAVE TO WORRY ABOUT IT ANYMORE)
+        //[Route("~/Queries/GetResolvedQueries")]
+        //[HttpGet]
+        //public IEnumerable<AllUserQueriesDTO> GetResolvedQueries(int? pageNumber)
+        //{
+            
+        //}
 
-            //Pagination
-            int curPage = pageNumber ?? 1;
-            int curPageSize = 20;
+        ////Retreives all Unresolved Queries (NEEDS TO HAVE AN EMPLOYEE ASSIGNED STILL)
+        //[Route("~/Queries/GetUnresolvedQueries")]
+        //[HttpGet]
+        //public IEnumerable<AllUserQueriesDTO> GetUnresolvedQueries(int? pageNumber)
+        //{
 
-            //Query for needed info
-            var qeuryData = (from u in _context.Users
-                             join uq in _context.Queries on u.User_Id equals uq.User_Id
-                             where uq.Status_Id == 3
-                             select new AllUserQueriesDTO
-                             {
-                                 Query_Id = uq.Query_Id,
-                                 Query_Level = uq.Query_Level,
-                                 Query_Code = uq.Query_Code,
-                                 Query_Title = uq.Query_Title,
-                                 User_Id = u.User_Id,
-                                 User_Name = u.User_Name
-                             }).ToList();
+        //}
 
-            return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
-        }
+        ////Retreives all Active Queries (CURRENTLY BEING ADDRESSED BY EMPLOYEE)
+        //[Route("~/Queries/GetActiveQueries")]
+        //[HttpGet]
+        //public IEnumerable<AllUserQueriesDTO> GetActiveQueries(int? pageNumber)
+        //{
 
-        //Retreives all Unresolved Queries (NEEDS TO HAVE AN EMPLOYEE ASSIGNED STILL)
-        [Route("~/Queries/GetUnresolvedQueries")]
-        [HttpGet]
-        public IEnumerable<AllUserQueriesDTO> GetUnresolvedQueries(int? pageNumber)
-        {
-
-            //Pagination
-            int curPage = pageNumber ?? 1;
-            int curPageSize = 20;
-
-            //Query for needed info
-            var qeuryData = (from u in _context.Users
-                             join uq in _context.Queries on u.User_Id equals uq.User_Id
-                             where uq.Status_Id == 1
-                             select new AllUserQueriesDTO
-                             {
-                                 Query_Id = uq.Query_Id,
-                                 Query_Level = uq.Query_Level,
-                                 Query_Code = uq.Query_Code,
-                                 Query_Title = uq.Query_Title,
-                                 User_Id = u.User_Id,
-                                 User_Name = u.User_Name
-                             }).ToList();
-
-            return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
-        }
-
-        //Retreives all Active Queries (CURRENTLY BEING ADDRESSED BY EMPLOYEE)
-        [Route("~/Queries/GetActiveQueries")]
-        [HttpGet]
-        public IEnumerable<AllUserQueriesDTO> GetActiveQueries(int? pageNumber)
-        {
-
-            //Pagination
-            int curPage = pageNumber ?? 1;
-            int curPageSize = 20;
-
-            //Query for needed info
-            var qeuryData = (from u in _context.Users
-                             join uq in _context.Queries on u.User_Id equals uq.User_Id
-                             where uq.Status_Id == 2
-                             select new AllUserQueriesDTO
-                             {
-                                 Query_Id = uq.Query_Id,
-                                 Query_Level = uq.Query_Level,
-                                 Query_Code = uq.Query_Code,
-                                 Query_Title = uq.Query_Title,
-                                 User_Id = u.User_Id,
-                                 User_Name = u.User_Name
-                             }).ToList();
-
-            return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
-        }
+        //}
 
         #endregion
     }

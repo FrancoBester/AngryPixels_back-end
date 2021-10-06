@@ -34,6 +34,8 @@ namespace application_programming_interface
             }
             services.AddDbContext<DataContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnections")));
             services.AddScoped<IAddressService, AddressService>();
+            services.AddScoped<IQueriesService, QueriesService>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddSingleton(x => new BlobServiceClient(Configuration.GetConnectionString("StorageAccount")));
             services.AddScoped<IBlobStorageService, BlobStorageService>();
