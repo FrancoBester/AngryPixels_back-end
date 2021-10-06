@@ -15,8 +15,7 @@ namespace application_programming_interface.DTOs
         public string CellPhoneNumber { get; set; }
         public string Gender { get; set; }
         public string IDnumber { get; set; }
-        //public string Street { get; set; }
-        //public string City { get; set; }
-        //public string PostalCode { get; set; }
+
+        public AddressDTO Address { get; set; }
     }
 }
