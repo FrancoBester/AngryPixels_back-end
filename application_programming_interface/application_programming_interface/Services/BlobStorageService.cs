@@ -44,8 +44,14 @@ namespace application_programming_interface.Services
 
             var fileUri = blobClient.Uri.AbsoluteUri; //Url the blob storage gets back
 
-            //TODO: use data context to save the URI to the data base.
-            //Use auth info to get the user information.
+            _context.Document.Add(new Document() 
+            {
+                File_Name = file.FileName,
+                User_Id = file.UserId,
+                File_Url = fileUri
+            }); // adds this document to the db
+
+            _context.SaveChanges();
         }
     }
 }
