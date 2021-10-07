@@ -37,7 +37,7 @@ namespace application_programming_interface.Services
             _context.SaveChanges();
         }
 
-        #region Client User Functionalities 
+        #region Client User Dashboard Functionalities 
 
         //Allow specific user to update their own information (includes Users and Address)
         public void UpdateUserInformation(Users user, int userId)
