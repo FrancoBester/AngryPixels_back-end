@@ -19,7 +19,7 @@ namespace application_programming_interface.Models
                 throw new ValidationException("No username entered.");
             }
 
-            if (Email.Length>20 || Email.Length < 3)
+            if (Email.Length>50 || Email.Length < 3)
             {
                 throw new ValidationException("Username must be longer than 3 charachters and shorter than 20.");
             }
