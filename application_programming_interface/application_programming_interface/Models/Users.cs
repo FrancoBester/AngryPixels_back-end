@@ -20,7 +20,7 @@ namespace application_programming_interface.Models
         public string User_Gender { get; set; }
         public string Password_Hash { get; set; }
         public int Address_Id { get; set; }
-
+        public bool IsActive { get; set; }
 
         //many to one - address
         public virtual Address Address { get; set; }
