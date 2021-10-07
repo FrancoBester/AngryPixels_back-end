@@ -49,6 +49,13 @@ namespace application_programming_interface.Controllers
             _blobStorage.UploadDocument(file);
         }
 
+        [Route("~/api/Document/UploadDocForUser")]
+        [HttpPost]
+        public void UploadDocumentForUser([FromForm] UserDocumentUploadDTO file)
+        {
+            _blobStorage.UploadDocumentForUser(file);
+        }
+
         [Route("~/Document/Create")]
         [HttpPost]
         public JsonResult Create(Document doc)

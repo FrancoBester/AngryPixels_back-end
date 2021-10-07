@@ -9,5 +9,6 @@ namespace application_programming_interface.Interfaces
     public interface IBlobStorageService
     {
         void UploadDocument(FileDTO file);
+        void UploadDocumentForUser(UserDocumentUploadDTO file);
     }
 }
