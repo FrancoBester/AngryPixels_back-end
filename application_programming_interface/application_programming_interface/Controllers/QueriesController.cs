@@ -34,7 +34,7 @@ namespace application_programming_interface.Controllers
             return _queriesService.GetSpecificUserQueries(pageNumber, userId);
         }
 
-        //Allow users to create queries (Needs to be tested)
+        //Allow users to create queries
         [Route("~/api/Queries/CreateQuery/{userId}")]
         [HttpPost("{userId}")]
         public JsonResult CreateQuery(int userId, Queries newQuery)
