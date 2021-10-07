@@ -13,6 +13,8 @@ namespace application_programming_interface.Models
         public int User_Id { get; set; }
         public int Policy_Id { get; set; }
         public int Doc_Type_Id { get; set; }
+        public string File_Name { get; set; }
+        public string File_Url { get; set; }
 
 
         //many to one - users
