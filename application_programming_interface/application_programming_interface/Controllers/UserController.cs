@@ -44,7 +44,7 @@ namespace application_programming_interface.Controllers
 
         #region Client User Functionalities 
 
-        [Route("~/Users/GetUserLoadPageData")]
+        [Route("~/api/Users/GetUserLoadPageData")]
         [HttpGet]
         public IEnumerable<UserQueryDTO> GetUserLoadPageData(int? pageNumber, int userId)
         {
@@ -52,7 +52,7 @@ namespace application_programming_interface.Controllers
         }
 
         //Allow specific user to update their own information (includes Users and Address)
-        [Route("~/Users/UpdateUserInformation/{userId}")]
+        [Route("~/api/Users/UpdateUserInformation/{userId}")]
         [HttpPut("{userId}")]
         public JsonResult UpdateUserInformation(Users user, int userId)
         {
@@ -73,7 +73,7 @@ namespace application_programming_interface.Controllers
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //Allow specific user to remove own account
         //Allow admin to also remove user account
-        [Route("~/Users/RemoveUserAccount/{userId}")]
+        [Route("~/api/Users/RemoveUserAccount/{userId}")]
         [HttpDelete("{userId}")]
         public JsonResult RemoveUserAccount(int userId) 
         {
@@ -87,6 +87,12 @@ namespace application_programming_interface.Controllers
             {
                 return new JsonResult(ex.InnerException);
             }
+        }
+
+        [Route("~/api/Users/GetProfileInformation/{userId}")]
+        public JsonResult GetProfiledata(int userId)
+        {
+            return new JsonResult(_userService.GetProfileInformation(userId));
         }
 
         //TODO:
@@ -121,7 +127,7 @@ namespace application_programming_interface.Controllers
                 // DocType_Id ==> Allow admins to click on Med_Cet, Passport_Doc, Birth_Certificate to download/view it
         [Route("~/Users/GetUserDetails/{userId}")]
         [HttpGet("{userId}")]
-        public IEnumerable<UserInfoDTO> GetUserDetails(int userId)
+        public UserInfoDTO GetUserDetails(int userId)
         {
             return _userService.GetUserDetails(userId);
         }

@@ -15,8 +15,9 @@ namespace application_programming_interface.Interfaces
         void RemoveUserAccount(int userId);
         IEnumerable<AdminLoadPageDTO> GetAdminLoadPageData(int? pageNumber);
         IEnumerable<AdminLoadPageDTO> SearchLoadPageData(int? pageNumber, string search);
-        IEnumerable<UserInfoDTO> GetUserDetails(int userId);
+        UserInfoDTO GetUserDetails(int userId);
         IEnumerable<PolicyInfoDTO> GetPolicyDetails(int policyId);
         IEnumerable<AdmsInfoDTO> GetAdmsTypeDetails(int admsId);
+        ProfileDTO GetProfileInformation(int id);
     }
 }

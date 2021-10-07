@@ -8,9 +8,6 @@ namespace application_programming_interface.DTOs
 {
     public class UserDTO
     {
-        //--------------------------------
-        //VIR EXAMPLE MOENI DELETE NIE
-        //--------------------------------
         public string FirstName { get; set; }
         public string LastName { get; set; }
 

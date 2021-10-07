@@ -192,7 +192,7 @@ namespace application_programming_interface.Services
         //Use when admin clicks on User_Name or User_Surname in GetAdminLoadPageData(User Controller) <<<AND>>> GetAllUserQueries(Queries Controller)
         // Policy_Id ==> Allow Admins to click on Policy_Type to view specific policy info
         // DocType_Id ==> Allow admins to click on Med_Cet, Passport_Doc, Birth_Certificate to download/view it
-        public IEnumerable<UserInfoDTO> GetUserDetails(int userId)
+        public UserInfoDTO GetUserDetails(int userId)
         {
             var userData = (from u in _context.Users
                          join a in _context.Address on u.Address_Id equals a.Address_Id
@@ -222,7 +222,7 @@ namespace application_programming_interface.Services
                                           on up.Policy_Id equals p.Policy_Id
                                           where up.User_Id == userId
                                           select p.Policy_Id).FirstOrDefault()
-                         }).ToList();
+                         }).FirstOrDefault();
 
             return userData;
         }
@@ -269,5 +269,14 @@ namespace application_programming_interface.Services
 
         #endregion
 
+        public ProfileDTO GetProfileInformation(int id)
+        {
+            var objectToReturn = new ProfileDTO()
+            {
+                User = GetUserDetails(id)
+            };
+
+            return objectToReturn;
+        }
     }
 }
