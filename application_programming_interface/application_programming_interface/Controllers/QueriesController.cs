@@ -52,6 +52,23 @@ namespace application_programming_interface.Controllers
             
         }
 
+        //Allow specific user to update their own information (includes Users and Address)
+        [Route("~/api/Queries/MarkQueryAsResolved/{queryId}")]
+        [HttpPut("{queryId}")]
+        public JsonResult MarkQueryAsResolved(int queryId)
+        {
+            try
+            {
+                _queriesService.MarkQueryAsResolved(queryId);
+
+                return new JsonResult("Query successfully resolved!");
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ex.InnerException);
+            }
+        }
+
         #endregion
 
         #region Admin Dashboard Query Functionalities
@@ -92,11 +109,23 @@ namespace application_programming_interface.Controllers
             return _queriesService.GetQueryDetails(queryId);
         }
 
-        //TODO: (Need DB changes gotta check which ones)
-        //Medical Scheme Request Review Page
-        //-->Retreive all schema requests (Name, Surname, RequestID, PolicyType)
-        //-->Allow admin to accept schema request
-        //-->Allow admin to reject schema request with alternatives
+        //Allow an employee to be assigned to a user query for assistance
+        [Route("~/api/Queries/AssignEmployeeToQuery/{empId}/{queryId}")]
+        [HttpPut("{queryId}")]
+        public JsonResult AssignEmployeeToQuery(int empId, int queryId)
+        {
+            try
+            {
+                _queriesService.AssignEmployeeToQuery(empId, queryId);
+
+                return new JsonResult("Employee successfully assigned to user query.");
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ex.InnerException);
+            }
+        }
+
 
         #endregion
 
@@ -106,7 +135,7 @@ namespace application_programming_interface.Controllers
         //[HttpGet]
         //public IEnumerable<AllUserQueriesDTO> GetResolvedQueries(int? pageNumber)
         //{
-            
+
         //}
 
         ////Retreives all Unresolved Queries (NEEDS TO HAVE AN EMPLOYEE ASSIGNED STILL)

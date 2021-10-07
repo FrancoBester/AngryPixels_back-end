@@ -104,15 +104,6 @@ namespace application_programming_interface.Services
 
         #endregion
 
-        //user CRUD func - profile page
-        //  Insert into schema request table - change/update policy
-
-
-        //Admin gets all CRUD
-        //Admin CRUD func
-        //  Edit
-        //      info  policies, 
-
         #region Admin/Employee Dashboard User Functionalities
 
         //Retreives user information data are displayed on the admin loading page regaring all users with their policies and roles.

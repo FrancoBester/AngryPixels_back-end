@@ -11,10 +11,12 @@ namespace application_programming_interface.Interfaces
     {
         IEnumerable<SpecificUserQueriesDTO> GetSpecificUserQueries(int? pageNumber, int userId);
         void CreateQuery(int userId, Queries newQuery);
+        void MarkQueryAsResolved(int queryId);
         IEnumerable<AllUserQueriesDTO> GetAllQueries(int? pageNumber);
         IEnumerable<AllUserQueriesDTO> SearchAllUserQueries(int? pageNumber, string search);
         IEnumerable<AllUserQueriesDTO> GetQueriesByStatus(int? pageNumber, int statusId);
         IEnumerable<QueryDetailsDTO> GetQueryDetails(int queryId);
+        void AssignEmployeeToQuery(int empId, int queryId);
 
     }
 }

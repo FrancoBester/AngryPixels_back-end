@@ -51,7 +51,7 @@ namespace application_programming_interface.Services
             return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
         }
 
-        //Allow users to create queries (Needs to be tested)
+        //Allow users to create queries
         public void CreateQuery(int userId, Queries newQuery)
         {
                 var queryToAdd = new Queries
@@ -69,11 +69,19 @@ namespace application_programming_interface.Services
                 _context.SaveChanges();
         }
 
+        //Allow users to mark their query as resolved (Problem has been solved)
+        public void MarkQueryAsResolved(int queryId)
+        {
+            var updateQueryObj= _context.Queries.Where(x => x.Query_Id == queryId).SingleOrDefault();
 
-        //TODO:
-        //Allow user to post query
-        //Allow user to remove query
+            if (updateQueryObj != null)
+            {
+                updateQueryObj.Status_Id = 3;
 
+                _context.Queries.Update(updateQueryObj);
+                _context.SaveChanges();
+            }
+        }
 
         #endregion
 
@@ -104,7 +112,7 @@ namespace application_programming_interface.Services
             return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
         }
 
-        //Allow admins to search for any of the fields in the Queries Table
+        //Allow admins/employees to search for any of the fields in the Queries Table
         public IEnumerable<AllUserQueriesDTO> SearchAllUserQueries(int? pageNumber, string search)
         {
 
@@ -162,7 +170,7 @@ namespace application_programming_interface.Services
             return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
         }
 
-        //Allow admins to view the details of the chosen query
+        //Allow admins/employee to view the details of the chosen query
         public IEnumerable<QueryDetailsDTO> GetQueryDetails(int queryId)
         {
             //Query for needed info
@@ -183,11 +191,21 @@ namespace application_programming_interface.Services
             return qeuryData;
         }
 
-        //TODO: (Need DB changes gotta check which ones)
-        //Medical Scheme Request Review Page
-        //-->Retreive all schema requests (Name, Surname, RequestID, PolicyType)
-        //-->Allow admin to accept schema request
-        //-->Allow admin to reject schema request with alternatives
+        //Allow employees to be assigned to a query
+        public void AssignEmployeeToQuery(int empId, int queryId)
+        {
+            var assingQueryObj = _context.Queries.Where(x => x.Query_Id == queryId).SingleOrDefault();
+            var employeeObj = _context.Users.Where(x => x.User_Id == empId && x.IsActive).SingleOrDefault();
+
+            if (assingQueryObj != null && employeeObj != null)
+            {
+                assingQueryObj.Assistant_Name = $"{employeeObj.User_Name} {employeeObj.User_Surname}";
+                assingQueryObj.Status_Id = 2;
+
+                _context.Queries.Update(assingQueryObj);
+                _context.SaveChanges();
+            };
+        }
 
         #endregion
 
