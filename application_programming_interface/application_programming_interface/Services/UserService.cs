@@ -62,7 +62,7 @@ namespace application_programming_interface.Services
         //Allow specific user to update their own information (includes Users and Address)
         public void UpdateUserInformation(Users user, int userId)
         {
-            var updateUserObj = _context.Users.Where(x => x.User_Id == userId).SingleOrDefault();
+            var updateUserObj = _context.Users.Where(x => x.User_Id == userId && x.IsActive).SingleOrDefault();
             var updateAdressObj = _context.Address.Where(x => x.Address_Id == updateUserObj.Address_Id).SingleOrDefault();
 
             if (updateUserObj != null)
@@ -84,20 +84,18 @@ namespace application_programming_interface.Services
             }
         }
 
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //FK CONSTRAINT ERROR
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //Allow specific user to remove own account
         //Allow admin to also remove user account
         public void RemoveUserAccount(int userId)
         {
-                var delObj = _context.Users.Where(x => x.User_Id == userId).SingleOrDefault();
+            var delObj = _context.Users.Where(x => x.IsActive && x.User_Id == userId).SingleOrDefault();
 
-                if (delObj != null)
-                {
-                    _context.Users.Remove(delObj);
-                    _context.SaveChanges();
-                }
+            if (delObj != null)
+            {
+                delObj.IsActive = false;
+                _context.Users.Update(delObj);
+                _context.SaveChanges();
+            }
         }
 
         //TODO:
@@ -115,11 +113,11 @@ namespace application_programming_interface.Services
         //  Edit
         //      info  policies, 
 
-        #region Admin Dashboard User Functionalities
+        #region Admin/Employee Dashboard User Functionalities
 
         //Retreives user information data are displayed on the admin loading page regaring all users with their policies and roles.
-        //FirstName/LastName --> When admin clicks it, they can view specific user info.
-        //PolicyType --> When admin clicks it, they can view specific policy info.
+            //FirstName/LastName --> When admin clicks it, they can view specific user info.
+            //PolicyType --> When admin clicks it, they can view specific policy info.
         public IEnumerable<AdminLoadPageDTO> GetAdminLoadPageData(int? pageNumber)
         {
             //Pagination
@@ -130,6 +128,7 @@ namespace application_programming_interface.Services
             var userData = (from u in _context.Users
                             join ur in _context.User_Roles on u.User_Id equals ur.User_Id
                             join r in _context.Roles on ur.Role_Id equals r.Role_Id
+                            where u.IsActive == true && r.Role_Id != 1
                             select new AdminLoadPageDTO
                             {
                                 UserId = u.User_Id,
@@ -163,6 +162,7 @@ namespace application_programming_interface.Services
             var userData = (from u in _context.Users
                             join ur in _context.User_Roles on u.User_Id equals ur.User_Id
                             join r in _context.Roles on ur.Role_Id equals r.Role_Id
+                            where u.IsActive == true && r.Role_Id != 1
                             select new AdminLoadPageDTO
                             {
                                 UserId = u.User_Id,
@@ -190,8 +190,8 @@ namespace application_programming_interface.Services
 
         //Retreives a specific Client Users information 
         //Use when admin clicks on User_Name or User_Surname in GetAdminLoadPageData(User Controller) <<<AND>>> GetAllUserQueries(Queries Controller)
-        // Policy_Id ==> Allow Admins to click on Policy_Type to view specific policy info
-        // DocType_Id ==> Allow admins to click on Med_Cet, Passport_Doc, Birth_Certificate to download/view it
+            // Policy_Id ==> Allow Admins to click on Policy_Type to view specific policy info
+            // DocType_Id ==> Allow admins to click on Med_Cet, Passport_Doc, Birth_Certificate to download/view it
         public UserInfoDTO GetUserDetails(int userId)
         {
             var userData = (from u in _context.Users
@@ -228,8 +228,8 @@ namespace application_programming_interface.Services
         }
 
         //Retreives a specific Policy's information with the Admissions Type
-        //Use when admin clicks on Policy_Type in GetAdminLoadPageData (User Controller)
-        //Adms_Id ==> Allow Admin to click on Adms_Type to view specific Admission type info
+            //Use when admin clicks on Policy_Type in GetAdminLoadPageData (User Controller)
+            //Adms_Id ==> Allow Admin to click on Adms_Type to view specific Admission type info
         public IEnumerable<PolicyInfoDTO> GetPolicyDetails(int policyId)
         {
             //Query for needed info

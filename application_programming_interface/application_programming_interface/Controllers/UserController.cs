@@ -68,13 +68,10 @@ namespace application_programming_interface.Controllers
             }
         }
 
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //NEEDS TO BE TESTED STILL
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //Allow specific user to remove own account
         //Allow admin to also remove user account
         [Route("~/api/Users/RemoveUserAccount/{userId}")]
-        [HttpDelete("{userId}")]
+        [HttpPut("{userId}")]
         public JsonResult RemoveUserAccount(int userId) 
         {
             try
@@ -114,6 +111,7 @@ namespace application_programming_interface.Controllers
         }
 
         //Allows Admin users to search for any field values on the admin loading page table
+            //Excludes Admin user info from table and Non active users
         [Route("~/api/Users/SearchLoadPageData")]
         [HttpGet]
         public IEnumerable<AdminLoadPageDTO> SearchLoadPageData(int? pageNumber, string search)

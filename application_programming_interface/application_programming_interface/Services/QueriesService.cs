@@ -90,6 +90,7 @@ namespace application_programming_interface.Services
             //Query for needed info
             var qeuryData = (from u in _context.Users
                              join uq in _context.Queries on u.User_Id equals uq.User_Id
+                             where u.IsActive
                              select new AllUserQueriesDTO
                              {
                                  Query_Id = uq.Query_Id,
@@ -114,7 +115,8 @@ namespace application_programming_interface.Services
             //Query for needed info
             var qeuryData = (from u in _context.Users
                              join uq in _context.Queries on u.User_Id equals uq.User_Id
-                             where uq.Query_Level.ToUpper().Contains(search.ToUpper()) ||
+                             where u.IsActive &&
+                                   uq.Query_Level.ToUpper().Contains(search.ToUpper()) ||
                                    uq.Query_Code.ToUpper().Contains(search.ToUpper()) ||
                                    uq.Query_Title.ToUpper().Contains(search.ToUpper()) ||
                                    u.User_Name.ToUpper().Contains(search.ToUpper())
@@ -146,7 +148,7 @@ namespace application_programming_interface.Services
             //Query for needed info
             var qeuryData = (from u in _context.Users
                              join uq in _context.Queries on u.User_Id equals uq.User_Id
-                             where uq.Status_Id == statusId
+                             where uq.Status_Id == statusId && u.IsActive
                              select new AllUserQueriesDTO
                              {
                                  Query_Id = uq.Query_Id,
