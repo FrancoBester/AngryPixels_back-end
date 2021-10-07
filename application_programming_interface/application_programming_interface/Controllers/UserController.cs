@@ -11,7 +11,7 @@ using application_programming_interface.Interfaces;
 namespace application_programming_interface.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
@@ -106,7 +106,7 @@ namespace application_programming_interface.Controllers
         //Retreives user information data are displayed on the admin loading page regaring all users with their policies and roles.
         //FirstName/LastName --> When admin clicks it, they can view specific user info.
         //PolicyType --> When admin clicks it, they can view specific policy info.
-        [Route("~/Users/GetAdminLoadPageData")]
+        [Route("~/api/Users/GetAdminLoadPageData")]
         [HttpGet]
         public IEnumerable<AdminLoadPageDTO> GetAdminLoadPageData(int? pageNumber)
         {
@@ -114,7 +114,7 @@ namespace application_programming_interface.Controllers
         }
 
         //Allows Admin users to search for any field values on the admin loading page table
-        [Route("~/Users/SearchLoadPageData")]
+        [Route("~/api/Users/SearchLoadPageData")]
         [HttpGet]
         public IEnumerable<AdminLoadPageDTO> SearchLoadPageData(int? pageNumber, string search)
         {
@@ -125,7 +125,7 @@ namespace application_programming_interface.Controllers
             //Use when admin clicks on User_Name or User_Surname in GetAdminLoadPageData(User Controller) <<<AND>>> GetAllUserQueries(Queries Controller)
                 // Policy_Id ==> Allow Admins to click on Policy_Type to view specific policy info
                 // DocType_Id ==> Allow admins to click on Med_Cet, Passport_Doc, Birth_Certificate to download/view it
-        [Route("~/Users/GetUserDetails/{userId}")]
+        [Route("~/api/Users/GetUserDetails/{userId}")]
         [HttpGet("{userId}")]
         public UserInfoDTO GetUserDetails(int userId)
         {
@@ -135,7 +135,7 @@ namespace application_programming_interface.Controllers
         //Retreives a specific Policy's information with the Admissions Type
             //Use when admin clicks on Policy_Type in GetAdminLoadPageData (User Controller)
                 //Adms_Id ==> Allow Admin to click on Adms_Type to view specific Admission type info
-        [Route("~/Users/GetPolicyDetails/{policyId}")]
+        [Route("~/api/Users/GetPolicyDetails/{policyId}")]
         [HttpGet("{policyId}")]
         public IEnumerable<PolicyInfoDTO> GetPolicyDetails(int policyId)
         {
@@ -144,7 +144,7 @@ namespace application_programming_interface.Controllers
 
         //Retreives a specific AddimionType's information
             //Use when admin clicks on Adms_Type in GetPolicyDetails (User Controller)
-        [Route("~/Users/GetAdmsTypeDetails/{admsId}")]
+        [Route("~/api/Users/GetAdmsTypeDetails/{admsId}")]
         [HttpGet("{admsId}")]
         public IEnumerable<AdmsInfoDTO> GetAdmsTypeDetails(int admsId)
         {

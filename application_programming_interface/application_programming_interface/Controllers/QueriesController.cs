@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 namespace application_programming_interface.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class QueriesController : ControllerBase
     {
         private readonly IQueriesService _queriesService;
@@ -26,7 +26,7 @@ namespace application_programming_interface.Controllers
 
         //Allow users to view all of their own queries
         //QueryId --> When clicked user can view that queries details
-        [Route("~/Queries/GetSpecificUserQueries/{userId}")]
+        [Route("~/api/Queries/GetSpecificUserQueries/{userId}")]
         [HttpGet("{userId}")]
         public IEnumerable<SpecificUserQueriesDTO> GetSpecificUserQueries(int? pageNumber, int userId)
         {
@@ -35,7 +35,7 @@ namespace application_programming_interface.Controllers
         }
 
         //Allow users to create queries (Needs to be tested)
-        [Route("~/Queries/CreateQuery/{userId}")]
+        [Route("~/api/Queries/CreateQuery/{userId}")]
         [HttpPost("{userId}")]
         public JsonResult CreateQuery(int userId, Queries newQuery)
         {
@@ -57,7 +57,7 @@ namespace application_programming_interface.Controllers
         #region Admin Dashboard Query Functionalities
 
         //Retreives all Queries
-        [Route("~/Queries/GetAllQueries")]
+        [Route("~/api/Queries/GetAllQueries")]
         [HttpGet]
         public IEnumerable<AllUserQueriesDTO> GetAllQueries(int? pageNumber)
         {
@@ -65,7 +65,7 @@ namespace application_programming_interface.Controllers
         }
 
         //Allow admins to search for any of the fields in the Queries Table
-        [Route("~/Queries/SearchAllUserQueries")]
+        [Route("~/api/Queries/SearchAllUserQueries")]
         [HttpGet]
         public IEnumerable<AllUserQueriesDTO> SearchAllUserQueries(int? pageNumber, string search)
         {
@@ -76,7 +76,7 @@ namespace application_programming_interface.Controllers
         // 1 --> Gets all Unresolved Queries
         // 2 --> Gets all Active Queries
         // 3 --> Gets all Resolved Queries
-        [Route("~/Queries/GetQueriesByStatus")]
+        [Route("~/api/Queries/GetQueriesByStatus")]
         [HttpGet]
         public IEnumerable<AllUserQueriesDTO> GetQueriesByStatus(int? pageNumber, int statusId)
         {
@@ -85,7 +85,7 @@ namespace application_programming_interface.Controllers
 
         //Allow admins to view the details of the chosen query
         //Allows users to view the details of their own query
-        [Route("~/Queries/GetQueryDetails/{queryId}")]
+        [Route("~/api/Queries/GetQueryDetails/{queryId}")]
         [HttpGet("{queryId}")]
         public IEnumerable<QueryDetailsDTO> GetQueryDetails(int queryId)
         {
