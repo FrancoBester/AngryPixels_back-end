@@ -244,7 +244,16 @@ namespace application_programming_interface.Services
         {
             var objectToReturn = new ProfileDTO()
             {
-                User = GetUserDetails(id)
+                User = GetUserDetails(id),
+                Files = (from d in _context.Document
+                         where d.Policy_Id == null
+                         && d.User_Id == id
+                         select new ProfileFileDTO
+                         {
+                             FileName = d.File_Name,
+                             FileUrl = d.File_Url,
+                             FileTypeId = d.Doc_Type_Id
+                         }).ToList()
             };
 
             return objectToReturn;
