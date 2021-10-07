@@ -38,26 +38,6 @@ namespace application_programming_interface.Services
         }
 
         #region Client User Functionalities 
-        public IEnumerable<UserQueryDTO> GetUserLoadPageData(int? pageNumber, int userId)
-        {
-            int curPage = pageNumber ?? 1;
-            int curPageSize = 20;
-
-            var userQeury = (from user in _context.Users
-                             select new UserQueryDTO
-                             {
-                                 FirstName = user.User_Name,
-                                 LastName = user.User_Surname,
-                                 Query_Detail = (from q in _context.Queries
-                                                 where q.Query_Id == userId
-                                                 select q.Query_Detail).ToList(),
-                                 Query_Title = (from q in _context.Queries
-                                                where q.Query_Id == userId
-                                                select q.Query_Title).ToList()
-                             }).ToList();
-
-            return userQeury.Skip((curPage - 1) * curPageSize).Take(curPageSize);
-        }
 
         //Allow specific user to update their own information (includes Users and Address)
         public void UpdateUserInformation(Users user, int userId)

@@ -44,13 +44,6 @@ namespace application_programming_interface.Controllers
 
         #region Client User Functionalities 
 
-        [Route("~/api/Users/GetUserLoadPageData")]
-        [HttpGet]
-        public IEnumerable<UserQueryDTO> GetUserLoadPageData(int? pageNumber, int userId)
-        {
-            return _userService.GetUserLoadPageData(pageNumber, userId);
-        }
-
         //Allow specific user to update their own information (includes Users and Address)
         [Route("~/api/Users/UpdateUserInformation/{userId}")]
         [HttpPut("{userId}")]

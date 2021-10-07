@@ -10,7 +10,6 @@ namespace application_programming_interface.Interfaces
     public interface IUserService
     {
         void RegisterUser(UserRegisterDTO user);
-        IEnumerable<UserQueryDTO> GetUserLoadPageData(int? pageNumber, int id);
         void UpdateUserInformation(Users user, int userId);
         void RemoveUserAccount(int userId);
         IEnumerable<AdminLoadPageDTO> GetAdminLoadPageData(int? pageNumber);
