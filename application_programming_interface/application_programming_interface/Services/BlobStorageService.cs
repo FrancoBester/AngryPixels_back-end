@@ -16,9 +16,10 @@ namespace application_programming_interface.Services
         private readonly BlobServiceClient _blobClient;
         private readonly DataContext _context;
 
-        public BlobStorageService(BlobServiceClient blobClient)
+        public BlobStorageService(BlobServiceClient blobClient, DataContext context)
         {
             _blobClient = blobClient;
+            _context = context;
         }
 
 
@@ -44,11 +45,12 @@ namespace application_programming_interface.Services
 
             var fileUri = blobClient.Uri.AbsoluteUri; //Url the blob storage gets back
 
-            _context.Document.Add(new Document() 
+            _context.Add<Document>(new Document() 
             {
                 File_Name = file.FileName,
                 User_Id = file.UserId,
-                File_Url = fileUri
+                File_Url = fileUri,
+                Doc_Type_Id = file.DocumentType
             }); // adds this document to the db
 
             _context.SaveChanges();
