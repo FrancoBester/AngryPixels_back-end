@@ -19,22 +19,34 @@ namespace application_programming_interface.Services
         public void RegisterUser(UserRegisterDTO user)
         {
             //Add julle code hier om n user te add
-            var userToAdd = new Users
+            try
             {
-                User_Name = user.FirstName,
-                User_Surname = user.LastName,
-                User_Dob = user.DateOfBirth,
-                User_Cell = user.CellPhoneNumber,
-                User_Email = user.Email,
-                User_Gender = user.Gender,
-                User_ID_Number = user.IDnumber,
-                Password_Hash = user.Password
+                var userToAdd = new Users
+                {
+                    User_Name = user.FirstName,
+                    User_Surname = user.LastName,
+                    User_Dob = user.DateOfBirth,
+                    User_Cell = user.CellPhoneNumber,
+                    User_Email = user.Email,
+                    User_Gender = user.Gender,
+                    User_ID_Number = user.IDnumber,
+                    Password_Hash = user.Password,
+                    Address = new Address
+                    {
+                        City = user.Address.City,
+                        Street = user.Address.Street
+                    }
+                    //CCAAAAARRREEEELLLL How you do this ? xD --> Address ??
+                };
 
-                //CCAAAAARRREEEELLLL How you do this ? xD --> Address ??
-            };
-
-            _context.Users.Add(userToAdd);
-            _context.SaveChanges();
+                _context.Users.Add(userToAdd);
+                _context.SaveChanges();
+            }
+            catch(Exception ex)
+            {
+                Console.Write(ex.Message);
+            }
+            
         }
 
         #region Client User Dashboard Functionalities 
