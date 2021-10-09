@@ -10,5 +10,6 @@ namespace application_programming_interface.Interfaces
     {
         void UploadDocument(FileDTO file);
         void UploadDocumentForUser(UserDocumentUploadDTO file);
+        void DeleteDocumentForUser(int userId, int docId);
     }
 }

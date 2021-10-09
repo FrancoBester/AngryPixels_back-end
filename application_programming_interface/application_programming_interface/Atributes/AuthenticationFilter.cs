@@ -52,7 +52,7 @@ namespace application_programming_interface.Atributes
             var claim = claims.Claims.ToList();
             var name = claim.Where(x => x.Type.Equals("Email", System.StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value;
             var roles = claim.Where(x => x.Type.Equals("Roles", System.StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value;
-            var id = claim.Where(x => x.Type.Equals("ID", System.StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value;
+            var id = int.Parse(claim.Where(x => x.Type.Equals("ID", System.StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
 
             if (!string.IsNullOrEmpty(_role))
             {
@@ -61,7 +61,7 @@ namespace application_programming_interface.Atributes
                     throw new ValidationException("Sorry , you do not have permision to access this shit.");
                 }
             }
-            authService.User.SetData(0, name,"Empty for now", roles);
+            authService.User.SetData(id, name,"Empty for now", roles);
         }
 
         public override void OnResultExecuted(ResultExecutedContext context)

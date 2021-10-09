@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using application_programming_interface.Interfaces;
 using Microsoft.AspNetCore.Http;
 using application_programming_interface.DTOs;
+using application_programming_interface.Atributes;
 
 namespace application_programming_interface.Controllers
 {
@@ -19,11 +20,13 @@ namespace application_programming_interface.Controllers
     {
         private readonly DataContext _context;
         private readonly IBlobStorageService _blobStorage;
+        private readonly IAuthenticationService _authInfo;
 
-        public DocumentController(DataContext context, IBlobStorageService blobStorage)
+        public DocumentController(DataContext context, IBlobStorageService blobStorage, IAuthenticationService authinfo)
         {
             _context = context;
             _blobStorage = blobStorage;
+            _authInfo = authinfo;
         }
 
         //[Route("~/Document/GetAll")]
@@ -54,6 +57,14 @@ namespace application_programming_interface.Controllers
         public void UploadDocumentForUser([FromForm] UserDocumentUploadDTO file)
         {
             _blobStorage.UploadDocumentForUser(file);
+        }
+
+        [Route("~/api/Document/DeleteDocForUser/{docId}")]
+        [HttpGet]
+        [Authentication]
+        public void DeleteDocumentForUser(int docId)
+        {
+            _blobStorage.DeleteDocumentForUser(_authInfo.GetUser().Id,docId);
         }
 
         [Route("~/Document/Create")]

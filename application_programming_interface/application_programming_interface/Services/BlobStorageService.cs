@@ -39,7 +39,8 @@ namespace application_programming_interface.Services
         public void UploadDocumentForUser(UserDocumentUploadDTO file)
         {
             var container = _blobClient.GetBlobContainerClient("documents");
-            var blobClient = container.GetBlobClient("UserDocuments/"  +DateTime.Now.Year + '/' + DateTime.Now.Month + file.FileName);
+            var fileNameToSave = "UserDocuments/" + DateTime.Now.Year + '/' + DateTime.Now.Month + file.FileName;
+            var blobClient = container.GetBlobClient(fileNameToSave);
 
             blobClient.Upload(file.File.OpenReadStream());
 
@@ -47,12 +48,28 @@ namespace application_programming_interface.Services
 
             _context.Add<Document>(new Document() 
             {
-                File_Name = file.FileName,
+                File_Name = fileNameToSave,
                 User_Id = file.UserId,
                 File_Url = fileUri,
                 Doc_Type_Id = file.DocumentType
             }); // adds this document to the db
 
+            _context.SaveChanges();
+        }
+
+        public void DeleteDocumentForUser(int userId, int docId)
+        {
+            //Delete the file from blobStorage First
+            var doc = (from d in _context.Document
+                       where d.Doc_Id == docId
+                       select d).FirstOrDefault();
+
+            var container = _blobClient.GetBlobContainerClient("documents");
+            var blobClient = container.GetBlobClient(doc.File_Name);
+            blobClient.Delete();
+            //Delete the entry from db
+
+            _context.Remove<Document>(doc);
             _context.SaveChanges();
         }
     }

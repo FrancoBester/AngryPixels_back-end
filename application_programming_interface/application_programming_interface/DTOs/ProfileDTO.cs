@@ -14,6 +14,7 @@ namespace application_programming_interface.DTOs
 
     public class ProfileFileDTO
     {
+        public int FileId { get; set; }
         public string FileName { get; set; }
         public int FileTypeId { get; set; }
         public string FileUrl { get; set; }

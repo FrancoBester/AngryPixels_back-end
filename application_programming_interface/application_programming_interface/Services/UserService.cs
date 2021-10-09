@@ -262,6 +262,7 @@ namespace application_programming_interface.Services
                          && d.User_Id == id
                          select new ProfileFileDTO
                          {
+                             FileId = d.Doc_Id,
                              FileName = d.File_Name,
                              FileUrl = d.File_Url,
                              FileTypeId = d.Doc_Type_Id
