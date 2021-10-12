@@ -135,11 +135,11 @@ namespace application_programming_interface.Controllers
 
         //Retreives a specific AddimionType's information
             //Use when admin clicks on Adms_Type in GetPolicyDetails (User Controller)
-        [Route("~/api/Users/GetAdmsTypeDetails/{admsId}")]
+        [Route("~/api/Users/GetAdmissionsTypeDetails/{admsId}")]
         [HttpGet("{admsId}")]
-        public IEnumerable<AdmsInfoDTO> GetAdmsTypeDetails(int admsId)
+        public IEnumerable<AdmsInfoDTO> GetAdmissionsTypeDetails(int admsId)
         {
-            return _userService.GetAdmsTypeDetails(admsId);
+            return _userService.GetAdmissionsTypeDetails(admsId);
         }
 
         #endregion

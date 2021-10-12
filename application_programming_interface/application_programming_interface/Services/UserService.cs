@@ -235,7 +235,7 @@ namespace application_programming_interface.Services
 
         //Retreives a specific AddimionType's information
         //Use when admin clicks on Adms_Type in GetPolicyDetails (User Controller)
-        public IEnumerable<AdmsInfoDTO> GetAdmsTypeDetails(int admsId)
+        public IEnumerable<AdmsInfoDTO> GetAdmissionsTypeDetails(int admsId)
         {
             //Query for needed info
             var policyData = (from a in _context.Admissions

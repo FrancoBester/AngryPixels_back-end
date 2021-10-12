@@ -16,7 +16,7 @@ namespace application_programming_interface.Interfaces
         IEnumerable<AdminLoadPageDTO> SearchLoadPageData(int? pageNumber, string search);
         UserInfoDTO GetUserDetails(int userId);
         PolicyInfoDTO GetPolicyDetails(int policyId);
-        IEnumerable<AdmsInfoDTO> GetAdmsTypeDetails(int admsId);
+        IEnumerable<AdmsInfoDTO> GetAdmissionsTypeDetails(int admsId);
         ProfileDTO GetProfileInformation(int id);
     }
 }
