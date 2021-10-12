@@ -88,13 +88,13 @@ namespace application_programming_interface.Services
         }
 
         //Request to Join a Policy
-        public void RequestToJoinSchema(int userId, Schema_Requests newRequest)
+        public void RequestToJoinSchema(int policyId,int userId)
         {
             var requestToAdd = new Schema_Requests
             {
                 User_Id = userId,
                 Status_Id = 1,
-                Policy_Id = newRequest.Policy_Id
+                Policy_Id = policyId
             };
 
             _context.Schema_Requests.Add(requestToAdd);

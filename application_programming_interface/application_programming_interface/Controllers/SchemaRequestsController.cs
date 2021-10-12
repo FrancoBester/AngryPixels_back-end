@@ -17,10 +17,12 @@ namespace application_programming_interface.Controllers
     public class SchemaRequestsController : ControllerBase
     {
         private readonly ISchemaRequestService _schemaRequestService;
+        private IAuthenticationService _authentication;
 
-        public SchemaRequestsController(ISchemaRequestService schemaRequestService)
+        public SchemaRequestsController(ISchemaRequestService schemaRequestService, IAuthenticationService authenticationService)
         {
             _schemaRequestService = schemaRequestService;
+            _authentication = authenticationService;
         }
 
         //----------------------------------------------------------------------------
@@ -59,13 +61,14 @@ namespace application_programming_interface.Controllers
 
         //Allow Users tp Apply to a New Policy
                 //Receive PolicyId from front-end on GetAllPolicies Page
-        [Route("~/api/SchemaRequests/RequestToJoinSchema/{userId}")]
+        [Route("~/api/SchemaRequests/RequestToJoinSchema/{PolicyId}")]
         [HttpPost("{userId}")]
-        public JsonResult RequestToJoinSchema(int userId, Schema_Requests newRequest)
+        [Authentication]
+        public JsonResult RequestToJoinSchema(int PolicyId)
         {
             try
             {
-                _schemaRequestService.RequestToJoinSchema(userId, newRequest);
+                _schemaRequestService.RequestToJoinSchema(PolicyId, _authentication.GetUser().Id);
 
                 return new JsonResult("Request Received.");
             }
