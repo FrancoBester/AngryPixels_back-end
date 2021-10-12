@@ -124,7 +124,7 @@ namespace application_programming_interface.Services
             var qeuryData = (from u in _context.Users
                              join uq in _context.Queries on u.User_Id equals uq.User_Id
                              where u.IsActive &&
-                                   uq.Query_Level == Convert.ToInt32(search) ||
+                                  (uq.Query_Level).ToString() == search ||
                                    uq.Query_Code.ToUpper().Contains(search.ToUpper()) ||
                                    uq.Query_Title.ToUpper().Contains(search.ToUpper()) ||
                                    u.User_Name.ToUpper().Contains(search.ToUpper())
