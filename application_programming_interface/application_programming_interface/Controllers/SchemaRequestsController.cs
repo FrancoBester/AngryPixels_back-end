@@ -96,6 +96,24 @@ namespace application_programming_interface.Controllers
             return _schemaRequestService.GetAllSchemaRequests(pageNumber);
         }
 
+        [Route("~/api/SchemaRequests/ViewUserSchemarequest/{requestId}")]
+        [HttpGet]
+        [Authentication]
+        public JsonResult ViewUserSchemarequest(int requestId)
+        {
+            try
+            {
+                _schemaRequestService.GetUserSchemaRequest(requestId);
+
+                return new JsonResult("Request Received.");
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ex.Message);
+            }
+
+        }
+
         //Decline Client Schema Request
         //Approve Client Schema Request
         #endregion

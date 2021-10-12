@@ -11,13 +11,15 @@ namespace application_programming_interface.Services
     public class SchemaRequestService : ISchemaRequestService
     {
         private readonly DataContext _context;
+        private readonly IUserService _userService;
 
-        public SchemaRequestService(DataContext context)
+        public SchemaRequestService(DataContext context, IUserService userService)
         {
             _context = context;
+            _userService = userService;
         }
 
-        enum SchemaRequestStatuses
+        public enum SchemaRequestStatuses
         {
             Pending = 1,
             Approved = 2,
@@ -138,6 +140,71 @@ namespace application_programming_interface.Services
                              }).ToList();
 
             return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
+        }
+
+        public ClientSchemaRequestDTO GetUserSchemaRequest(int requestId)
+        {
+            var objectToReturn = new ClientSchemaRequestDTO();
+
+            //Splitting the query up into multiple queries to save on db processing time
+
+            objectToReturn.SchemaRequest = (from r in _context.Schema_Requests
+                                            where r.Request_Id == requestId
+                                            select new SchemaRequestDTO
+                                            {
+                                                PolicyId = r.Policy_Id,
+                                                UserId = r.User_Id,
+                                                RequestStatus = ((SchemaRequestStatuses)r.Status_Id).ToString()
+                                            }).FirstOrDefault();
+
+            objectToReturn.PolicyInfo = (from p in _context.Policy
+                                         join a in _context.Admissions
+                                            on p.Policy_Id equals a.Policy_Id
+                                         where p.Policy_Id == objectToReturn.SchemaRequest.PolicyId
+                                         select new PolicyInfoDTO
+                                         {
+                                             Policy_Holder = p.Policy_Holder,
+                                             Policy_Benefits = p.Policy_Benefits,
+                                             Policy_Date = p.Policy_Date,
+                                             Policy_Des = p.Policy_Des,
+                                             Policy_Type = p.Policy_Type,
+                                             Adms_Id = a.Adms_Id,
+                                             Adms_Type = a.Adms_Type
+
+                                         }).FirstOrDefault();
+            //NOTE TO SELF : Maby add the addmisions information aswell
+
+            var profileInfo = _userService.GetProfileInformation(objectToReturn.SchemaRequest.UserId);
+            var birthCert = profileInfo.Files.Where(x => x.FileTypeId == 3).FirstOrDefault();
+            var medDoc = profileInfo.Files.Where(x => x.FileTypeId == 1).FirstOrDefault();
+            var passPort = profileInfo.Files.Where(x => x.FileTypeId == 2).FirstOrDefault();
+
+            objectToReturn.ClientInformation = new ClientInformationDTO
+            {
+                Fullname = profileInfo.User.User_Name + " " + profileInfo.User.User_Surname,
+                IDNumber = profileInfo.User.User_ID_Number,
+                Cell = profileInfo.User.User_Cell,
+                Dob = profileInfo.User.User_Dob,
+                Email = profileInfo.User.User_Email,
+                Gender = profileInfo.User.User_Gender,
+                BirthCertificate = birthCert != null ? new UserFileDTO
+                {
+                    FileName = birthCert.FileName,
+                    FileUrl = birthCert.FileUrl
+                }: null,
+                MedicalCertificate = medDoc != null? new UserFileDTO
+                {
+                    FileName = medDoc.FileName,
+                    FileUrl = medDoc.FileUrl
+                } : null,
+                Passport = passPort != null ? new UserFileDTO
+                {
+                    FileName = passPort.FileName,
+                    FileUrl = passPort.FileUrl
+                } : null
+        };
+
+            return objectToReturn;
         }
 
         //Decline Client Schema Request
