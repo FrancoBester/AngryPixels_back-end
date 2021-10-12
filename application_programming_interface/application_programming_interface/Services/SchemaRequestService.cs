@@ -78,7 +78,10 @@ namespace application_programming_interface.Services
                                   PolicyId = p.Policy_Id,
                                   AdmsId = a.Adms_Id,
                                   PolicyType = p.Policy_Type,
-                                  AdmsType = a.Adms_Type
+                                  AdmsType = a.Adms_Type,
+                                  PolicyBenefits = p.Policy_Benefits,
+                                  PolicyDescription = p.Policy_Des,
+                                  PolicyHolder = p.Policy_Holder
                               }).ToList();
 
             return policyData;
