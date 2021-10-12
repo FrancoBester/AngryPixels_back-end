@@ -36,6 +36,7 @@ namespace application_programming_interface
             services.AddScoped<IAddressService, AddressService>();
             services.AddScoped<IQueriesService, QueriesService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ISchemaRequestService, SchemaRequestService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddSingleton(x => new BlobServiceClient(Configuration.GetConnectionString("StorageAccount")));
             services.AddScoped<IBlobStorageService, BlobStorageService>();

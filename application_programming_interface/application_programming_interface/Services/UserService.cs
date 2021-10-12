@@ -31,6 +31,7 @@ namespace application_programming_interface.Services
                     User_Gender = user.Gender,
                     User_ID_Number = user.IDnumber,
                     Password_Hash = user.Password,
+                    IsActive = true,
                     Address = new Address
                     {
                         City = user.Address.City,
