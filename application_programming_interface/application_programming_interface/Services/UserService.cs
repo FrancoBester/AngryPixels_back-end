@@ -213,7 +213,7 @@ namespace application_programming_interface.Services
         //Retreives a specific Policy's information with the Admissions Type
             //Use when admin clicks on Policy_Type in GetAdminLoadPageData (User Controller)
             //Adms_Id ==> Allow Admin to click on Adms_Type to view specific Admission type info
-        public IEnumerable<PolicyInfoDTO> GetPolicyDetails(int policyId)
+        public PolicyInfoDTO GetPolicyDetails(int policyId)
         {
             //Query for needed info
             var policyData = (from p in _context.Policy
@@ -228,7 +228,7 @@ namespace application_programming_interface.Services
                                   Policy_Benefits = p.Policy_Benefits,
                                   Adms_Id = a.Adms_Id,
                                   Adms_Type = a.Adms_Type
-                              }).ToList();
+                              }).FirstOrDefault();
 
             return policyData;
         }

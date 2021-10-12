@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using application_programming_interface.Atributes;
 using application_programming_interface.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,11 +21,19 @@ namespace application_programming_interface.Controllers
             _context = context;
         }
 
-        [Route("~/SchemaRequests/GetAll")]
+        [Route("~/api/SchemaRequests/GetAll")]
         [HttpGet]
         public IEnumerable<Schema_Requests> Get()
         {
             return _context.Schema_Requests.ToList();
+        }
+
+        [Route("~/api/GetAllPolicies")]
+        [HttpGet]
+        [Authentication]
+        public JsonResult GetAllPolicies()
+        {
+            return new JsonResult(_context.Policy.ToList());
         }
 
         [Route("~/SchemaRequests/Create")]

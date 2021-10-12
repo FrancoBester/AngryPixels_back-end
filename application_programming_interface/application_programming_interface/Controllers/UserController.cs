@@ -128,7 +128,7 @@ namespace application_programming_interface.Controllers
                 //Adms_Id ==> Allow Admin to click on Adms_Type to view specific Admission type info
         [Route("~/api/Users/GetPolicyDetails/{policyId}")]
         [HttpGet("{policyId}")]
-        public IEnumerable<PolicyInfoDTO> GetPolicyDetails(int policyId)
+        public PolicyInfoDTO GetPolicyDetails(int policyId)
         {
             return _userService.GetPolicyDetails(policyId);
         }
