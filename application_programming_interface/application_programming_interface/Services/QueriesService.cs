@@ -4,6 +4,7 @@ using application_programming_interface.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Results;
 
@@ -27,11 +28,27 @@ namespace application_programming_interface.Services
 
         #region User Dashboard Query Functionalities
 
+        public string GenerateQueryCode()
+        {
+            //Add maybe check vir duplicates in DB
+            StringBuilder builder = new StringBuilder();
+            Enumerable
+               .Range(65, 26)
+                .Select(e => ((char)e).ToString())
+                .Concat(Enumerable.Range(97, 26).Select(e => ((char)e).ToString()))
+                .Concat(Enumerable.Range(0, 10).Select(e => e.ToString()))
+                .OrderBy(e => Guid.NewGuid())
+                .Take(6)
+                .ToList().ForEach(e => builder.Append(e));
+            string RefCode = builder.ToString();
+
+            return RefCode;
+        }
+
         //Allow users to view all of their own queries
         //QueryId --> When clicked user can view that queries details
         public IEnumerable<SpecificUserQueriesDTO> GetSpecificUserQueries(int? pageNumber, int userId)
         {
-
             //Pagination
             int curPage = pageNumber ?? 1;
             int curPageSize = 20;
@@ -62,7 +79,7 @@ namespace application_programming_interface.Services
                     Query_Title = newQuery.Query_Title,
                     Query_Level = newQuery.Query_Level,
                     Query_Detail = newQuery.Query_Detail,
-                    Query_Code = "QC4" //need to add method to generate one 
+                    Query_Code = GenerateQueryCode()
                 };
 
                 _context.Queries.Add(queryToAdd);

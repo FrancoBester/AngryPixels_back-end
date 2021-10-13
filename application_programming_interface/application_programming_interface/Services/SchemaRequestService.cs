@@ -179,12 +179,14 @@ namespace application_programming_interface.Services
             var medDoc = profileInfo.Files.Where(x => x.FileTypeId == 1).FirstOrDefault();
             var passPort = profileInfo.Files.Where(x => x.FileTypeId == 2).FirstOrDefault();
 
+            //CAREL --> Ek het net jou DOB convert na Datetime want toe ek my UserInfoDTO sn na string toe verander het dit gemown
+            //Keryn wou n short date string he
             objectToReturn.ClientInformation = new ClientInformationDTO
             {
                 Fullname = profileInfo.User.User_Name + " " + profileInfo.User.User_Surname,
                 IDNumber = profileInfo.User.User_ID_Number,
                 Cell = profileInfo.User.User_Cell,
-                Dob = profileInfo.User.User_Dob,
+                Dob = Convert.ToDateTime(profileInfo.User.User_Dob),
                 Email = profileInfo.User.User_Email,
                 Gender = profileInfo.User.User_Gender,
                 BirthCertificate = birthCert != null ? new UserFileDTO
