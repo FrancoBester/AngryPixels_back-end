@@ -59,10 +59,10 @@ namespace application_programming_interface.Services
                              where u.User_Id == userId
                              select new SpecificUserQueriesDTO
                              {
-                                 Query_Id = uq.Query_Id,
-                                 Query_Title = uq.Query_Title,
-                                 Query_Status = ((QueryStatuses)uq.Status_Id).ToString(),
-                                 Assistant_Name = uq.Assistant_Name
+                                 QueryId = uq.Query_Id,
+                                 QueryTitle = uq.Query_Title,
+                                 QueryStatus = ((QueryStatuses)uq.Status_Id).ToString(),
+                                 AssistantName = uq.Assistant_Name
                              }).ToList();
 
             return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);

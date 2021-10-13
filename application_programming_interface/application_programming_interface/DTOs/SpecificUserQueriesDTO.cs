@@ -7,9 +7,9 @@ namespace application_programming_interface.DTOs
 {
     public class SpecificUserQueriesDTO
     {
-        public int Query_Id { get; set; }
-        public string Query_Title { get; set; }
-        public string Query_Status { get; set; }
-        public string Assistant_Name { get; set; }
+        public int QueryId { get; set; }
+        public string QueryTitle { get; set; }
+        public string QueryStatus { get; set; }
+        public string AssistantName { get; set; }
     }
 }
