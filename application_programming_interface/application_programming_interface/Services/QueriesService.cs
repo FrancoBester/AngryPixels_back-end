@@ -62,12 +62,12 @@ namespace application_programming_interface.Services
                                  QueryId = uq.Query_Id,
                                  QueryTitle = uq.Query_Title,
                                  QueryStatus = ((QueryStatuses)uq.Status_Id).ToString(),
-                                 AssistantName = (uq.Assistant_Id == null ? "None" : (uq.Assistant_Id != null) ? 
+                                 AssistantName = (uq.Assistant_Id == null ? "None" :
                                                   (from u in _context.Users
                                                   join uq in _context.Queries
                                                   on u.User_Id equals uq.Assistant_Id
                                                   where uq.Assistant_Id == u.User_Id                                               
-                                                  select $"{u.User_Name} {u.User_Surname}").FirstOrDefault() : "")                
+                                                  select $"{u.User_Name} {u.User_Surname}").FirstOrDefault())               
                              }).ToList();
 
             return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
@@ -213,12 +213,12 @@ namespace application_programming_interface.Services
                                  Query_Code = uq.Query_Code,
                                  Query_Detail = uq.Query_Detail,
                                  Query_Status = ((QueryStatuses)uq.Status_Id).ToString(),
-                                 Assistant_Name = (uq.Assistant_Id == null ? "None" : (uq.Assistant_Id != null) ?
+                                 Assistant_Name = (uq.Assistant_Id == null ? "None" :
                                                   (from u in _context.Users
                                                    join q in _context.Queries
-                                                   on u.User_Id equals uq.Assistant_Id
+                                                   on u.User_Id equals q.Assistant_Id
                                                    where q.Assistant_Id == u.User_Id
-                                                   select $"{u.User_Name} {u.User_Surname}").FirstOrDefault() : "")
+                                                   select $"{u.User_Name} {u.User_Surname}").FirstOrDefault())
 
                              }).ToList();
 
