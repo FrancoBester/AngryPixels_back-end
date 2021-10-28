@@ -20,6 +20,7 @@ namespace application_programming_interface.Services
         {
             var policyToAdd = new Policy
             {
+                IsActive = true,
                 Policy_Holder = newPolicy.Policy_Holder,
                 Policy_Type = newPolicy.Policy_Type,
                 Policy_Des = newPolicy.Policy_Des,

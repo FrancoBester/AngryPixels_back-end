@@ -75,6 +75,7 @@ namespace application_programming_interface.Services
             //Query for needed info
             var policyData = (from p in _context.Policy
                               join a in _context.Admissions on p.Policy_Id equals a.Policy_Id
+                              where p.IsActive == true
                               select new AllPoliciesDTO
                               {
                                   PolicyId = p.Policy_Id,
