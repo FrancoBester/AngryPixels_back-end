@@ -62,7 +62,12 @@ namespace application_programming_interface.Services
                                  QueryId = uq.Query_Id,
                                  QueryTitle = uq.Query_Title,
                                  QueryStatus = ((QueryStatuses)uq.Status_Id).ToString(),
-                                 AssistantName = uq.Assistant_Name
+                                 AssistantName = (uq.Assistant_Id == null ? "None" : (uq.Assistant_Id != null) ? 
+                                                  (from u in _context.Users
+                                                  join uq in _context.Queries
+                                                  on u.User_Id equals uq.Assistant_Id
+                                                  where uq.Assistant_Id == u.User_Id                                               
+                                                  select $"{u.User_Name} {u.User_Surname}").FirstOrDefault() : "")                
                              }).ToList();
 
             return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
@@ -75,7 +80,7 @@ namespace application_programming_interface.Services
                 {
                     User_Id = userId,
                     Status_Id = 1,
-                    Assistant_Name = "None",
+                    Assistant_Id = null,
                     Query_Title = newQuery.Query_Title,
                     Query_Level = newQuery.Query_Level,
                     Query_Detail = newQuery.Query_Detail,
@@ -132,31 +137,38 @@ namespace application_programming_interface.Services
         //Allow admins/employees to search for any of the fields in the Queries Table
         public IEnumerable<AllUserQueriesDTO> SearchAllUserQueries(int? pageNumber, string search)
         {
+            if (!string.IsNullOrEmpty(search))
+            {
+                //Pagination
+                int curPage = pageNumber ?? 1;
+                int curPageSize = 20;
 
-            //Pagination
-            int curPage = pageNumber ?? 1;
-            int curPageSize = 20;
+                //Query for needed info
+                var qeuryData = (from u in _context.Users
+                                 join uq in _context.Queries on u.User_Id equals uq.User_Id
+                                 where u.IsActive &&
+                                      (uq.Query_Level).ToString() == search ||
+                                       uq.Query_Code.ToUpper().Contains(search.ToUpper()) ||
+                                       uq.Query_Title.ToUpper().Contains(search.ToUpper()) ||
+                                       u.User_Name.ToUpper().Contains(search.ToUpper())
+                                 select new AllUserQueriesDTO
+                                 {
+                                     Query_Id = uq.Query_Id,
+                                     Query_Level = uq.Query_Level,
+                                     Query_Code = uq.Query_Code,
+                                     Query_Title = uq.Query_Title,
+                                     User_Id = u.User_Id,
+                                     User_Name = u.User_Name
+                                 }).ToList();
 
-            //Query for needed info
-            var qeuryData = (from u in _context.Users
-                             join uq in _context.Queries on u.User_Id equals uq.User_Id
-                             where u.IsActive &&
-                                  (uq.Query_Level).ToString() == search ||
-                                   uq.Query_Code.ToUpper().Contains(search.ToUpper()) ||
-                                   uq.Query_Title.ToUpper().Contains(search.ToUpper()) ||
-                                   u.User_Name.ToUpper().Contains(search.ToUpper())
-                             select new AllUserQueriesDTO
-                             {
-                                 Query_Id = uq.Query_Id,
-                                 Query_Level = uq.Query_Level,
-                                 Query_Code = uq.Query_Code,
-                                 Query_Title = uq.Query_Title,
-                                 User_Id = u.User_Id,
-                                 User_Name = u.User_Name
-                             }).ToList();
+                return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
+            }
+            else
+            {
+                return null; //Return everything
+            }
 
-
-            return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
+              
         }
 
         //Retreives Queries by ID
@@ -201,7 +213,13 @@ namespace application_programming_interface.Services
                                  Query_Code = uq.Query_Code,
                                  Query_Detail = uq.Query_Detail,
                                  Query_Status = ((QueryStatuses)uq.Status_Id).ToString(),
-                                 Assistant_Name = uq.Assistant_Name
+                                 Assistant_Name = (uq.Assistant_Id == null ? "None" : (uq.Assistant_Id != null) ?
+                                                  (from u in _context.Users
+                                                   join q in _context.Queries
+                                                   on u.User_Id equals uq.Assistant_Id
+                                                   where q.Assistant_Id == u.User_Id
+                                                   select $"{u.User_Name} {u.User_Surname}").FirstOrDefault() : "")
+
                              }).ToList();
 
 
@@ -212,11 +230,11 @@ namespace application_programming_interface.Services
         public void AssignEmployeeToQuery(int empId, int queryId)
         {
             var assingQueryObj = _context.Queries.Where(x => x.Query_Id == queryId).SingleOrDefault();
-            var employeeObj = _context.Users.Where(x => x.User_Id == empId && x.IsActive).SingleOrDefault();
+            //var employeeObj = _context.Users.Where(x => x.User_Id == empId && x.IsActive).SingleOrDefault();
 
-            if (assingQueryObj != null && employeeObj != null)
+            if (assingQueryObj != null)
             {
-                assingQueryObj.Assistant_Name = $"{employeeObj.User_Name} {employeeObj.User_Surname}";
+                assingQueryObj.Assistant_Id = empId;
                 assingQueryObj.Status_Id = 2;
 
                 _context.Queries.Update(assingQueryObj);

@@ -30,7 +30,6 @@ namespace application_programming_interface.Controllers
         [HttpGet("{userId}")]
         public IEnumerable<SpecificUserQueriesDTO> GetSpecificUserQueries(int? pageNumber, int userId)
         {
-
             return _queriesService.GetSpecificUserQueries(pageNumber, userId);
         }
 

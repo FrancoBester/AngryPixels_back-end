@@ -38,6 +38,7 @@ namespace application_programming_interface.Models
             //not tested
             modelBuilder.Entity<Users>().HasOne(u => u.Address).WithMany(a => a.Users).HasForeignKey(u => u.Address_Id);// user/address
             modelBuilder.Entity<Queries>().HasOne(q => q.Users).WithMany(u => u.Queries).HasForeignKey(q => q.User_Id); //query/users
+            modelBuilder.Entity<Queries>().HasOne(q => q.Users).WithMany(u => u.Queries).HasForeignKey(q => q.Assistant_Id);
             modelBuilder.Entity<User_Roles>().HasOne(ur => ur.Role).WithMany(r => r.User_Roles).HasForeignKey(ur => ur.Role_Id); // user_roles/roles
             modelBuilder.Entity<User_Roles>().HasOne(ur => ur.User).WithMany(u => u.User_Roles).HasForeignKey(ur => ur.User_Id);// user_roles/user
             modelBuilder.Entity<Schema_Requests>().HasOne(sr => sr.User).WithMany(u => u.Schema_Requests).HasForeignKey(sr => sr.User_Id);// schema_roles/user
