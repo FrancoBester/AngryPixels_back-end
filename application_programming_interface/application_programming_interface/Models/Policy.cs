@@ -15,6 +15,7 @@ namespace application_programming_interface.Models
         public string Policy_Des { get; set; }
         public string Policy_Date { get; set; }
         public string Policy_Benefits { get; set; }
+        public bool IsActive { get; set; }
 
 
         //one to many - schema_requests
