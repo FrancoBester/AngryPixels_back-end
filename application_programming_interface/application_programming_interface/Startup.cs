@@ -9,6 +9,9 @@ using application_programming_interface.Interfaces;
 using application_programming_interface.Services;
 using System;
 using Azure.Storage.Blobs;
+using MailKit.Net.Smtp;
+using MailKit.Security;
+
 
 namespace application_programming_interface
 {
@@ -46,6 +49,9 @@ namespace application_programming_interface
                                                                 .AllowAnyOrigin()
                                                                 .WithOrigins("https://localhost/")
                                                                 .SetIsOriginAllowedToAllowWildcardSubdomains()));
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+            services.AddTransient<IMailService, Services.MailService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
