@@ -22,12 +22,12 @@ namespace application_programming_interface.Controllers
 
         [Route("~/api/Send")]
         [HttpPost]
-        public Task<IActionResult> Send([FromHeader] MailRequest request)
+        public JsonResult Send( MailRequest request)
         {
             try
             {
                 mailService.SendEmail(request);
-                return null;
+                return new JsonResult("Mail sent");
             }
             catch(Exception ex)
             {
