@@ -132,12 +132,17 @@ namespace application_programming_interface.Services
                                  RequestId = sr.Request_Id,
                                  UserName = u.User_Name,
                                  UserSurname = u.User_Surname,
+                                 
                                  RequestStatus = ((SchemaRequestStatuses)sr.Status_Id).ToString(),
-                                 PolicyType = (from sr in _context.Schema_Requests
-                                               join p in _context.Policy
-                                               on sr.Policy_Id equals p.Policy_Id
-                                               where sr.Policy_Id == p.Policy_Id
-                                               select p.Policy_Type).FirstOrDefault(),
+                                 PolicyType = ( from p in _context.Policy
+                                                where p.Policy_Id == sr.Policy_Id
+                                                select p.Policy_Type
+                                 ).FirstOrDefault(),
+                                 //PolicyType = (from sr in _context.Schema_Requests
+                                 //              join p in _context.Policy
+                                 //              on sr.Policy_Id equals p.Policy_Id
+                                 //              where sr.Policy_Id == p.Policy_Id
+                                 //              select p.Policy_Type).FirstOrDefault(),
                              }).ToList();
 
             return qeuryData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
