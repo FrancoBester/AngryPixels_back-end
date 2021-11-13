@@ -14,6 +14,7 @@ namespace application_programming_interface.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [ApiExceptionFilter]
     public class SchemaRequestsController : ControllerBase
     {
         private readonly ISchemaRequestService _schemaRequestService;

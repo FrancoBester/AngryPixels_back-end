@@ -9,6 +9,7 @@ namespace application_programming_interface.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [ApiExceptionFilter]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]

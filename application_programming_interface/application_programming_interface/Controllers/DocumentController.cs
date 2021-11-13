@@ -16,6 +16,7 @@ namespace application_programming_interface.Controllers
     
     [ApiController]
     [Route("[controller]")]
+    [ApiExceptionFilter]
     public class DocumentController : ControllerBase
     {
         private readonly DataContext _context;

@@ -11,7 +11,8 @@ namespace application_programming_interface.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    
+    [ApiExceptionFilter]
+
     public class EmailController : Controller
     {
         private readonly IMailService mailService;

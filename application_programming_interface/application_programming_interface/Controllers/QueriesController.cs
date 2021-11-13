@@ -12,6 +12,7 @@ namespace application_programming_interface.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [ApiExceptionFilter]
     public class QueriesController : ControllerBase
     {
         private readonly IQueriesService _queriesService;

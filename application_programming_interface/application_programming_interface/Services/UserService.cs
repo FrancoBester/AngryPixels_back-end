@@ -18,7 +18,7 @@ namespace application_programming_interface.Services
 
         public void RegisterUser(UserRegisterDTO user)
         {
-            //Add julle code hier om n user te add
+            
             try
             {
                 var userToAdd = new Users
@@ -37,7 +37,7 @@ namespace application_programming_interface.Services
                         City = user.Address.City,
                         Street = user.Address.Street
                     }
-                    //CCAAAAARRREEEELLLL How you do this ? xD --> Address ??
+                    
                 };
 
                 _context.Users.Add(userToAdd);

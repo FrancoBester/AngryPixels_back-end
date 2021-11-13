@@ -13,12 +13,12 @@ namespace application_programming_interface.DTOs
         public string Surname { get; set; }
         public List<string> Roles { get; set; }
 
-        public void SetData(int id,string name,string surname,string roles)
+        public void SetData(int id,string name,string surname,List<string> roles)
         {
             this.Id = id;
             this.Name = name;
             this.Surname = surname;
-            this.Roles = JsonConvert.DeserializeObject<List<string>>(roles);
+            this.Roles = roles;
         }
 
     }

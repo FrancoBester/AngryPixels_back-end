@@ -7,11 +7,13 @@ using application_programming_interface.Models;
 using Microsoft.EntityFrameworkCore;
 using application_programming_interface.DTOs;
 using application_programming_interface.Interfaces;
+using application_programming_interface.Atributes;
 
 namespace application_programming_interface.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [ApiExceptionFilter]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
@@ -98,6 +100,7 @@ namespace application_programming_interface.Controllers
         //PolicyType --> When admin clicks it, they can view specific policy info.
         [Route("~/api/Users/GetAdminLoadPageData")]
         [HttpGet]
+        [Authentication(new string[] { "Admin" })]
         public IEnumerable<AdminLoadPageDTO> GetAdminLoadPageData(int? pageNumber)
         {
             return _userService.GetAdminLoadPageData(pageNumber);

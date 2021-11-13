@@ -12,6 +12,7 @@ namespace application_programming_interface.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiExceptionFilter]
     public class ConnectionTestController : ControllerBase
     {
         private IAuthenticationService _auth;
@@ -31,7 +32,7 @@ namespace application_programming_interface.Controllers
 
         [HttpGet]
         [Route("~/api/ConnectionTest/Authed")]
-        [Authentication]
+        [Authentication(new string[] { "Customer" })]
         public JsonResult GetAuthed()
         {
             return new JsonResult(new { value = "Sucsess",testValue = _auth.GetUser()});

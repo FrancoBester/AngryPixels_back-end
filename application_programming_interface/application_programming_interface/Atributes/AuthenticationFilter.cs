@@ -13,14 +13,14 @@ namespace application_programming_interface.Atributes
 {
     public class AuthenticationAttribute :ActionFilterAttribute, IActionFilter
     {
-        private string _role;
+        private string[] _role;
         public AuthenticationAttribute()
         {
 
         }
-        //CAAAAAAAAAAAAARRRRRRRRRRRRRRRMMMMMMMMMMMMMMMMMMMEEEEEEEEEEEEEEEEEEEEENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNnNnNnNnNnnNnN
+        
 
-        public AuthenticationAttribute(string role)
+        public AuthenticationAttribute(string[] role)
         {
             _role = role;
         }
@@ -51,15 +51,19 @@ namespace application_programming_interface.Atributes
             var authService = (AuthenticationService)context.HttpContext.RequestServices.GetService(typeof(IAuthenticationService));
             var claim = claims.Claims.ToList();
             var name = claim.Where(x => x.Type.Equals("Email", System.StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value;
-            var roles = claim.Where(x => x.Type.Equals("Roles", System.StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value;
+            var roles = claim.Where(x => x.Type.Equals("Roles", System.StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value.Split(',').ToList();
             var id = int.Parse(claim.Where(x => x.Type.Equals("ID", System.StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
 
-            if (!string.IsNullOrEmpty(_role))
+            if (_role != null)
             {
-                if (!roles.Contains(_role))
+                if (_role.Length > 0)
                 {
-                    throw new ValidationException("Sorry , you do not have permision to access this shit.");
+                    if (!_role.ToList().Intersect(roles).Any())
+                    {
+                        throw new ValidationException("Sorry , you do not have permision to access this.");
+                    }
                 }
+                
             }
             authService.User.SetData(id, name,"Empty for now", roles);
         }

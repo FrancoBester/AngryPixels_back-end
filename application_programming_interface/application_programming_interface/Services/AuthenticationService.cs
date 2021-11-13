@@ -63,7 +63,14 @@ namespace application_programming_interface.Services
             claims.Add(new Claim("Email", requestDTO.Email));
             claims.Add(new Claim("ID", id.ToString()));
 
-            var roles = new List<string>() { "User"};
+            var roles = (
+                    from ur in _context.User_Roles
+                    join r in _context.Roles
+                     on ur.Role_Id equals r.Role_Id
+                    where ur.User_Id == id
+                    select r.Role_Name
+                ).ToList();
+
             var rolesAsString = JsonConvert.SerializeObject(roles);
 
             claims.Add(new Claim("Roles", rolesAsString));

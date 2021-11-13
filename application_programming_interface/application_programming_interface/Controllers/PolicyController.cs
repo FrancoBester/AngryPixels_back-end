@@ -10,6 +10,7 @@ namespace application_programming_interface.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [ApiExceptionFilter]
     public class PolicyController : Controller
     {
         private readonly IPolicyService _policyService;

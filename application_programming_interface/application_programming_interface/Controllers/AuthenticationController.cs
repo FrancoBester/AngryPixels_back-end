@@ -4,6 +4,7 @@ using application_programming_interface.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Security.Authentication;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,6 +12,7 @@ namespace application_programming_interface.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiExceptionFilter]
     public class AuthenticationController : ControllerBase
     {
 
@@ -35,16 +37,8 @@ namespace application_programming_interface.Controllers
             }
             catch (Exception e)
             {
-                throw new Exception(e.Message);
+                throw new AuthenticationException(e.Message);
             }
-        }
-        //CAAAAAAAAAAAAARRRRRRRRRRRRRRRMMMMMMMMMMMMMMMMMMMEEEEEEEEEEEEEEEEEEEEENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNnNnNnNnNnnNnN
-        [HttpGet]
-        [Route("~/TEST")]
-        [Authentication("admin")]
-        public JsonResult Test()
-        {
-            return new JsonResult(new { Token = "Fuck you"});
         }
     }
 }
