@@ -15,5 +15,7 @@ namespace application_programming_interface.Interfaces
         IEnumerable<SchemaRequestDTO> GetAllSchemaRequests(int? pageNumber);
 
         ClientSchemaRequestDTO GetUserSchemaRequest(int requestId);
+        void AproveRequest(int requestId);
+        void DeclineRequest(int requestId);
     }
 }

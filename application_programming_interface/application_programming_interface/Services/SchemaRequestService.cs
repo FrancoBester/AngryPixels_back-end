@@ -155,7 +155,8 @@ namespace application_programming_interface.Services
                                             {
                                                 PolicyId = r.Policy_Id,
                                                 UserId = r.User_Id,
-                                                RequestStatus = ((SchemaRequestStatuses)r.Status_Id).ToString()
+                                                RequestStatus = ((SchemaRequestStatuses)r.Status_Id).ToString(),
+                                                RequestId = r.Request_Id
                                             }).FirstOrDefault();
 
             objectToReturn.PolicyInfo = (from p in _context.Policy
@@ -212,6 +213,19 @@ namespace application_programming_interface.Services
 
         //Decline Client Schema Request
         //Approve Client Schema Request
+
+        public void AproveRequest(int requestId)
+        {
+            var objectToUpdate = _context.Schema_Requests.Where(q => q.Request_Id == requestId).FirstOrDefault();
+            objectToUpdate.Status_Id = (int)SchemaRequestStatuses.Approved;
+            _context.SaveChanges();
+        }
+        public void DeclineRequest(int requestId)
+        {
+            var objectToUpdate = _context.Schema_Requests.Where(q => q.Request_Id == requestId).FirstOrDefault();
+            objectToUpdate.Status_Id = (int)SchemaRequestStatuses.Declined;
+            _context.SaveChanges();
+        }
         #endregion
     }
 }

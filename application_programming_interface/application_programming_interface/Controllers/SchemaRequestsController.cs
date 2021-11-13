@@ -117,6 +117,21 @@ namespace application_programming_interface.Controllers
 
         //Decline Client Schema Request
         //Approve Client Schema Request
+
+        [Route("~/api/SchemaRequests/AproveRequest/{requestId}")]
+        [HttpGet]
+        [Authentication]
+        public void AproveRequest(int requestId)
+        {
+            _schemaRequestService.AproveRequest(requestId);
+        }
+        [Route("~/api/SchemaRequests/DeclineRequest/{requestId}")]
+        [HttpGet]
+        [Authentication]
+        public void DeclineRequest(int requestId)
+        {
+            _schemaRequestService.DeclineRequest(requestId);
+        }
         #endregion
     }
 }
