@@ -104,9 +104,9 @@ namespace application_programming_interface.Controllers
         {
             try
             {
-                _schemaRequestService.GetUserSchemaRequest(requestId);
+                var result = _schemaRequestService.GetUserSchemaRequest(requestId);
 
-                return new JsonResult("Request Received.");
+                return new JsonResult(result);
             }
             catch (Exception ex)
             {
