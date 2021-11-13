@@ -42,6 +42,13 @@ namespace application_programming_interface.Services
 
                 _context.Users.Add(userToAdd);
                 _context.SaveChanges();
+
+                //add a new user role
+                _context.User_Roles.Add(new User_Roles {
+                    User_Id = userToAdd.User_Id,
+                    Role_Id = 3
+                });
+                _context.SaveChanges();
             }
             catch(Exception ex)
             {
