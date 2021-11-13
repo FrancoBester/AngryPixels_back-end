@@ -66,7 +66,7 @@ namespace application_programming_interface.Controllers
         //Allow specific user to remove own account
         //Allow admin to also remove user account
         [Route("~/api/Users/RemoveUserAccount/{userId}")]
-        [HttpPut("{userId}")]
+        [HttpGet("{userId}")]
         public JsonResult RemoveUserAccount(int userId) 
         {
             try

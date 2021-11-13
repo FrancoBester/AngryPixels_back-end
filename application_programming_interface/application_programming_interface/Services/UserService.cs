@@ -86,7 +86,7 @@ namespace application_programming_interface.Services
             if (delObj != null)
             {
                 delObj.IsActive = false;
-                _context.Users.Update(delObj);
+                _context.Users.Remove(delObj);
                 _context.SaveChanges();
             }
         }
