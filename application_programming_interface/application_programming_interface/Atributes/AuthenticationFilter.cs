@@ -3,6 +3,8 @@ using application_programming_interface.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -51,7 +53,7 @@ namespace application_programming_interface.Atributes
             var authService = (AuthenticationService)context.HttpContext.RequestServices.GetService(typeof(IAuthenticationService));
             var claim = claims.Claims.ToList();
             var name = claim.Where(x => x.Type.Equals("Email", System.StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value;
-            var roles = claim.Where(x => x.Type.Equals("Roles", System.StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value.Split(',').ToList();
+            var roles = JsonConvert.DeserializeObject<List<string>>(claim.Where(x => x.Type.Equals("Roles", System.StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
             var id = int.Parse(claim.Where(x => x.Type.Equals("ID", System.StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Value);
 
             if (_role != null)
