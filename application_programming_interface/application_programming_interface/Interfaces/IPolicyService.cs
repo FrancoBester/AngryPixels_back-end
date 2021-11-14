@@ -10,7 +10,7 @@ namespace application_programming_interface.Interfaces
     public interface IPolicyService
     {
         void CreatePolicy(PolicyCreateDTO newPolicy);
-        void UpdatePolicyInformation(Policy policy, int policyId);
+        void UpdatePolicyInformation(PolicyCreateDTO policy, int policyId);
         void RemovePolicy(int policyId);
     }
 }

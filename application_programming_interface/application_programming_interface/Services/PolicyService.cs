@@ -53,11 +53,12 @@ namespace application_programming_interface.Services
         }
 
         //Update Policy
-        public void UpdatePolicyInformation(Policy policy, int policyId)
+        public void UpdatePolicyInformation(PolicyCreateDTO policy, int policyId)
         {
             var updatePolicyObj = _context.Policy.Where(x => x.Policy_Id == policyId && x.IsActive).SingleOrDefault();
+            var updateAdmsObj = _context.Admissions.Where(x => x.Policy_Id == policyId).SingleOrDefault();
 
-            if (updatePolicyObj != null)
+            if (updatePolicyObj != null && updateAdmsObj != null)
             {
                 updatePolicyObj.Policy_Holder = policy.Policy_Holder;
                 updatePolicyObj.Policy_Type = policy.Policy_Type;
@@ -67,7 +68,15 @@ namespace application_programming_interface.Services
 
                 _context.Policy.Update(updatePolicyObj);
                 _context.SaveChanges();
+
+                updateAdmsObj.Adms_Hospitals = policy.Admissions.Adms_Hospitals;
+                updateAdmsObj.Adms_Doctors = policy.Admissions.Adms_Doctors;
+                updateAdmsObj.Adms_Type = policy.Admissions.Adms_Type;
+
+                _context.Admissions.Update(updateAdmsObj);
+                _context.SaveChanges();
             }
+
         }
 
         //Delete Policy

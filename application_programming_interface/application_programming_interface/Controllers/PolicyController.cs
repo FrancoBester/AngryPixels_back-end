@@ -41,7 +41,7 @@ namespace application_programming_interface.Controllers
         //Update Policy
         [Route("~/api/Policy/UpdatePolicyInformation/{policyId}")]
         [HttpPut("{policyId}")]
-        public JsonResult UpdatePolicyInformation(Policy policy, int policyId)
+        public JsonResult UpdatePolicyInformation(PolicyCreateDTO policy, int policyId)
         {
             try
             {
