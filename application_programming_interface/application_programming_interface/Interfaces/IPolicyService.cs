@@ -12,5 +12,7 @@ namespace application_programming_interface.Interfaces
         void CreatePolicy(PolicyCreateDTO newPolicy);
         void UpdatePolicyInformation(PolicyCreateDTO policy, int policyId);
         void RemovePolicy(int policyId);
+        IEnumerable<SpecificUserPolicyDTO> GetSpecificPolicyDetails(int policyId);
+
     }
 }

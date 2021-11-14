@@ -72,5 +72,12 @@ namespace application_programming_interface.Controllers
             }
         }
 
+        [Route("~/api/Policy/GetSpecificPolicyDetails/{policyId}")]
+        [HttpGet("{policyId}")]
+        public IEnumerable<SpecificUserPolicyDTO> GetSpecificPolicyDetails(int policyId)
+        {
+            return _policyService.GetSpecificPolicyDetails(policyId);
+        }
+
     }
 }

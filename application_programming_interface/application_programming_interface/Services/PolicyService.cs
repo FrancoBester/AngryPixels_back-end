@@ -92,5 +92,30 @@ namespace application_programming_interface.Services
             }
         }
 
+        //Get Specific Users Policy / Policies
+        public IEnumerable<SpecificUserPolicyDTO> GetSpecificPolicyDetails(int policyId)
+        {
+            //Query for needed info
+            var policyData = (from p in _context.Policy
+                              join a in _context.Admissions on p.Policy_Id equals a.Policy_Id
+                              where p.Policy_Id == policyId
+                              select new SpecificUserPolicyDTO
+                              {
+                                  policyId = policyId,
+                                  Policy_Type = p.Policy_Type,
+                                  Policy_Holder = p.Policy_Holder,
+                                  Policy_Date = p.Policy_Date,
+                                  Policy_Des = p.Policy_Des,
+                                  Policy_Benefits = p.Policy_Benefits,
+                                  Adms_Id = a.Adms_Id,
+                                  Adms_Type = a.Adms_Type,
+                                  Adms_Doctors = a.Adms_Doctors,
+                                  Adms_Hospitals = a.Adms_Hospitals
+                              }).ToList();
+
+            return policyData;
+        }
+
+
     }
 }
