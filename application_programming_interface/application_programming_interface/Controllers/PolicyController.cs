@@ -56,7 +56,7 @@ namespace application_programming_interface.Controllers
 
         //Delete Policy
         [Route("~/api/Policy/RemovePolicy/{policyId}")]
-        [HttpPut("{policyId}")]
+        [HttpGet("{policyId}")]
         public JsonResult RemovePolicy(int policyId)
         {
             try
