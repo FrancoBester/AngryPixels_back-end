@@ -1,4 +1,5 @@
-﻿using application_programming_interface.Interfaces;
+﻿using application_programming_interface.DTOs;
+using application_programming_interface.Interfaces;
 using application_programming_interface.Models;
 using System;
 using System.Collections.Generic;
@@ -16,20 +17,39 @@ namespace application_programming_interface.Services
         }
 
         //Create Policy
-        public void CreatePolicy(Policy newPolicy)
+        public void CreatePolicy(PolicyCreateDTO newPolicy)
         {
-            var policyToAdd = new Policy
+            try
             {
-                IsActive = true,
-                Policy_Holder = newPolicy.Policy_Holder,
-                Policy_Type = newPolicy.Policy_Type,
-                Policy_Des = newPolicy.Policy_Des,
-                Policy_Benefits = newPolicy.Policy_Benefits,
-                Policy_Date = DateTime.Now.ToString()
-            };
+                var policyToAdd = new Policy
+                {
+                    IsActive = true,
+                    Policy_Holder = newPolicy.Policy_Holder,
+                    Policy_Type = newPolicy.Policy_Type,
+                    Policy_Des = newPolicy.Policy_Des,
+                    Policy_Benefits = newPolicy.Policy_Benefits,
+                    Policy_Date = DateTime.Now.ToString(),
+                };
 
-            _context.Policy.Add(policyToAdd);
-            _context.SaveChanges();
+                _context.Policy.Add(policyToAdd);
+                _context.SaveChanges();
+
+                //Add the policy admissions info
+                _context.Admissions.Add(new Admissions
+                {
+                    Adms_Doctors = newPolicy.Admissions.Adms_Doctors,
+                    Adms_Hospitals = newPolicy.Admissions.Adms_Hospitals,
+                    Adms_Type = newPolicy.Admissions.Adms_Type,
+                    Policy_Id = policyToAdd.Policy_Id
+                });
+
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.Message);
+            }
+
         }
 
         //Update Policy

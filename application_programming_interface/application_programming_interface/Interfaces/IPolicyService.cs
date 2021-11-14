@@ -1,4 +1,5 @@
-﻿using application_programming_interface.Models;
+﻿using application_programming_interface.DTOs;
+using application_programming_interface.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace application_programming_interface.Interfaces
 {
     public interface IPolicyService
     {
-        void CreatePolicy(Policy newPolicy);
+        void CreatePolicy(PolicyCreateDTO newPolicy);
         void UpdatePolicyInformation(Policy policy, int policyId);
         void RemovePolicy(int policyId);
     }

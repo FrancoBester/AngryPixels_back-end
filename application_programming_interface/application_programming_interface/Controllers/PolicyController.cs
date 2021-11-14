@@ -1,4 +1,5 @@
-﻿using application_programming_interface.Interfaces;
+﻿using application_programming_interface.DTOs;
+using application_programming_interface.Interfaces;
 using application_programming_interface.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -22,7 +23,7 @@ namespace application_programming_interface.Controllers
         //Allow users to create queries
         [Route("~/api/Queries/CreatePolicy")]
         [HttpPost]
-        public JsonResult CreatePolicy(Policy newPolicy)
+        public JsonResult CreatePolicy(PolicyCreateDTO newPolicy)
         {
             try
             {
