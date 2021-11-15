@@ -16,6 +16,13 @@ namespace application_programming_interface.Services
             _context = context;
         }
 
+        public enum SchemaRequestStatuses
+        {
+            Pending = 1,
+            Approved = 2,
+            Declined = 3
+        }
+
         //Create Policy
         public void CreatePolicy(PolicyCreateDTO newPolicy)
         {
@@ -116,6 +123,24 @@ namespace application_programming_interface.Services
             return policyData;
         }
 
+        //Get Specific User Policy Information
+        public IEnumerable<UserSpecificPoliciesDTO> GetAllSchemaRequests(int userId)
+        {
+            //Query for needed info
+            var qeuryData = (from u in _context.Users
+                             join sr in _context.Schema_Requests on u.User_Id equals sr.User_Id
+                             join p in _context.Policy on sr.Policy_Id equals p.Policy_Id
+                             where u.IsActive == true && u.User_Id == userId
+                             select new UserSpecificPoliciesDTO
+                             {
+                                 Policy_Id = sr.Policy_Id,
+                                 Policy_Holder = p.Policy_Holder,
+                                 Policy_Type = p.Policy_Type,
+                                 RequestStatus = ((SchemaRequestStatuses)sr.Status_Id).ToString()
+                             }).ToList();
+
+            return qeuryData;
+        }
 
     }
 }
