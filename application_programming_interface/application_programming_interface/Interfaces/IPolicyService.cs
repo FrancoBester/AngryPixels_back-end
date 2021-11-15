@@ -13,6 +13,6 @@ namespace application_programming_interface.Interfaces
         void UpdatePolicyInformation(PolicyCreateDTO policy, int policyId);
         void RemovePolicy(int policyId);
         IEnumerable<SpecificUserPolicyDTO> GetSpecificPolicyDetails(int policyId);
-        IEnumerable<UserSpecificPoliciesDTO> GetAllSchemaRequests(int userId);
+        IEnumerable<UserSpecificPoliciesDTO> GetSpecificUserSchemaRequests(int userId);
     }
 }

@@ -132,7 +132,7 @@ namespace application_programming_interface.Services
         }
 
         //Get Specific User Policy Information
-        public IEnumerable<UserSpecificPoliciesDTO> GetAllSchemaRequests(int userId)
+        public IEnumerable<UserSpecificPoliciesDTO> GetSpecificUserSchemaRequests(int userId)
         {
             try
             {

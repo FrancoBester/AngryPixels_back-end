@@ -81,12 +81,13 @@ namespace application_programming_interface.Controllers
         }
 
         //Get Specific User Policy Information
-        [Route("~/api/Policy/GetAllSchemaRequests/{userId}")]
+        [Route("~/api/Policy/GetSpecificUserSchemaRequests/{userId}")]
         [HttpGet("{userId}")]
-        public IEnumerable<UserSpecificPoliciesDTO> GetAllSchemaRequests(int userId)
+        public IEnumerable<UserSpecificPoliciesDTO> GetSpecificUserSchemaRequests(int userId)
         {
-            return _policyService.GetAllSchemaRequests(userId);
+            return _policyService.GetSpecificUserSchemaRequests(userId);
         }
 
     }
+
 }
