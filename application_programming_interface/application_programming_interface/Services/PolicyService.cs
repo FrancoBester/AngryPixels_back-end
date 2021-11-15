@@ -102,44 +102,60 @@ namespace application_programming_interface.Services
         //Get Specific Users Policy / Policies
         public IEnumerable<SpecificUserPolicyDTO> GetSpecificPolicyDetails(int policyId)
         {
-            //Query for needed info
-            var policyData = (from p in _context.Policy
-                              join a in _context.Admissions on p.Policy_Id equals a.Policy_Id
-                              where p.Policy_Id == policyId
-                              select new SpecificUserPolicyDTO
-                              {
-                                  policyId = policyId,
-                                  Policy_Type = p.Policy_Type,
-                                  Policy_Holder = p.Policy_Holder,
-                                  Policy_Date = p.Policy_Date,
-                                  Policy_Des = p.Policy_Des,
-                                  Policy_Benefits = p.Policy_Benefits,
-                                  Adms_Id = a.Adms_Id,
-                                  Adms_Type = a.Adms_Type,
-                                  Adms_Doctors = a.Adms_Doctors,
-                                  Adms_Hospitals = a.Adms_Hospitals
-                              }).ToList();
+            try
+            {
+                var policyData = (from p in _context.Policy
+                                  join a in _context.Admissions on p.Policy_Id equals a.Policy_Id
+                                  where p.Policy_Id == policyId
+                                  select new SpecificUserPolicyDTO
+                                  {
+                                      policyId = policyId,
+                                      Policy_Type = p.Policy_Type,
+                                      Policy_Holder = p.Policy_Holder,
+                                      Policy_Date = p.Policy_Date,
+                                      Policy_Des = p.Policy_Des,
+                                      Policy_Benefits = p.Policy_Benefits,
+                                      Adms_Id = a.Adms_Id,
+                                      Adms_Type = a.Adms_Type,
+                                      Adms_Doctors = a.Adms_Doctors,
+                                      Adms_Hospitals = a.Adms_Hospitals
+                                  }).ToList();
 
-            return policyData;
+                return policyData;
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.Message);
+                return null;
+            }
+           
         }
 
         //Get Specific User Policy Information
         public IEnumerable<UserSpecificPoliciesDTO> GetAllSchemaRequests(int userId)
         {
-            //Query for needed info
-            var qeuryData = (from u in _context.Users
-                             join sr in _context.Schema_Requests on u.User_Id equals sr.User_Id
-                             join p in _context.Policy on sr.Policy_Id equals p.Policy_Id
-                             where u.IsActive == true && u.User_Id == userId
-                             select new UserSpecificPoliciesDTO
-                             {
-                                 Policy_Id = sr.Policy_Id,
-                                 Policy_Holder = p.Policy_Holder,
-                                 Policy_Type = p.Policy_Type,
-                                 RequestStatus = ((SchemaRequestStatuses)sr.Status_Id).ToString()
-                             }).ToList();
+            try
+            {
+                var qeuryData = (from u in _context.Users
+                                 join sr in _context.Schema_Requests on u.User_Id equals sr.User_Id
+                                 join p in _context.Policy on sr.Policy_Id equals p.Policy_Id
+                                 where u.IsActive == true && u.User_Id == userId
+                                 select new UserSpecificPoliciesDTO
+                                 {
+                                     Policy_Id = sr.Policy_Id,
+                                     Policy_Holder = p.Policy_Holder,
+                                     Policy_Type = p.Policy_Type,
+                                     RequestStatus = ((SchemaRequestStatuses)sr.Status_Id).ToString()
+                                 }).ToList();
 
-            return qeuryData;
+                return qeuryData;
+            }
+            catch(Exception ex)
+            {
+                Console.Write(ex.Message);
+                return null;
+            }
+            
         }
 
     }
