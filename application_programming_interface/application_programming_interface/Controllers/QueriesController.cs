@@ -111,7 +111,7 @@ namespace application_programming_interface.Controllers
 
         //Allow an employee to be assigned to a user query for assistance
         [Route("~/api/Queries/AssignEmployeeToQuery/{empId}/{queryId}")]
-        [HttpPut("{queryId}")]
+        [HttpPost("{queryId}")]
         public JsonResult AssignEmployeeToQuery(int empId, int queryId)
         {
             try
@@ -122,7 +122,7 @@ namespace application_programming_interface.Controllers
             }
             catch (Exception ex)
             {
-                return new JsonResult(ex.InnerException);
+                throw new Exception(ex.Message);
             }
         }
 
