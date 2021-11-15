@@ -15,11 +15,13 @@ namespace application_programming_interface.Services
     {
         private readonly BlobServiceClient _blobClient;
         private readonly DataContext _context;
+        private readonly IAuthenticationService _authenticationService;
 
-        public BlobStorageService(BlobServiceClient blobClient, DataContext context)
+        public BlobStorageService(BlobServiceClient blobClient, DataContext context,IAuthenticationService authentication)
         {
             _blobClient = blobClient;
             _context = context;
+            _authenticationService = authentication;
         }
 
 
@@ -38,8 +40,10 @@ namespace application_programming_interface.Services
 
         public void UploadDocumentForUser(UserDocumentUploadDTO file)
         {
+            var id = _authenticationService.GetUser().Id;
             var container = _blobClient.GetBlobContainerClient("documents");
-            var fileNameToSave = "UserDocuments/" + DateTime.Now.Year + '/' + DateTime.Now.Month + file.FileName;
+            Guid g = Guid.NewGuid();
+            var fileNameToSave = "UserDocuments/" + $"{id}/" + DateTime.Now.Year + '/' + DateTime.Now.Month + $"/{g.ToString().Substring(0,4)}{file.FileName}";
             var blobClient = container.GetBlobClient(fileNameToSave);
 
             blobClient.Upload(file.File.OpenReadStream());

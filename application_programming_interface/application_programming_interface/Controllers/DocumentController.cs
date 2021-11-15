@@ -55,6 +55,7 @@ namespace application_programming_interface.Controllers
 
         [Route("~/api/Document/UploadDocForUser")]
         [HttpPost]
+        [Authentication]
         public void UploadDocumentForUser([FromForm] UserDocumentUploadDTO file)
         {
             _blobStorage.UploadDocumentForUser(file);
