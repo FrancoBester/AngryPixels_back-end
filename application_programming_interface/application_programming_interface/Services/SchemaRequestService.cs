@@ -119,7 +119,7 @@ namespace application_programming_interface.Services
         {
             //Pagination
             int curPage = pageNumber ?? 1;
-            int curPageSize = 20;
+            int curPageSize = 5;
 
             //Query for needed info
             var qeuryData = (from u in _context.Users
