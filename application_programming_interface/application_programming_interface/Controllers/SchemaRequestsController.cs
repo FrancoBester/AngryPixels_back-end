@@ -60,8 +60,15 @@ namespace application_programming_interface.Controllers
 
         }
 
+        [Route("~/api/SchemaRequests/GetAllPoliciesPaginate")]
+        [HttpGet]
+        public IEnumerable<AllPoliciesDTO> GetAllPoliciesPaginate(int? pageNumber)
+        {
+            return _schemaRequestService.GetAllPoliciesPaginate(pageNumber);
+        }
+
         //Allow Users tp Apply to a New Policy
-                //Receive PolicyId from front-end on GetAllPolicies Page
+        //Receive PolicyId from front-end on GetAllPolicies Page
         [Route("~/api/SchemaRequests/RequestToJoinSchema/{PolicyId}")]
         [HttpPost("{userId}")]
         [Authentication]

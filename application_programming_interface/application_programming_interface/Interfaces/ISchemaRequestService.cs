@@ -11,6 +11,7 @@ namespace application_programming_interface.Interfaces
     {
         IEnumerable<SpecificUserPolicyDTO> GetSpecificUserPolicyDetails(int userId);
         IEnumerable<AllPoliciesDTO> GetAllPolicies();
+        IEnumerable<AllPoliciesDTO> GetAllPoliciesPaginate(int? pageNumber);
         void RequestToJoinSchema(int policyId, int userId);
         IEnumerable<SchemaRequestDTO> GetAllSchemaRequests(int? pageNumber);
 

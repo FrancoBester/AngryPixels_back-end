@@ -90,6 +90,30 @@ namespace application_programming_interface.Services
             return policyData;
         }
 
+        public IEnumerable<AllPoliciesDTO> GetAllPoliciesPaginate(int? pageNumber)
+        {
+            //Pagination
+            int curPage = pageNumber ?? 1;
+            int curPageSize = 5;
+
+            //Query for needed info
+            var policyData = (from p in _context.Policy
+                              join a in _context.Admissions on p.Policy_Id equals a.Policy_Id
+                              where p.IsActive == true
+                              select new AllPoliciesDTO
+                              {
+                                  PolicyId = p.Policy_Id,
+                                  AdmsId = a.Adms_Id,
+                                  PolicyType = p.Policy_Type,
+                                  AdmsType = a.Adms_Type,
+                                  PolicyBenefits = p.Policy_Benefits,
+                                  PolicyDescription = p.Policy_Des,
+                                  PolicyHolder = p.Policy_Holder
+                              }).ToList();
+
+            return policyData.Skip((curPage - 1) * curPageSize).Take(curPageSize);
+        }
+
         //Request to Join a Policy
         public void RequestToJoinSchema(int policyId,int userId)
         {
