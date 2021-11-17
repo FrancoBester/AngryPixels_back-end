@@ -248,6 +248,24 @@ namespace application_programming_interface.Services
             var objectToUpdate = _context.Schema_Requests.Where(q => q.Request_Id == requestId).FirstOrDefault();
             objectToUpdate.Status_Id = (int)SchemaRequestStatuses.Approved;
             _context.SaveChanges();
+
+            try
+            {
+                //If approved it needs to be added to User_Policy Table
+                var userPolicyToAdd = new User_Policy
+                {
+                    Policy_Id = objectToUpdate.Policy_Id,
+                    User_Id = objectToUpdate.User_Id
+                };
+
+                _context.User_Policy.Add(userPolicyToAdd);
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
         }
         public void DeclineRequest(int requestId)
         {

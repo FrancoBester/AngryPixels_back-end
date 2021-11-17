@@ -46,6 +46,7 @@ namespace application_programming_interface.Models
             modelBuilder.Entity<Document>().HasOne(d => d.User).WithMany(u => u.Documents).HasForeignKey(d => d.User_Id);// document/user
             modelBuilder.Entity<Schema_Requests>().HasOne(sr => sr.Policy).WithMany(p => p.Schema_Requests).HasForeignKey(sr => sr.Policy_Id);// schema_request/policy
             modelBuilder.Entity<User_Policy>().HasOne(up => up.Policy).WithMany(p => p.User_Policies).HasForeignKey(up => up.Policy_Id);// user_policy/policy
+            modelBuilder.Entity<User_Policy>().HasOne(up => up.User).WithMany(p => p.User_Policy).HasForeignKey(up => up.User_Id);
             modelBuilder.Entity<Document>().HasOne(d => d.Policy).WithMany(p => p.Documents).HasForeignKey(d => d.Policy_Id);// document/policy
             modelBuilder.Entity<Admissions>().HasOne(a => a.Policy).WithMany(p => p.Admissions).HasForeignKey(a => a.Policy_Id);// admissions/policy
             modelBuilder.Entity<Document_Type>().HasOne(dt => dt.Document).WithMany(d => d.Document_Types).HasForeignKey(dt => dt.DocType_Id);// document_type/document
